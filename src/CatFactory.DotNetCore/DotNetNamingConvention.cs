@@ -8,7 +8,6 @@ namespace CatFactory.DotNetCore
     {
         public DotNetNamingConvention()
         {
-
         }
 
         public String ValidName(String name)

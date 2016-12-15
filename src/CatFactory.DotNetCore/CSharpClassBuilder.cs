@@ -105,7 +105,7 @@ namespace CatFactory.DotNetCore
                     {
                         foreach (var field in ObjectDefinition.Fields)
                         {
-                            output.AppendFormat("{0}{1} {2} {3};", Indent(2), field.ModifierAccess.ToString().ToLower(), field.Type, field.Name);
+                            output.AppendFormat("{0}{1} {2} {3};", Indent(2), field.AccessModifier.ToString().ToLower(), field.Type, field.Name);
                             output.AppendLine();
                         }
 
@@ -251,7 +251,7 @@ namespace CatFactory.DotNetCore
                         }
                         else if (property.IsAutomatic)
                         {
-                            output.AppendFormat("{0}{1} {2} {3} {{ get; set; }}", Indent(2), property.ModifierAccess.ToString().ToLower(), property.Type, property.Name);
+                            output.AppendFormat("{0}{1} {2} {3} {{ get; set; }}", Indent(2), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
                             output.AppendLine();
                         }
 
@@ -297,7 +297,7 @@ namespace CatFactory.DotNetCore
 
                         var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.Format("{0} {1}", item.Type, item.Name)));
 
-                        output.AppendFormat("{0}{1} {2}{3} {4}({5})", Indent(2), method.ModifierAccess.ToString().ToLower(), String.IsNullOrEmpty(method.Prefix) ? String.Empty : String.Format("{0} ", method.Prefix), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
+                        output.AppendFormat("{0}{1} {2}{3} {4}({5})", Indent(2), method.AccessModifier.ToString().ToLower(), String.IsNullOrEmpty(method.Prefix) ? String.Empty : String.Format("{0} ", method.Prefix), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
                         output.AppendLine();
 
                         output.AppendFormat("{0}{1}", Indent(2), "{");
