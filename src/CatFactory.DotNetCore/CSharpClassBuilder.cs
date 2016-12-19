@@ -56,6 +56,37 @@ namespace CatFactory.DotNetCore
                     output.AppendLine();
                 }
 
+                foreach (var attrib in ObjectDefinition.Attributes)
+                {
+                    var attributeDefinition = new StringBuilder();
+
+                    attributeDefinition.Append("[");
+
+                    attributeDefinition.AppendFormat("{0}", attrib.Name);
+
+                    if (attrib.HasMembers)
+                    {
+                        attributeDefinition.Append("(");
+
+                        if (attrib.HasArguments)
+                        {
+                            attributeDefinition.Append(String.Join(", ", attrib.Arguments));
+                        }
+
+                        if (attrib.HasSets)
+                        {
+                            attributeDefinition.Append(String.Join(", ", attrib.Sets));
+                        }
+
+                        attributeDefinition.Append(")");
+                    }
+
+                    attributeDefinition.Append("]");
+
+                    output.AppendFormat("{0}{1}", Indent(1), attributeDefinition.ToString());
+                    output.AppendLine();
+                }
+
                 if (ObjectDefinition.IsPartial)
                 {
                     output.AppendFormat("{0}public partial class {1}", Indent(1), ObjectDefinition.Name);
@@ -192,40 +223,43 @@ namespace CatFactory.DotNetCore
                     {
                         var property = ObjectDefinition.Properties[i];
 
-                        foreach (var attrib in property.Attributes)
+                        if (property.Attributes.Count > 0)
                         {
-                            var attributeDefinition = new StringBuilder();
-
-                            attributeDefinition.Append("[");
-
-                            attributeDefinition.AppendFormat("{0}", attrib.Name);
-
-                            if (attrib.HasMembers)
+                            foreach (var attrib in property.Attributes)
                             {
-                                attributeDefinition.Append("(");
+                                var attributeDefinition = new StringBuilder();
 
-                                if (attrib.HasArguments)
+                                attributeDefinition.Append("[");
+
+                                attributeDefinition.AppendFormat("{0}", attrib.Name);
+
+                                if (attrib.HasMembers)
                                 {
-                                    attributeDefinition.Append(String.Join(", ", attrib.Arguments));
+                                    attributeDefinition.Append("(");
+
+                                    if (attrib.HasArguments)
+                                    {
+                                        attributeDefinition.Append(String.Join(", ", attrib.Arguments));
+                                    }
+
+                                    if (attrib.HasSets)
+                                    {
+                                        attributeDefinition.Append(String.Join(", ", attrib.Sets));
+                                    }
+
+                                    attributeDefinition.Append(")");
                                 }
 
-                                if (attrib.HasSets)
-                                {
-                                    attributeDefinition.Append(String.Join(", ", attrib.Sets));
-                                }
+                                attributeDefinition.Append("]");
 
-                                attributeDefinition.Append(")");
+                                output.AppendFormat("{0}{1}", Indent(2), attributeDefinition.ToString());
+                                output.AppendLine();
                             }
-
-                            attributeDefinition.Append("]");
-
-                            output.AppendFormat("{0}{1}", Indent(2), attributeDefinition.ToString());
-                            output.AppendLine();
                         }
 
                         if (property.IsReadOnly)
                         {
-                            output.AppendFormat("{0}public {1} {2}", Indent(2), property.Type, property.Name);
+                            output.AppendFormat("{0}{1} {2} {3}", Indent(2), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
                             output.AppendLine();
 
                             output.AppendFormat("{0}{1}", Indent(2), "{");

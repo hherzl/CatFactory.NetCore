@@ -56,6 +56,40 @@ namespace CatFactory.DotNetCore
                     output.AppendLine();
                 }
 
+                if (ObjectDefinition.Attributes.Count > 0)
+                {
+                    foreach (var attrib in ObjectDefinition.Attributes)
+                    {
+                        var attributeDefinition = new StringBuilder();
+
+                        attributeDefinition.Append("[");
+
+                        attributeDefinition.AppendFormat("{0}", attrib.Name);
+
+                        if (attrib.HasMembers)
+                        {
+                            attributeDefinition.Append("(");
+
+                            if (attrib.HasArguments)
+                            {
+                                attributeDefinition.Append(String.Join(", ", attrib.Arguments));
+                            }
+
+                            if (attrib.HasSets)
+                            {
+                                attributeDefinition.Append(String.Join(", ", attrib.Sets));
+                            }
+
+                            attributeDefinition.Append(")");
+                        }
+
+                        attributeDefinition.Append("]");
+
+                        output.AppendFormat("{0}{1}", Indent(1), attributeDefinition.ToString());
+                        output.AppendLine();
+                    }
+                }
+
                 if (ObjectDefinition.IsPartial)
                 {
                     output.AppendFormat("{0}public partial interface {1}", Indent(1), ObjectDefinition.Name);
@@ -99,9 +133,11 @@ namespace CatFactory.DotNetCore
                         output.AppendLine();
                     }
 
-                    foreach (var property in ObjectDefinition.Properties)
+                    var namingConvention = new DotNetNamingConvention();
+
+                    for (var i = 0; i < ObjectDefinition.Properties.Count; i++)
                     {
-                        var propertyName = ObjectDefinition.NamingConvention.GetPropertyName(property.Name);
+                        var property = ObjectDefinition.Properties[i];
 
                         foreach (var attrib in property.Attributes)
                         {
@@ -136,16 +172,19 @@ namespace CatFactory.DotNetCore
 
                         if (property.IsReadOnly)
                         {
-                            output.AppendFormat("{0}{1} {2} {{ get; }}", Indent(2), property.Type, propertyName);
+                            output.AppendFormat("{0}{1} {2} {{ get; }}", Indent(2), property.Type, property.Name);
                         }
                         else
                         {
-                            output.AppendFormat("{0}{1} {2} {{ get; set; }}", Indent(2), property.Type, propertyName);
+                            output.AppendFormat("{0}{1} {2} {{ get; set; }}", Indent(2), property.Type, property.Name);
                         }
 
                         output.AppendLine();
 
-                        output.AppendLine();
+                        if (i < ObjectDefinition.Properties.Count - 1)
+                        {
+                            output.AppendLine();
+                        }
                     }
 
                     if (ObjectDefinition.UseRegionsToGroupClassMembers)

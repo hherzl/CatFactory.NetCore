@@ -7,7 +7,6 @@ namespace CatFactory.DotNetCore
     {
         public CSharpClassDefinition()
         {
-            NamingConvention = new DotNetNamingConvention();
         }
 
         public Boolean UseRegionsToGroupClassMembers { get; set; }
