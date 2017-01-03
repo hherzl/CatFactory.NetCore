@@ -7,11 +7,14 @@ namespace CatFactory.DotNetCore
     {
         public DotNetCodeBuilder()
         {
+            EventsRegionDescription = "[ Events ]";
             FieldsRegionDescription = "[ Fields ]";
             ConstructorsRegionDescription = "[ Constructor ]";
             PropertiesRegionDescription = "[ Properties ]";
             MethodsRegionDescription = "[ Methods ]";
         }
+
+        public String EventsRegionDescription { get; set; }
 
         public String FieldsRegionDescription { get; set; }
 

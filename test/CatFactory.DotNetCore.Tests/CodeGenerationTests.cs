@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CatFactory.CodeFactory;
 using CatFactory.OOP;
 using Xunit;
 
@@ -122,6 +123,50 @@ namespace CatFactory.DotNetCore.Tests
             var classBuilder = new CSharpInterfaceBuilder()
             {
                 ObjectDefinition = interfaceDefinition,
+                OutputDirectory = "C:\\Temp"
+            };
+
+            classBuilder.CreateFile();
+        }
+
+        [Fact]
+        public void TestCsharpViewModelClassGeneration()
+        {
+            var classDefinition = new CSharpClassDefinition();
+
+            classDefinition.Namespace = "ViewModels";
+            classDefinition.Name = "MyViewModel";
+
+            classDefinition.Namespaces.Add("System");
+            classDefinition.Namespaces.Add("System.ComponentModel");
+
+            classDefinition.Implements.Add("INotifyPropertyChanged");
+
+            classDefinition.Events.Add(new EventDefinition("PropertyChangedEventHandler", "PropertyChanged"));
+
+            classDefinition.Fields.Add(new FieldDefinition("String", "m_firstName") { AccessModifier = AccessModifier.Private });
+
+            classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName")
+            {
+                IsAutomatic = false,
+                GetBody = new List<CodeLine>()
+                {
+                    new CodeLine("return m_firstName;")
+                },
+                SetBody = new List<CodeLine>()
+                {
+                    new CodeLine("if (m_firstName != value)"),
+                    new CodeLine("{{"),
+                    new CodeLine(1, "m_firstName = value;"),
+                    new CodeLine(),
+                    new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(\"FirstName\"));"),
+                    new CodeLine("}}")
+                }
+            });
+
+            var classBuilder = new CSharpClassBuilder()
+            {
+                ObjectDefinition = classDefinition,
                 OutputDirectory = "C:\\Temp"
             };
 

@@ -31,6 +31,374 @@ namespace CatFactory.DotNetCore
             }
         }
 
+        protected void AddAttributes (Int32 start, StringBuilder output)
+        {
+            foreach (var attrib in ObjectDefinition.Attributes)
+            {
+                var attributeDefinition = new StringBuilder();
+
+                attributeDefinition.Append("[");
+
+                attributeDefinition.AppendFormat("{0}", attrib.Name);
+
+                if (attrib.HasMembers)
+                {
+                    attributeDefinition.Append("(");
+
+                    if (attrib.HasArguments)
+                    {
+                        attributeDefinition.Append(String.Join(", ", attrib.Arguments));
+                    }
+
+                    if (attrib.HasSets)
+                    {
+                        attributeDefinition.Append(String.Join(", ", attrib.Sets));
+                    }
+
+                    attributeDefinition.Append(")");
+                }
+
+                attributeDefinition.Append("]");
+
+                output.AppendFormat("{0}{1}", Indent(1), attributeDefinition.ToString());
+                output.AppendLine();
+            }
+        }
+
+        protected void AddEvents(Int32 start, StringBuilder output)
+        {
+            if (ObjectDefinition.Events != null && ObjectDefinition.Events.Count > 0)
+            {
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}#region {1}", Indent(start + 1), EventsRegionDescription);
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+
+                if (ObjectDefinition.Events.Count > 0)
+                {
+                    foreach (var @event in ObjectDefinition.Events)
+                    {
+                        output.AppendFormat("{0}{1} event {2} {3};", Indent(start + 1), @event.AccessModifier.ToString().ToLower(), @event.Type, @event.Name);
+                        output.AppendLine();
+                    }
+
+                    output.AppendLine();
+                }
+
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}#endregion", Indent(start + 1));
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+            }
+        }
+
+        protected void AddFields (Int32 start, StringBuilder output)
+        {
+            if (ObjectDefinition.Fields != null && ObjectDefinition.Fields.Count > 0)
+            {
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}#region {1}", Indent(start + 1), FieldsRegionDescription);
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+
+                if (ObjectDefinition.Fields.Count > 0)
+                {
+                    foreach (var field in ObjectDefinition.Fields)
+                    {
+                        output.AppendFormat("{0}{1} {2} {3};", Indent(start + 1), field.AccessModifier.ToString().ToLower(), field.Type, field.Name);
+                        output.AppendLine();
+                    }
+
+                    output.AppendLine();
+                }
+
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}#endregion", Indent(start + 1));
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+            }
+        }
+
+        protected void AddConstructors(Int32 start, StringBuilder output)
+        {
+            if (ObjectDefinition.Constructors != null && ObjectDefinition.Constructors.Count > 0)
+            {
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendFormat("{0}#region {1}", Indent(start + 1), ConstructorsRegionDescription);
+                    output.AppendLine();
+                }
+
+                foreach (var constructor in ObjectDefinition.Constructors)
+                {
+                    output.AppendFormat("{0}public {1}({2})", Indent(start + 1), ObjectDefinition.Name, constructor.Parameters.Count == 0 ? String.Empty : String.Join(", ", constructor.Parameters.Select(item => String.Format("{0} {1}", item.Type, item.Name))));
+                    output.AppendLine();
+
+                    if (!String.IsNullOrEmpty(constructor.ParentInvoke))
+                    {
+                        output.AppendFormat("{0}: {1}", Indent(start + 2), constructor.ParentInvoke);
+                        output.AppendLine();
+                    }
+
+                    output.AppendFormat("{0}{1}", Indent(start + 1), "{");
+                    output.AppendLine();
+
+                    foreach (var line in constructor.Lines)
+                    {
+                        if (line.IsNullOrEmpty)
+                        {
+                            output.AppendLine();
+                        }
+                        else
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), line);
+                            output.AppendLine();
+                        }
+                    }
+
+                    output.AppendFormat("{0}{1}", Indent(start + 1), "}");
+                    output.AppendLine();
+
+                    if (ObjectDefinition.Constructors.Count > 1)
+                    {
+                        output.AppendLine();
+                    }
+                }
+
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}#endregion", Indent(start + 1));
+                    output.AppendLine();
+                }
+
+                output.AppendLine();
+            }
+        }
+
+        protected void AddProperties(Int32 start, StringBuilder output)
+        {
+            if (ObjectDefinition.Properties != null && ObjectDefinition.Properties.Count > 0)
+            {
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendFormat("{0}#region {1}", Indent(start + 1), PropertiesRegionDescription);
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+
+                for (var i = 0; i < ObjectDefinition.Properties.Count; i++)
+                {
+                    var property = ObjectDefinition.Properties[i];
+
+                    if (property.Attributes.Count > 0)
+                    {
+                        foreach (var attrib in property.Attributes)
+                        {
+                            var attributeDefinition = new StringBuilder();
+
+                            attributeDefinition.Append("[");
+
+                            attributeDefinition.AppendFormat("{0}", attrib.Name);
+
+                            if (attrib.HasMembers)
+                            {
+                                attributeDefinition.Append("(");
+
+                                if (attrib.HasArguments)
+                                {
+                                    attributeDefinition.Append(String.Join(", ", attrib.Arguments));
+                                }
+
+                                if (attrib.HasSets)
+                                {
+                                    attributeDefinition.Append(String.Join(", ", attrib.Sets));
+                                }
+
+                                attributeDefinition.Append(")");
+                            }
+
+                            attributeDefinition.Append("]");
+
+                            output.AppendFormat("{0}{1}", Indent(start + 1), attributeDefinition.ToString());
+                            output.AppendLine();
+                        }
+                    }
+
+                    if (property.IsReadOnly)
+                    {
+                        output.AppendFormat("{0}{1} {2} {3}", Indent(start + 1), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}{1}", Indent(start + 1), "{");
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}get", Indent(start + 2));
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}{1}", Indent(start + 2), "{");
+                        output.AppendLine();
+
+                        foreach (var line in property.GetBody)
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
+                            output.AppendLine();
+                        }
+
+                        output.AppendFormat("{0}{1}", Indent(start + 2), "}");
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}{1}", Indent(start + 1), "}");
+                        output.AppendLine();
+                    }
+                    else if (property.IsAutomatic)
+                    {
+                        output.AppendFormat("{0}{1} {2} {3} {{ get; set; }}", Indent(start + 1), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
+                        output.AppendLine();
+                    }
+                    else
+                    {
+                        output.AppendFormat("{0}{1} {2} {3}", Indent(start + 1), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}{1}", Indent(start + 1), "{");
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}get", Indent(start + 2));
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}{1}", Indent(start + 2), "{");
+                        output.AppendLine();
+
+                        foreach (var line in property.GetBody)
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3+ line.Indent), line);
+                            output.AppendLine();
+                        }
+
+                        output.AppendFormat("{0}{1}", Indent(start + 2), "}");
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}set", Indent(start + 2));
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}{1}", Indent(start + 2), "{");
+                        output.AppendLine();
+
+                        foreach (var line in property.SetBody)
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
+                            output.AppendLine();
+                        }
+
+                        output.AppendFormat("{0}{1}", Indent(start + 2), "}");
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}{1}", Indent(start + 1), "}");
+                        output.AppendLine();
+                    }
+
+                    if (i < ObjectDefinition.Properties.Count - 1)
+                    {
+                        output.AppendLine();
+                    }
+                }
+
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendFormat("{0}#endregion", Indent(start + 1));
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+            }
+        }
+
+        protected void AddMethods (Int32 start, StringBuilder output)
+        {
+            if (ObjectDefinition.Methods != null && ObjectDefinition.Methods.Count > 0)
+            {
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendFormat("{0}#region {1}", Indent(2), MethodsRegionDescription);
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+
+                if (ObjectDefinition.Properties != null && ObjectDefinition.Properties.Count > 0)
+                {
+                    output.AppendLine();
+                }
+
+                for (var i = 0; i < ObjectDefinition.Methods.Count; i++)
+                {
+                    var method = ObjectDefinition.Methods[i];
+
+                    foreach (var attrib in method.Attributes)
+                    {
+                        output.AppendFormat("{0}[{1}]", Indent(2), attrib.Name);
+                        output.AppendLine();
+                    }
+
+                    var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.Format("{0} {1}", item.Type, item.Name)));
+
+                    output.AppendFormat("{0}{1} {2}{3} {4}({5})", Indent(2), method.AccessModifier.ToString().ToLower(), String.IsNullOrEmpty(method.Prefix) ? String.Empty : String.Format("{0} ", method.Prefix), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}{1}", Indent(2), "{");
+                    output.AppendLine();
+
+                    if (method.Lines.Count > 0)
+                    {
+                        foreach (var line in method.Lines)
+                        {
+                            output.AppendFormat("{0}{1}", Indent(3 + line.Indent), line);
+                            output.AppendLine();
+                        }
+                    }
+
+                    output.AppendFormat("{0}{1}", Indent(2), "}");
+                    output.AppendLine();
+
+                    if (i < ObjectDefinition.Methods.Count - 1)
+                    {
+                        output.AppendLine();
+                    }
+                }
+
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendFormat("{0}#endregion", Indent(2));
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+            }
+        }
+
         public override String Code
         {
             get
@@ -48,57 +416,39 @@ namespace CatFactory.DotNetCore
                     output.AppendLine();
                 }
 
+                var start = 0;
+
                 if (!String.IsNullOrEmpty(ObjectDefinition.Namespace))
                 {
+                    start = 1;
+
                     output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
                     output.AppendLine();
+
                     output.AppendFormat("{0}", "{");
                     output.AppendLine();
                 }
 
-                foreach (var attrib in ObjectDefinition.Attributes)
-                {
-                    var attributeDefinition = new StringBuilder();
+                AddAttributes(start, output);
 
-                    attributeDefinition.Append("[");
+                // todo: add access modifier to class definition
 
-                    attributeDefinition.AppendFormat("{0}", attrib.Name);
+                var classDeclaration = new List<String>();
 
-                    if (attrib.HasMembers)
-                    {
-                        attributeDefinition.Append("(");
-
-                        if (attrib.HasArguments)
-                        {
-                            attributeDefinition.Append(String.Join(", ", attrib.Arguments));
-                        }
-
-                        if (attrib.HasSets)
-                        {
-                            attributeDefinition.Append(String.Join(", ", attrib.Sets));
-                        }
-
-                        attributeDefinition.Append(")");
-                    }
-
-                    attributeDefinition.Append("]");
-
-                    output.AppendFormat("{0}{1}", Indent(1), attributeDefinition.ToString());
-                    output.AppendLine();
-                }
+                classDeclaration.Add("public");
 
                 if (ObjectDefinition.IsPartial)
                 {
-                    output.AppendFormat("{0}public partial class {1}", Indent(1), ObjectDefinition.Name);
+                    classDeclaration.Add("partial");
                 }
-                else
-                {
-                    output.AppendFormat("{0}public class {1}", Indent(1), ObjectDefinition.Name);
-                }
+
+                classDeclaration.Add("class");
+
+                classDeclaration.Add(ObjectDefinition.Name);
 
                 if (ObjectDefinition.HasInheritance)
                 {
-                    output.AppendFormat(" : ");
+                    classDeclaration.Add(":");
 
                     var parents = new List<String>();
 
@@ -112,259 +462,27 @@ namespace CatFactory.DotNetCore
                         parents.AddRange(ObjectDefinition.Implements);
                     }
 
-                    output.Append(String.Join(", ", parents));
+                    classDeclaration.Add(String.Join(", ", parents));
                 }
+
+                output.AppendFormat("{0}{1}", Indent(start), String.Join(" ", classDeclaration));
 
                 output.AppendLine();
 
-                output.AppendFormat("{0}{1}", Indent(1), "{");
+                output.AppendFormat("{0}{1}", Indent(start), "{");
                 output.AppendLine();
 
-                if (ObjectDefinition.Fields != null && ObjectDefinition.Fields.Count > 0)
-                {
-                    if (ObjectDefinition.UseRegionsToGroupClassMembers)
-                    {
-                        output.AppendLine();
+                AddEvents(start, output);
 
-                        output.AppendFormat("{0}#region {1}", Indent(2), FieldsRegionDescription);
-                        output.AppendLine();
+                AddFields(start, output);
 
-                        output.AppendLine();
-                    }
+                AddConstructors(start, output);
 
-                    if (ObjectDefinition.Fields.Count > 0)
-                    {
-                        foreach (var field in ObjectDefinition.Fields)
-                        {
-                            output.AppendFormat("{0}{1} {2} {3};", Indent(2), field.AccessModifier.ToString().ToLower(), field.Type, field.Name);
-                            output.AppendLine();
-                        }
+                AddProperties(start, output);
 
-                        output.AppendLine();
-                    }
+                AddMethods(start, output);
 
-                    if (ObjectDefinition.UseRegionsToGroupClassMembers)
-                    {
-                        output.AppendLine();
-
-                        output.AppendFormat("{0}#endregion", Indent(2));
-                        output.AppendLine();
-
-                        output.AppendLine();
-                    }
-                }
-
-                if (ObjectDefinition.Constructors != null && ObjectDefinition.Constructors.Count > 0)
-                {
-                    if (ObjectDefinition.UseRegionsToGroupClassMembers)
-                    {
-                        output.AppendFormat("{0}#region {1}", Indent(2), ConstructorsRegionDescription);
-                        output.AppendLine();
-                    }
-
-                    foreach (var constructor in ObjectDefinition.Constructors)
-                    {
-                        output.AppendFormat("{0}public {1}({2})", Indent(2), ObjectDefinition.Name, constructor.Parameters.Count == 0 ? String.Empty : String.Join(", ", constructor.Parameters.Select(item => String.Format("{0} {1}", item.Type, item.Name))));
-                        output.AppendLine();
-
-                        if (!String.IsNullOrEmpty(constructor.ParentInvoke))
-                        {
-                            output.AppendFormat("{0}: {1}", Indent(3), constructor.ParentInvoke);
-                            output.AppendLine();
-                        }
-
-                        output.AppendFormat("{0}{1}", Indent(2), "{");
-                        output.AppendLine();
-
-                        foreach (var line in constructor.Lines)
-                        {
-                            if (line.IsNullOrEmpty)
-                            {
-                                output.AppendLine();
-                            }
-                            else
-                            {
-                                output.AppendFormat("{0}{1}", Indent(3 + line.Indent), line);
-                                output.AppendLine();
-                            }
-                        }
-
-                        output.AppendFormat("{0}{1}", Indent(2), "}");
-                        output.AppendLine();
-
-                        if (ObjectDefinition.Constructors.Count > 1)
-                        {
-                            output.AppendLine();
-                        }
-                    }
-
-                    if (ObjectDefinition.UseRegionsToGroupClassMembers)
-                    {
-                        output.AppendLine();
-
-                        output.AppendFormat("{0}#endregion", Indent(2));
-                        output.AppendLine();
-                    }
-
-                    output.AppendLine();
-                }
-
-                if (ObjectDefinition.Properties != null && ObjectDefinition.Properties.Count > 0)
-                {
-                    if (ObjectDefinition.UseRegionsToGroupClassMembers)
-                    {
-                        output.AppendFormat("{0}#region {1}", Indent(2), PropertiesRegionDescription);
-                        output.AppendLine();
-
-                        output.AppendLine();
-                    }
-
-                    for (var i = 0; i < ObjectDefinition.Properties.Count; i++)
-                    {
-                        var property = ObjectDefinition.Properties[i];
-
-                        if (property.Attributes.Count > 0)
-                        {
-                            foreach (var attrib in property.Attributes)
-                            {
-                                var attributeDefinition = new StringBuilder();
-
-                                attributeDefinition.Append("[");
-
-                                attributeDefinition.AppendFormat("{0}", attrib.Name);
-
-                                if (attrib.HasMembers)
-                                {
-                                    attributeDefinition.Append("(");
-
-                                    if (attrib.HasArguments)
-                                    {
-                                        attributeDefinition.Append(String.Join(", ", attrib.Arguments));
-                                    }
-
-                                    if (attrib.HasSets)
-                                    {
-                                        attributeDefinition.Append(String.Join(", ", attrib.Sets));
-                                    }
-
-                                    attributeDefinition.Append(")");
-                                }
-
-                                attributeDefinition.Append("]");
-
-                                output.AppendFormat("{0}{1}", Indent(2), attributeDefinition.ToString());
-                                output.AppendLine();
-                            }
-                        }
-
-                        if (property.IsReadOnly)
-                        {
-                            output.AppendFormat("{0}{1} {2} {3}", Indent(2), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
-                            output.AppendLine();
-
-                            output.AppendFormat("{0}{1}", Indent(2), "{");
-                            output.AppendLine();
-
-                            output.AppendFormat("{0}get", Indent(3));
-                            output.AppendLine();
-
-                            output.AppendFormat("{0}{1}", Indent(3), "{");
-                            output.AppendLine();
-
-                            foreach (var line in property.GetBody)
-                            {
-                                output.AppendFormat("{0}{1}", Indent(4 + line.Indent), line);
-                                output.AppendLine();
-                            }
-
-                            output.AppendFormat("{0}{1}", Indent(3), "}");
-                            output.AppendLine();
-
-                            output.AppendFormat("{0}{1}", Indent(2), "}");
-                            output.AppendLine();
-                        }
-                        else if (property.IsAutomatic)
-                        {
-                            output.AppendFormat("{0}{1} {2} {3} {{ get; set; }}", Indent(2), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
-                            output.AppendLine();
-                        }
-
-                        if (i < ObjectDefinition.Properties.Count - 1)
-                        {
-                            output.AppendLine();
-                        }
-                    }
-
-                    if (ObjectDefinition.UseRegionsToGroupClassMembers)
-                    {
-                        output.AppendFormat("{0}#endregion", Indent(2));
-                        output.AppendLine();
-
-                        output.AppendLine();
-                    }
-                }
-
-                if (ObjectDefinition.Methods != null && ObjectDefinition.Methods.Count > 0)
-                {
-                    if (ObjectDefinition.UseRegionsToGroupClassMembers)
-                    {
-                        output.AppendFormat("{0}#region {1}", Indent(2), MethodsRegionDescription);
-                        output.AppendLine();
-
-                        output.AppendLine();
-                    }
-
-                    if (ObjectDefinition.Properties != null && ObjectDefinition.Properties.Count > 0)
-                    {
-                        output.AppendLine();
-                    }
-
-                    for (var i = 0; i < ObjectDefinition.Methods.Count; i++)
-                    {
-                        var method = ObjectDefinition.Methods[i];
-
-                        foreach (var attrib in method.Attributes)
-                        {
-                            output.AppendFormat("{0}[{1}]", Indent(2), attrib.Name);
-                            output.AppendLine();
-                        }
-
-                        var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.Format("{0} {1}", item.Type, item.Name)));
-
-                        output.AppendFormat("{0}{1} {2}{3} {4}({5})", Indent(2), method.AccessModifier.ToString().ToLower(), String.IsNullOrEmpty(method.Prefix) ? String.Empty : String.Format("{0} ", method.Prefix), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
-                        output.AppendLine();
-
-                        output.AppendFormat("{0}{1}", Indent(2), "{");
-                        output.AppendLine();
-
-                        if (method.Lines.Count > 0)
-                        {
-                            foreach (var line in method.Lines)
-                            {
-                                output.AppendFormat("{0}{1}", Indent(3 + line.Indent), line);
-                                output.AppendLine();
-                            }
-                        }
-
-                        output.AppendFormat("{0}{1}", Indent(2), "}");
-                        output.AppendLine();
-
-                        if (i < ObjectDefinition.Methods.Count - 1)
-                        {
-                            output.AppendLine();
-                        }
-                    }
-
-                    if (ObjectDefinition.UseRegionsToGroupClassMembers)
-                    {
-                        output.AppendFormat("{0}#endregion", Indent(2));
-                        output.AppendLine();
-
-                        output.AppendLine();
-                    }
-                }
-
-                output.AppendFormat("{0}{1}", Indent(1), "}");
+                output.AppendFormat("{0}{1}", Indent(start), "}");
                 output.AppendLine();
 
                 if (!String.IsNullOrEmpty(ObjectDefinition.Namespace))
