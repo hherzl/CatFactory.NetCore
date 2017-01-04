@@ -27,11 +27,12 @@ namespace CatFactory.DotNetCore
                 new CodeLine("{{"),
                 new CodeLine(1, "{0} = value;", fieldName),
                 new CodeLine(),
-                new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(\"{0}\"));", fieldName),
+                new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(\"{0}\"));", propertyName),
                 new CodeLine("}}")
             };
 
             classDefinition.Fields.Add(new FieldDefinition(property.Type, fieldName) { AccessModifier = AccessModifier.Private });
+
             classDefinition.Properties.Add(property);
         }
     }
