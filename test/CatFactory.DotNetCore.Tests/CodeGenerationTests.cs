@@ -203,5 +203,35 @@ namespace CatFactory.DotNetCore.Tests
 
             classBuilder.CreateFile();
         }
+
+        [Fact]
+        public void TestCsharpViewModelClassWithExtensionsGeneration()
+        {
+            var classDefinition = new CSharpClassDefinition();
+
+            classDefinition.Namespace = "ViewModels";
+            classDefinition.Name = "ProductViewModel";
+
+            classDefinition.Namespaces.Add("System");
+            classDefinition.Namespaces.Add("System.ComponentModel");
+
+            classDefinition.Implements.Add("INotifyPropertyChanged");
+
+            classDefinition.Events.Add(new EventDefinition("PropertyChangedEventHandler", "PropertyChanged"));
+
+            classDefinition.AddViewModelProperty("Int32?", "ProductId");
+            classDefinition.AddViewModelProperty("String", "ProductName");
+            classDefinition.AddViewModelProperty("Int32?", "ProductCategoryID");
+            classDefinition.AddViewModelProperty("Decimal?", "UnitPrice");
+            classDefinition.AddViewModelProperty("String", "ProductDescription");
+
+            var classBuilder = new CSharpClassBuilder()
+            {
+                ObjectDefinition = classDefinition,
+                OutputDirectory = "C:\\Temp"
+            };
+
+            classBuilder.CreateFile();
+        }
     }
 }
