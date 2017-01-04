@@ -117,8 +117,10 @@ namespace CatFactory.DotNetCore.Tests
             interfaceDefinition.Properties.Add(new PropertyDefinition("String", "FirstName"));
             interfaceDefinition.Properties.Add(new PropertyDefinition("String", "MiddleName"));
             interfaceDefinition.Properties.Add(new PropertyDefinition("String", "LastName"));
+            interfaceDefinition.Properties.Add(new PropertyDefinition("String", "FullName") { IsReadOnly = true });
             interfaceDefinition.Properties.Add(new PropertyDefinition("String", "Gender"));
             interfaceDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate"));
+            interfaceDefinition.Properties.Add(new PropertyDefinition("Int32", "Age") { IsReadOnly = true });
 
             var classBuilder = new CSharpInterfaceBuilder()
             {
@@ -145,6 +147,7 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Events.Add(new EventDefinition("PropertyChangedEventHandler", "PropertyChanged"));
 
             classDefinition.Fields.Add(new FieldDefinition("String", "m_firstName") { AccessModifier = AccessModifier.Private });
+            classDefinition.Fields.Add(new FieldDefinition("String", "m_lastName") { AccessModifier = AccessModifier.Private });
 
             classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName")
             {
@@ -161,6 +164,34 @@ namespace CatFactory.DotNetCore.Tests
                     new CodeLine(),
                     new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(\"FirstName\"));"),
                     new CodeLine("}}")
+                }
+            });
+
+            classDefinition.Properties.Add(new PropertyDefinition("String", "LastName")
+            {
+                IsAutomatic = false,
+                GetBody = new List<CodeLine>()
+                {
+                    new CodeLine("return m_firstName;")
+                },
+                SetBody = new List<CodeLine>()
+                {
+                    new CodeLine("if (m_lastName != value)"),
+                    new CodeLine("{{"),
+                    new CodeLine(1, "m_lastName = value;"),
+                    new CodeLine(),
+                    new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(\"LastName\"));"),
+                    new CodeLine("}}")
+                }
+            });
+
+            classDefinition.Properties.Add(new PropertyDefinition("String", "LastName")
+            {
+                IsAutomatic = false,
+                IsReadOnly = true,
+                GetBody = new List<CodeLine>()
+                {
+                    new CodeLine("return String.Format(\"{{0}} {{1}}\", FirstName, LastName);")
                 }
             });
 
