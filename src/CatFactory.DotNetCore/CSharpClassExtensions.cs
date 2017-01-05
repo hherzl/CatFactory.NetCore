@@ -35,5 +35,43 @@ namespace CatFactory.DotNetCore
 
             classDefinition.Properties.Add(property);
         }
+
+        public static CSharpInterfaceDefinition RefactInterface(this CSharpClassDefinition classDefinition)
+        {
+            var interfaceDefinition = new CSharpInterfaceDefinition();
+
+            foreach (var @event in classDefinition.Events)
+            {
+                if (@event.AccessModifier == AccessModifier.Public)
+                {
+                    interfaceDefinition.Events.Add(new EventDefinition(@event.Type, @event.Name));
+                }
+            }
+
+            foreach (var property in classDefinition.Properties)
+            {
+                if (property.AccessModifier == AccessModifier.Public)
+                {
+                    interfaceDefinition.Properties.Add(new PropertyDefinition(property.Type, property.Name)
+                    {
+                        IsAutomatic = property.IsAutomatic,
+                        IsReadOnly = property.IsReadOnly
+                    });
+                }
+            }
+
+            foreach (var method in classDefinition.Methods)
+            {
+                if (method.AccessModifier == AccessModifier.Public)
+                {
+                    interfaceDefinition.Methods.Add(new MethodDefinition(method.Type, method.Name)
+                    {
+                        Parameters = method.Parameters
+                    });
+                }
+            }
+
+            return interfaceDefinition;
+        }
     }
 }
