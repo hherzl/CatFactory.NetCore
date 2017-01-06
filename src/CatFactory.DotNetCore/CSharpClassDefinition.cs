@@ -6,6 +6,7 @@ namespace CatFactory.DotNetCore
     public class CSharpClassDefinition : ClassDefinition, IDotNetClassDefinition
     {
         public CSharpClassDefinition()
+            : base()
         {
         }
 

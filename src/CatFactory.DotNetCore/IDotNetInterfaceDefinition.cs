@@ -1,10 +1,9 @@
-﻿using System;
-using CatFactory.OOP;
+﻿using CatFactory.OOP;
 
 namespace CatFactory.DotNetCore
 {
-    public interface IDotNetInterfaceDefinition : IInterfaceDefinition
+    public interface IDotNetInterfaceDefinition : IDotNetObjectDefinition, IInterfaceDefinition
     {
-        Boolean UseRegionsToGroupClassMembers { get; set; }
+
     }
 }
