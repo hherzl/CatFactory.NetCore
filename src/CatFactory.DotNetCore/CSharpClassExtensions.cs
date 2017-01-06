@@ -36,12 +36,11 @@ namespace CatFactory.DotNetCore
             classDefinition.Properties.Add(property);
         }
 
-        public static CSharpInterfaceDefinition RefactInterface(this CSharpClassDefinition classDefinition, String interfaceNamespace)
+        public static CSharpInterfaceDefinition RefactInterface(this CSharpClassDefinition classDefinition)
         {
             var interfaceDefinition = new CSharpInterfaceDefinition();
             var namingConvention = new DotNetNamingConvention();
 
-            interfaceDefinition.Namespace = interfaceNamespace;
             interfaceDefinition.Name = namingConvention.GetInterfaceName(classDefinition.Name);
 
             interfaceDefinition.Namespaces = classDefinition.Namespaces;
