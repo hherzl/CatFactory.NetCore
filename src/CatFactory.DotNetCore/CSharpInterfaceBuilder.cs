@@ -19,6 +19,11 @@ namespace CatFactory.DotNetCore
         {
             get
             {
+                if (ObjectDefinition != null && ObjectDefinition.Name != null && ObjectDefinition.Name.Contains("<"))
+                {
+                    return ObjectDefinition.Name.Substring(0, ObjectDefinition.Name.IndexOf("<"));
+                }
+
                 return ObjectDefinition.Name;
             }
         }
