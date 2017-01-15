@@ -27,7 +27,7 @@ namespace CatFactory.DotNetCore
                 new CodeLine("{{"),
                 new CodeLine(1, "{0} = value;", fieldName),
                 new CodeLine(),
-                new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(\"{0}\"));", propertyName),
+                new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof({0})));", propertyName),
                 new CodeLine("}}")
             };
 

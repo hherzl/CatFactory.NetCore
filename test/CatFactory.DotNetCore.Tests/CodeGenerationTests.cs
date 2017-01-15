@@ -162,7 +162,7 @@ namespace CatFactory.DotNetCore.Tests
                     new CodeLine("{{"),
                     new CodeLine(1, "m_firstName = value;"),
                     new CodeLine(),
-                    new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(\"FirstName\"));"),
+                    new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FirstName)));"),
                     new CodeLine("}}")
                 }
             });
@@ -180,7 +180,7 @@ namespace CatFactory.DotNetCore.Tests
                     new CodeLine("{{"),
                     new CodeLine(1, "m_lastName = value;"),
                     new CodeLine(),
-                    new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(\"LastName\"));"),
+                    new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastName));"),
                     new CodeLine("}}")
                 }
             });
