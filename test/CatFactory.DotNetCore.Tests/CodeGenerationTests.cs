@@ -15,85 +15,25 @@ namespace CatFactory.DotNetCore.Tests
             {
                 Namespace = "ContactManager",
                 Name = "Person",
-                Namespaces = new List<String>()
-                {
-                    "System",
-                    "System.ComponentModel"
-                }
             };
 
-            classDefinition.Attributes.Add(new MetadataAttribute("Table")
-            {
-                Arguments = new List<String>() { "\"Persons\"" }
-            });
+            classDefinition.Namespaces.Add("System");
+            classDefinition.Namespaces.Add("System.ComponentModel");
 
-            classDefinition.Properties.Add(new PropertyDefinition("Int32?", "ID")
-            {
-                Attributes = new List<MetadataAttribute>()
-                {
-                    new MetadataAttribute("Key")
-                }
-            });
+            classDefinition.Documentation.Summary = "Represents mapping for persons table";
+            classDefinition.Attributes.Add(new MetadataAttribute("Table", "\"Persons\""));
 
-            classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName")
-            {
-                Attributes = new List<MetadataAttribute>()
-                {
-                    new MetadataAttribute("Required"),
-                    new MetadataAttribute("StringLength")
-                    {
-                        Arguments = new List<String>() { "25" }
-                    }
-                }
-            });
-
-            classDefinition.Properties.Add(new PropertyDefinition("String", "MiddleName")
-            {
-                Attributes = new List<MetadataAttribute>()
-                {
-                    new MetadataAttribute("StringLength")
-                    {
-                        Arguments = new List<String>() { "25" }
-                    }
-                }
-            });
-
-            classDefinition.Properties.Add(new PropertyDefinition("String", "LastName")
-            {
-                Attributes = new List<MetadataAttribute>()
-                {
-                    new MetadataAttribute("Required"),
-                    new MetadataAttribute("StringLength")
-                    {
-                        Arguments = new List<String>() { "25" }
-                    }
-                }
-            });
-
-            classDefinition.Properties.Add(new PropertyDefinition("String", "Gender")
-            {
-                Attributes = new List<MetadataAttribute>()
-                {
-                    new MetadataAttribute("Required"),
-                    new MetadataAttribute("StringLength")
-                    {
-                        Arguments = new List<String>() { "1" }
-                    }
-                }
-            });
-
-            classDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate")
-            {
-                Attributes = new List<MetadataAttribute>()
-                {
-                    new MetadataAttribute("Required")
-                }
-            });
+            classDefinition.Properties.Add(new PropertyDefinition("Int32?", "ID", new MetadataAttribute("Key")));
+            classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
+            classDefinition.Properties.Add(new PropertyDefinition("String", "MiddleName", new MetadataAttribute("StringLength", "25")));
+            classDefinition.Properties.Add(new PropertyDefinition("String", "LastName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
+            classDefinition.Properties.Add(new PropertyDefinition("String", "Gender", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "1")));
+            classDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate", new MetadataAttribute("Required")));
 
             var classBuilder = new CSharpClassBuilder()
             {
                 ObjectDefinition = classDefinition,
-                OutputDirectory = "C:\\Temp"
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
             };
 
             classBuilder.CreateFile();
@@ -125,7 +65,7 @@ namespace CatFactory.DotNetCore.Tests
             var classBuilder = new CSharpInterfaceBuilder()
             {
                 ObjectDefinition = interfaceDefinition,
-                OutputDirectory = "C:\\Temp"
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
             };
 
             classBuilder.CreateFile();
@@ -185,7 +125,7 @@ namespace CatFactory.DotNetCore.Tests
                 }
             });
 
-            classDefinition.Properties.Add(new PropertyDefinition("String", "LastName")
+            classDefinition.Properties.Add(new PropertyDefinition("String", "FullName")
             {
                 IsAutomatic = false,
                 IsReadOnly = true,
@@ -198,7 +138,7 @@ namespace CatFactory.DotNetCore.Tests
             var classBuilder = new CSharpClassBuilder()
             {
                 ObjectDefinition = classDefinition,
-                OutputDirectory = "C:\\Temp"
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
             };
 
             classBuilder.CreateFile();
@@ -228,7 +168,59 @@ namespace CatFactory.DotNetCore.Tests
             var classBuilder = new CSharpClassBuilder()
             {
                 ObjectDefinition = classDefinition,
-                OutputDirectory = "C:\\Temp"
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
+            };
+
+            classBuilder.CreateFile();
+        }
+
+        [Fact]
+        public void TestCsharpRepositoryClassGeneration()
+        {
+            var classDefinition = new CSharpClassDefinition();
+
+            classDefinition.Namespace = "Repositories";
+            classDefinition.Name = "DboRepository";
+
+            classDefinition.Namespaces.Add("System");
+            classDefinition.Namespaces.Add("System.Collections.Generic");
+
+            classDefinition.Implements.Add("IRepository");
+
+            classDefinition.Fields.Add(new FieldDefinition("DbContext", "m_dbContext") { AccessModifier = AccessModifier.Private });
+
+            classDefinition.Constructors.Add(new ClassConstructorDefinition());
+
+            classDefinition.AddReadOnlyProperty("DbContext", "DbContext", new CodeLine("return m_dbContext;"));
+
+            classDefinition.Properties.Add(new PropertyDefinition("IUserInfo", "UserInfo"));
+
+            classDefinition.Methods.Add(new MethodDefinition("IEnumerable<TEntity>", "GetAll")
+            {
+                Lines = new List<CodeLine>()
+                {
+                    new CodeLine("return DbContext.Set<TEntity>();")
+                }
+            });
+
+            classDefinition.Methods.Add(new MethodDefinition("void", "Add")
+            {
+                Parameters = new List<ParameterDefinition>()
+                {
+                    new ParameterDefinition("TEntity", "entity")
+                },
+                Lines = new List<CodeLine>()
+                {
+                    new CodeLine("DbContext.Set<TEntity>().Add(entity);"),
+                    new CodeLine(),
+                    new CodeLine("DbContext.SaveChanges();")
+                }
+            });
+
+            var classBuilder = new CSharpClassBuilder()
+            {
+                ObjectDefinition = classDefinition,
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
             };
 
             classBuilder.CreateFile();

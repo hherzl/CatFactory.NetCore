@@ -257,26 +257,34 @@ namespace CatFactory.DotNetCore
                         output.AppendFormat("{0}{1} {2} {3}", Indent(start + 1), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
                         output.AppendLine();
 
-                        output.AppendFormat("{0}{1}", Indent(start + 1), "{");
-                        output.AppendLine();
-
-                        output.AppendFormat("{0}get", Indent(start + 2));
-                        output.AppendLine();
-
-                        output.AppendFormat("{0}{1}", Indent(start + 2), "{");
-                        output.AppendLine();
-
-                        foreach (var line in property.GetBody)
+                        if (property.GetBody.Count == 1)
                         {
-                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
+                            output.AppendFormat("{0}=> {1}", Indent(start + 2), property.GetBody[0].Content.Replace("return ", String.Empty));
                             output.AppendLine();
                         }
+                        else
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 1), "{");
+                            output.AppendLine();
 
-                        output.AppendFormat("{0}{1}", Indent(start + 2), "}");
-                        output.AppendLine();
+                            output.AppendFormat("{0}get", Indent(start + 2));
+                            output.AppendLine();
 
-                        output.AppendFormat("{0}{1}", Indent(start + 1), "}");
-                        output.AppendLine();
+                            output.AppendFormat("{0}{1}", Indent(start + 2), "{");
+                            output.AppendLine();
+
+                            foreach (var line in property.GetBody)
+                            {
+                                output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
+                                output.AppendLine();
+                            }
+
+                            output.AppendFormat("{0}{1}", Indent(start + 2), "}");
+                            output.AppendLine();
+
+                            output.AppendFormat("{0}{1}", Indent(start + 1), "}");
+                            output.AppendLine();
+                        }
                     }
                     else if (property.IsAutomatic)
                     {
@@ -299,7 +307,7 @@ namespace CatFactory.DotNetCore
 
                         foreach (var line in property.GetBody)
                         {
-                            output.AppendFormat("{0}{1}", Indent(start + 3+ line.Indent), line);
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
                             output.AppendLine();
                         }
 
@@ -347,7 +355,7 @@ namespace CatFactory.DotNetCore
             {
                 if (ObjectDefinition.UseRegionsToGroupClassMembers)
                 {
-                    output.AppendFormat("{0}#region {1}", Indent(2), MethodsRegionDescription);
+                    output.AppendFormat("{0}#region {1}", Indent(start + 2), MethodsRegionDescription);
                     output.AppendLine();
 
                     output.AppendLine();
@@ -364,29 +372,34 @@ namespace CatFactory.DotNetCore
 
                     foreach (var attrib in method.Attributes)
                     {
-                        output.AppendFormat("{0}[{1}]", Indent(2), attrib.Name);
+                        output.AppendFormat("{0}[{1}]", Indent(start + 2), attrib.Name);
                         output.AppendLine();
                     }
 
                     var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.Format("{0} {1}", item.Type, item.Name)));
 
-                    output.AppendFormat("{0}{1} {2}{3} {4}({5})", Indent(2), method.AccessModifier.ToString().ToLower(), String.IsNullOrEmpty(method.Prefix) ? String.Empty : String.Format("{0} ", method.Prefix), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
+                    output.AppendFormat("{0}{1} {2}{3} {4}({5})", Indent(start + 1), method.AccessModifier.ToString().ToLower(), String.IsNullOrEmpty(method.Prefix) ? String.Empty : String.Format("{0} ", method.Prefix), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
                     output.AppendLine();
 
-                    output.AppendFormat("{0}{1}", Indent(2), "{");
-                    output.AppendLine();
-
-                    if (method.Lines.Count > 0)
+                    if (method.Lines.Count == 1)
                     {
+                        output.AppendFormat("{0}=> {1}", Indent(start + 2), method.Lines[0].Content.Replace("return ", String.Empty));
+                        output.AppendLine();
+                    }
+                    else if (method.Lines.Count > 0)
+                    {
+                        output.AppendFormat("{0}{1}", Indent(start + 1), "{");
+                        output.AppendLine();
+
                         foreach (var line in method.Lines)
                         {
                             output.AppendFormat("{0}{1}", Indent(3 + line.Indent), line);
                             output.AppendLine();
                         }
-                    }
 
-                    output.AppendFormat("{0}{1}", Indent(2), "}");
-                    output.AppendLine();
+                        output.AppendFormat("{0}{1}", Indent(start + 1), "}");
+                        output.AppendLine();
+                    }
 
                     if (i < ObjectDefinition.Methods.Count - 1)
                     {
@@ -396,7 +409,7 @@ namespace CatFactory.DotNetCore
 
                 if (ObjectDefinition.UseRegionsToGroupClassMembers)
                 {
-                    output.AppendFormat("{0}#endregion", Indent(2));
+                    output.AppendFormat("{0}#endregion", Indent(start + 2));
                     output.AppendLine();
 
                     output.AppendLine();
@@ -436,11 +449,9 @@ namespace CatFactory.DotNetCore
 
                 AddAttributes(start, output);
 
-                // todo: add access modifier to class definition
-
                 var classDeclaration = new List<String>();
 
-                classDeclaration.Add("public");
+                classDeclaration.Add(ObjectDefinition.ToString().ToLower());
 
                 if (ObjectDefinition.IsPartial)
                 {
