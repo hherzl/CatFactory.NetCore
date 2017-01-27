@@ -451,7 +451,7 @@ namespace CatFactory.DotNetCore
 
                 var classDeclaration = new List<String>();
 
-                classDeclaration.Add(ObjectDefinition.ToString().ToLower());
+                classDeclaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
 
                 if (ObjectDefinition.IsPartial)
                 {
