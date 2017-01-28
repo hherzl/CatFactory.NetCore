@@ -17,7 +17,7 @@ namespace CatFactory.DotNetCore
             classDefinition.Properties.Add(property);
         }
 
-        public static void AddViewModelProperty(this CSharpClassDefinition classDefinition, String type, String name)
+        public static void AddViewModelProperty(this CSharpClassDefinition classDefinition, String type, String name, Boolean useNullConditionalOperatorAndUseNameOfOperator = true)
         {
             var namingConvention = new DotNetNamingConvention();
 
@@ -30,15 +30,24 @@ namespace CatFactory.DotNetCore
                 new CodeLine("return {0};", fieldName)
             };
 
-            property.SetBody = new List<CodeLine>()
+            property.SetBody.Add(new CodeLine("if ({0} != value)", fieldName));
+            property.SetBody.Add(new CodeLine("{{"));
+            property.SetBody.Add(new CodeLine(1, "{0} = value;", fieldName));
+            property.SetBody.Add(new CodeLine());
+
+            if (useNullConditionalOperatorAndUseNameOfOperator)
             {
-                new CodeLine("if ({0} != value)", fieldName),
-                new CodeLine("{{"),
-                new CodeLine(1, "{0} = value;", fieldName),
-                new CodeLine(),
-                new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof({0})));", name),
-                new CodeLine("}}")
-            };
+                property.SetBody.Add(new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof({0})));", name));
+            }
+            else
+            {
+                property.SetBody.Add(new CodeLine(1, "if (PropertyChanged != null)"));
+                property.SetBody.Add(new CodeLine(1, "{{"));
+                property.SetBody.Add(new CodeLine(2, "PropertyChanged(this, new PropertyChangedEventArgs(\"{0}\"));", name));
+                property.SetBody.Add(new CodeLine(1, "}}"));
+            }
+
+            property.SetBody.Add(new CodeLine("}}"));
 
             classDefinition.Fields.Add(new FieldDefinition(property.Type, fieldName) { AccessModifier = AccessModifier.Private });
 

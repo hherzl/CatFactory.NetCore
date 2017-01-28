@@ -30,6 +30,15 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Properties.Add(new PropertyDefinition("String", "Gender", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "1")));
             classDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate", new MetadataAttribute("Required")));
 
+            classDefinition.Methods.Add(new MethodDefinition("void", "Do")
+            {
+                Parameters = new List<ParameterDefinition>()
+                {
+                    new ParameterDefinition("int", "foo") { DefaultValue = "0" },
+                    new ParameterDefinition("int", "bar") { DefaultValue = "1" }
+                }
+            });
+
             var classBuilder = new CSharpClassBuilder()
             {
                 ObjectDefinition = classDefinition,
@@ -61,6 +70,15 @@ namespace CatFactory.DotNetCore.Tests
             interfaceDefinition.Properties.Add(new PropertyDefinition("String", "Gender"));
             interfaceDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate"));
             interfaceDefinition.Properties.Add(new PropertyDefinition("Int32", "Age") { IsReadOnly = true });
+
+            interfaceDefinition.Methods.Add(new MethodDefinition("void", "Do")
+            {
+                Parameters = new List<ParameterDefinition>()
+                {
+                    new ParameterDefinition("int", "foo") { DefaultValue = "0" },
+                    new ParameterDefinition("int", "bar") { DefaultValue = "1" }
+                }
+            });
 
             var classBuilder = new CSharpInterfaceBuilder()
             {
@@ -163,7 +181,7 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.AddViewModelProperty("String", "ProductName");
             classDefinition.AddViewModelProperty("Int32?", "ProductCategoryID");
             classDefinition.AddViewModelProperty("Decimal?", "UnitPrice");
-            classDefinition.AddViewModelProperty("String", "ProductDescription");
+            classDefinition.AddViewModelProperty("String", "ProductDescription", false);
 
             var classBuilder = new CSharpClassBuilder()
             {

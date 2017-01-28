@@ -210,8 +210,8 @@ namespace CatFactory.DotNetCore
                         output.AppendFormat("{0}[{1}]", Indent(2), attrib.Name);
                         output.AppendLine();
                     }
-                    
-                    var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.Format("{0} {1}", item.Type, item.Name)));
+
+                    var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.IsNullOrEmpty(item.DefaultValue) ? String.Format("{0} {1}", item.Type, item.Name) : String.Format(String.Format("{0} {1} = {2}", item.Type, item.Name, item.DefaultValue))));
 
                     output.AppendFormat("{0}{1} {2}({3});", Indent(2), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
                     output.AppendLine();

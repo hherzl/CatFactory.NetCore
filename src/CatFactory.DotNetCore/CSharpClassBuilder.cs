@@ -376,12 +376,20 @@ namespace CatFactory.DotNetCore
                         output.AppendLine();
                     }
 
-                    var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.Format("{0} {1}", item.Type, item.Name)));
+                    var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.IsNullOrEmpty(item.DefaultValue) ? String.Format("{0} {1}", item.Type, item.Name) : String.Format(String.Format("{0} {1} = {2}", item.Type, item.Name, item.DefaultValue))));
 
                     output.AppendFormat("{0}{1} {2}{3} {4}({5})", Indent(start + 1), method.AccessModifier.ToString().ToLower(), String.IsNullOrEmpty(method.Prefix) ? String.Empty : String.Format("{0} ", method.Prefix), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
                     output.AppendLine();
 
-                    if (method.Lines.Count == 1)
+                    if (method.Lines.Count == 0)
+                    {
+                        output.AppendFormat("{0}{1}", Indent(start + 1), "{");
+                        output.AppendLine();
+
+                        output.AppendFormat("{0}{1}", Indent(start + 1), "}");
+                        output.AppendLine();
+                    }
+                    else if (method.Lines.Count == 1)
                     {
                         output.AppendFormat("{0}=> {1}", Indent(start + 2), method.Lines[0].Content.Replace("return ", String.Empty));
                         output.AppendLine();
