@@ -20,7 +20,6 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Namespaces.Add("System");
             classDefinition.Namespaces.Add("System.ComponentModel");
 
-            classDefinition.Documentation.Summary = "Represents mapping for persons table";
             classDefinition.Attributes.Add(new MetadataAttribute("Table", "\"Persons\""));
 
             classDefinition.Properties.Add(new PropertyDefinition("Int32?", "ID", new MetadataAttribute("Key")));
@@ -29,15 +28,6 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Properties.Add(new PropertyDefinition("String", "LastName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
             classDefinition.Properties.Add(new PropertyDefinition("String", "Gender", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "1")));
             classDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate", new MetadataAttribute("Required")));
-
-            classDefinition.Methods.Add(new MethodDefinition("void", "Do")
-            {
-                Parameters = new List<ParameterDefinition>()
-                {
-                    new ParameterDefinition("int", "foo") { DefaultValue = "0" },
-                    new ParameterDefinition("int", "bar") { DefaultValue = "1" }
-                }
-            });
 
             var classBuilder = new CSharpClassBuilder()
             {
@@ -70,15 +60,6 @@ namespace CatFactory.DotNetCore.Tests
             interfaceDefinition.Properties.Add(new PropertyDefinition("String", "Gender"));
             interfaceDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate"));
             interfaceDefinition.Properties.Add(new PropertyDefinition("Int32", "Age") { IsReadOnly = true });
-
-            interfaceDefinition.Methods.Add(new MethodDefinition("void", "Do")
-            {
-                Parameters = new List<ParameterDefinition>()
-                {
-                    new ParameterDefinition("int", "foo") { DefaultValue = "0" },
-                    new ParameterDefinition("int", "bar") { DefaultValue = "1" }
-                }
-            });
 
             var classBuilder = new CSharpInterfaceBuilder()
             {
@@ -163,7 +144,7 @@ namespace CatFactory.DotNetCore.Tests
         }
 
         [Fact]
-        public void TestCsharpViewModelClassWithExtensionsGeneration()
+        public void TestCsharpViewModelClassGenerationWithExtensionMethods()
         {
             var classDefinition = new CSharpClassDefinition();
 
@@ -181,7 +162,7 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.AddViewModelProperty("String", "ProductName");
             classDefinition.AddViewModelProperty("Int32?", "ProductCategoryID");
             classDefinition.AddViewModelProperty("Decimal?", "UnitPrice");
-            classDefinition.AddViewModelProperty("String", "ProductDescription", false);
+            classDefinition.AddViewModelProperty("String", "ProductDescription");
 
             var classBuilder = new CSharpClassBuilder()
             {
@@ -213,6 +194,15 @@ namespace CatFactory.DotNetCore.Tests
 
             classDefinition.Properties.Add(new PropertyDefinition("IUserInfo", "UserInfo"));
 
+            classDefinition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChangesAsync")
+            {
+                IsAsync = true,
+                Lines = new List<CodeLine>()
+                {
+                    new CodeLine("return await DbContext.SaveChangesAsync();")
+                }
+            });
+
             classDefinition.Methods.Add(new MethodDefinition("IEnumerable<TEntity>", "GetAll")
             {
                 Lines = new List<CodeLine>()
@@ -232,6 +222,51 @@ namespace CatFactory.DotNetCore.Tests
                     new CodeLine("DbContext.Set<TEntity>().Add(entity);"),
                     new CodeLine(),
                     new CodeLine("DbContext.SaveChanges();")
+                }
+            });
+
+            var classBuilder = new CSharpClassBuilder()
+            {
+                ObjectDefinition = classDefinition,
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
+            };
+
+            classBuilder.CreateFile();
+        }
+
+        [Fact]
+        public void TestCsharpClassWithMethodsGeneration()
+        {
+            var classDefinition = new CSharpClassDefinition();
+
+            classDefinition.Namespaces.Add("System");
+
+            classDefinition.Namespace = "Operations";
+            classDefinition.Name = "Helpers";
+
+            classDefinition.Methods.Add(new MethodDefinition("void", "Foo")
+            {
+                IsAsync = true,
+                Parameters = new List<ParameterDefinition>()
+                {
+                    new ParameterDefinition("int", "foo") { DefaultValue = "0" },
+                    new ParameterDefinition("int", "bar") { DefaultValue = "1" }
+                }
+            });
+
+            classDefinition.Methods.Add(new MethodDefinition("void", "Bar")
+            {
+                Parameters = new List<ParameterDefinition>()
+                {
+                    new ParameterDefinition("int", "a")
+                }
+            });
+
+            classDefinition.Methods.Add(new MethodDefinition("int", "Zaz")
+            {
+                Lines = new List<CodeLine>()
+                {
+                    new CodeLine("return 0;")
                 }
             });
 

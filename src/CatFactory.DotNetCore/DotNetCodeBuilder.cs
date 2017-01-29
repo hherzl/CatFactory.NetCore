@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text;
 using CatFactory.CodeFactory;
+using CatFactory.OOP;
 
 namespace CatFactory.DotNetCore
 {
@@ -23,5 +25,22 @@ namespace CatFactory.DotNetCore
         public String PropertiesRegionDescription { get; set; }
 
         public String MethodsRegionDescription { get; set; }
+
+        public virtual void AddSummary(StringBuilder output, Int32 start, Documentation documentation)
+        {
+            if (documentation == null)
+            {
+                return;
+            }
+
+            output.AppendFormat("{0}/// <summary>", Indent(start));
+            output.AppendLine();
+
+            output.AppendFormat("{0}/// {1}", Indent(start), documentation.Summary);
+            output.AppendLine();
+
+            output.AppendFormat("{0}/// </summary>", Indent(start));
+            output.AppendLine();
+        }
     }
 }

@@ -348,7 +348,7 @@ namespace CatFactory.DotNetCore
                 }
             }
         }
-
+        
         protected void AddMethods (Int32 start, StringBuilder output)
         {
             if (ObjectDefinition.Methods != null && ObjectDefinition.Methods.Count > 0)
@@ -376,9 +376,27 @@ namespace CatFactory.DotNetCore
                         output.AppendLine();
                     }
 
-                    var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.IsNullOrEmpty(item.DefaultValue) ? String.Format("{0} {1}", item.Type, item.Name) : String.Format(String.Format("{0} {1} = {2}", item.Type, item.Name, item.DefaultValue))));
+                    var methodSignature = new List<String>();
 
-                    output.AppendFormat("{0}{1} {2}{3} {4}({5})", Indent(start + 1), method.AccessModifier.ToString().ToLower(), String.IsNullOrEmpty(method.Prefix) ? String.Empty : String.Format("{0} ", method.Prefix), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
+                    methodSignature.Add(method.AccessModifier.ToString().ToLower());
+
+                    if (method.IsAsync)
+                    {
+                        methodSignature.Add("async");
+                    }
+
+                    if (method.IsStatic)
+                    {
+                        methodSignature.Add("static");
+                    }
+
+                    methodSignature.Add(String.IsNullOrEmpty(method.Type) ? "void" : method.Type);
+
+                    methodSignature.Add(method.Name);
+
+                    var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.IsNullOrEmpty(item.DefaultValue) ? String.Format("{0} {1}", item.Type, item.Name) : String.Format(String.Format("{0} {1} = {2}", item.Type, item.Name, item.DefaultValue))));
+                    
+                    output.AppendFormat("{0}{1}({2})", Indent(start + 1), String.Join(" ", methodSignature), parameters);
                     output.AppendLine();
 
                     if (method.Lines.Count == 0)
@@ -424,7 +442,7 @@ namespace CatFactory.DotNetCore
                 }
             }
         }
-
+        
         public override String Code
         {
             get
@@ -453,6 +471,11 @@ namespace CatFactory.DotNetCore
 
                     output.AppendFormat("{0}", "{");
                     output.AppendLine();
+                }
+
+                if (! String.IsNullOrEmpty(ObjectDefinition.Documentation.Summary))
+                {
+                    AddSummary(output, start, ObjectDefinition.Documentation);
                 }
 
                 AddAttributes(start, output);
