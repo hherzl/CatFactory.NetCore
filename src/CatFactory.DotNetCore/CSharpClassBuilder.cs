@@ -393,10 +393,23 @@ namespace CatFactory.DotNetCore
                     methodSignature.Add(String.IsNullOrEmpty(method.Type) ? "void" : method.Type);
 
                     methodSignature.Add(method.Name);
+                    
+                    output.AppendFormat("{0}{1}", Indent(start + 1), String.Join(" ", methodSignature));
 
                     var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.IsNullOrEmpty(item.DefaultValue) ? String.Format("{0} {1}", item.Type, item.Name) : String.Format(String.Format("{0} {1} = {2}", item.Type, item.Name, item.DefaultValue))));
-                    
-                    output.AppendFormat("{0}{1}({2})", Indent(start + 1), String.Join(" ", methodSignature), parameters);
+
+                    if (!String.IsNullOrEmpty(method.GenericType))
+                    {
+                        output.AppendFormat("<{0}>", method.GenericType);
+                    }
+
+                    output.AppendFormat("({0})", parameters);
+
+                    if (method.WhereConstraints.Count > 0)
+                    {
+                        output.AppendFormat(" where {0}", String.Join(", ", method.WhereConstraints));
+                    }
+
                     output.AppendLine();
 
                     if (method.Lines.Count == 0)

@@ -71,6 +71,35 @@ namespace CatFactory.DotNetCore.Tests
         }
 
         [Fact]
+        public void TestCSharpContractInterfaceGeneration()
+        {
+            var interfaceDefinition = new CSharpInterfaceDefinition()
+            {
+                Namespace = "Contracts",
+                Name = "IRepository",
+                Namespaces = new List<String>()
+                {
+                    "System",
+                    "System.Threading.Tasks"
+                }
+            };
+            
+            interfaceDefinition.Properties.Add(new PropertyDefinition("DbContext", "DbContext") { IsReadOnly = true });
+
+            interfaceDefinition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChanges", new ParameterDefinition("int", "foo", "0")));
+
+            interfaceDefinition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChangesAsync"));
+
+            var classBuilder = new CSharpInterfaceBuilder()
+            {
+                ObjectDefinition = interfaceDefinition,
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
+            };
+
+            classBuilder.CreateFile();
+        }
+
+        [Fact]
         public void TestCsharpViewModelClassGeneration()
         {
             var classDefinition = new CSharpClassDefinition();
@@ -85,8 +114,8 @@ namespace CatFactory.DotNetCore.Tests
 
             classDefinition.Events.Add(new EventDefinition("PropertyChangedEventHandler", "PropertyChanged"));
 
-            classDefinition.Fields.Add(new FieldDefinition("String", "m_firstName") { AccessModifier = AccessModifier.Private });
-            classDefinition.Fields.Add(new FieldDefinition("String", "m_lastName") { AccessModifier = AccessModifier.Private });
+            classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, "String", "m_firstName"));
+            classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, "String", "m_lastName"));
 
             classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName")
             {
@@ -186,7 +215,7 @@ namespace CatFactory.DotNetCore.Tests
 
             classDefinition.Implements.Add("IRepository");
 
-            classDefinition.Fields.Add(new FieldDefinition("DbContext", "m_dbContext") { AccessModifier = AccessModifier.Private });
+            classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, "DbContext", "m_dbContext"));
 
             classDefinition.Constructors.Add(new ClassConstructorDefinition());
 
@@ -211,12 +240,8 @@ namespace CatFactory.DotNetCore.Tests
                 }
             });
 
-            classDefinition.Methods.Add(new MethodDefinition("void", "Add")
+            classDefinition.Methods.Add(new MethodDefinition("void", "Add", new ParameterDefinition("TEntity", "entity"))
             {
-                Parameters = new List<ParameterDefinition>()
-                {
-                    new ParameterDefinition("TEntity", "entity")
-                },
                 Lines = new List<CodeLine>()
                 {
                     new CodeLine("DbContext.Set<TEntity>().Add(entity);"),
@@ -244,26 +269,28 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Namespace = "Operations";
             classDefinition.Name = "Helpers";
 
-            classDefinition.Methods.Add(new MethodDefinition("void", "Foo")
+            classDefinition.Methods.Add(new MethodDefinition("void", "Foo", new ParameterDefinition("int", "foo", "0"), new ParameterDefinition("int", "bar", "1"))
             {
-                IsAsync = true,
-                Parameters = new List<ParameterDefinition>()
-                {
-                    new ParameterDefinition("int", "foo") { DefaultValue = "0" },
-                    new ParameterDefinition("int", "bar") { DefaultValue = "1" }
-                }
+                IsAsync = true
             });
 
-            classDefinition.Methods.Add(new MethodDefinition("void", "Bar")
-            {
-                Parameters = new List<ParameterDefinition>()
-                {
-                    new ParameterDefinition("int", "a")
-                }
-            });
+            classDefinition.Methods.Add(new MethodDefinition("void", "Bar", new ParameterDefinition("int", "a")));
 
             classDefinition.Methods.Add(new MethodDefinition("int", "Zaz")
             {
+                Lines = new List<CodeLine>()
+                {
+                    new CodeLine("return 0;")
+                }
+            });
+
+            classDefinition.Methods.Add(new MethodDefinition("int", "Qux")
+            {
+                GenericType = "T",
+                WhereConstraints = new List<String>()
+                {
+                    "T : class"
+                },
                 Lines = new List<CodeLine>()
                 {
                     new CodeLine("return 0;")

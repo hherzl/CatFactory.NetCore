@@ -213,7 +213,15 @@ namespace CatFactory.DotNetCore
 
                     var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.IsNullOrEmpty(item.DefaultValue) ? String.Format("{0} {1}", item.Type, item.Name) : String.Format(String.Format("{0} {1} = {2}", item.Type, item.Name, item.DefaultValue))));
 
-                    output.AppendFormat("{0}{1} {2}({3});", Indent(2), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
+                    output.AppendFormat("{0}{1} {2}({3})", Indent(2), String.IsNullOrEmpty(method.Type) ? "void" : method.Type, method.Name, parameters);
+
+                    if (method.WhereConstraints.Count > 0)
+                    {
+                        output.AppendFormat(" where {0}", String.Join(", ", method.WhereConstraints));
+                    }
+
+                    output.Append(";");
+
                     output.AppendLine();
 
                     if (i < ObjectDefinition.Methods.Count - 1)

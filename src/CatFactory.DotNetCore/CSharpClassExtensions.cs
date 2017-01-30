@@ -10,9 +10,35 @@ namespace CatFactory.DotNetCore
     {
         public static void AddReadOnlyProperty(this CSharpClassDefinition classDefinition, String type, String name, params CodeLine[] codeLines)
         {
-            var property = new PropertyDefinition(type, name) { IsReadOnly = true };
+            var property = new PropertyDefinition(type, name)
+            {
+                IsReadOnly = true,
+                GetBody = new List<CodeLine>(codeLines)
+            };
+            
+            classDefinition.Properties.Add(property);
+        }
 
-            property.GetBody = new List<CodeLine>(codeLines);
+        public static void AddPropertyWithField(this CSharpClassDefinition classDefinition, String type, String name)
+        {
+            var namingConvention = new DotNetNamingConvention();
+
+            var fieldName = namingConvention.GetFieldName(name);
+
+            var property = new PropertyDefinition(type, name)
+            {
+                IsAutomatic = false,
+                GetBody = new List<CodeLine>()
+                {
+                    new CodeLine("return {0};", fieldName)
+                },
+                SetBody = new List<CodeLine>()
+                {
+                    new CodeLine("{0} = value;", fieldName)
+                }
+            };
+
+            classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, property.Type, fieldName));
 
             classDefinition.Properties.Add(property);
         }
@@ -23,11 +49,13 @@ namespace CatFactory.DotNetCore
 
             var fieldName = namingConvention.GetFieldName(name);
 
-            var property = new PropertyDefinition(type, name) { IsAutomatic = false };
-
-            property.GetBody = new List<CodeLine>()
+            var property = new PropertyDefinition(type, name)
             {
-                new CodeLine("return {0};", fieldName)
+                IsAutomatic = false,
+                GetBody = new List<CodeLine>()
+                {
+                    new CodeLine("return {0};", fieldName)
+                }
             };
 
             property.SetBody.Add(new CodeLine("if ({0} != value)", fieldName));
@@ -49,7 +77,7 @@ namespace CatFactory.DotNetCore
 
             property.SetBody.Add(new CodeLine("}}"));
 
-            classDefinition.Fields.Add(new FieldDefinition(property.Type, fieldName) { AccessModifier = AccessModifier.Private });
+            classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, property.Type, fieldName));
 
             classDefinition.Properties.Add(property);
         }
@@ -63,50 +91,38 @@ namespace CatFactory.DotNetCore
 
             interfaceDefinition.Namespaces = classDefinition.Namespaces;
 
-            foreach (var @event in classDefinition.Events)
+            foreach (var @event in classDefinition.Events.Where(item => item.AccessModifier == AccessModifier.Public))
             {
                 if (exclusions.Contains(@event.Name))
                 {
                     continue;
                 }
 
-                if (@event.AccessModifier == AccessModifier.Public)
-                {
-                    interfaceDefinition.Events.Add(new EventDefinition(@event.Type, @event.Name));
-                }
+                interfaceDefinition.Events.Add(new EventDefinition(@event.Type, @event.Name));
             }
 
-            foreach (var property in classDefinition.Properties)
+            foreach (var property in classDefinition.Properties.Where(item => item.AccessModifier == AccessModifier.Public))
             {
                 if (exclusions.Contains(property.Name))
                 {
                     continue;
                 }
 
-                if (property.AccessModifier == AccessModifier.Public)
+                interfaceDefinition.Properties.Add(new PropertyDefinition(property.Type, property.Name)
                 {
-                    interfaceDefinition.Properties.Add(new PropertyDefinition(property.Type, property.Name)
-                    {
-                        IsAutomatic = property.IsAutomatic,
-                        IsReadOnly = property.IsReadOnly
-                    });
-                }
+                    IsAutomatic = property.IsAutomatic,
+                    IsReadOnly = property.IsReadOnly
+                });
             }
 
-            foreach (var method in classDefinition.Methods)
+            foreach (var method in classDefinition.Methods.Where(item => item.AccessModifier == AccessModifier.Public))
             {
                 if (exclusions.Contains(method.Name))
                 {
                     continue;
                 }
 
-                if (method.AccessModifier == AccessModifier.Public)
-                {
-                    interfaceDefinition.Methods.Add(new MethodDefinition(method.Type, method.Name)
-                    {
-                        Parameters = method.Parameters
-                    });
-                }
+                interfaceDefinition.Methods.Add(new MethodDefinition(method.Type, method.Name, method.Parameters.ToArray()));
             }
 
             return interfaceDefinition;
