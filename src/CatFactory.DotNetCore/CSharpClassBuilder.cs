@@ -389,6 +389,18 @@ namespace CatFactory.DotNetCore
                     {
                         methodSignature.Add("static");
                     }
+                    else if (method.IsOverride)
+                    {
+                        methodSignature.Add("override");
+                    }
+                    else if (method.IsVirtual)
+                    {
+                        methodSignature.Add("virtual");
+                    }
+                    else if (method.IsAbstract)
+                    {
+                        methodSignature.Add("abstract");
+                    }
 
                     methodSignature.Add(String.IsNullOrEmpty(method.Type) ? "void" : method.Type);
 
