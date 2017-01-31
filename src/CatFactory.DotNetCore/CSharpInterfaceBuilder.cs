@@ -28,13 +28,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        public override String FileExtension
-        {
-            get
-            {
-                return "cs";
-            }
-        }
+        public override String FileExtension => "cs";
 
         protected void AddAttributes(Int32 start, StringBuilder output)
         {

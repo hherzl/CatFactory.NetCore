@@ -10,41 +10,26 @@ namespace CatFactory.DotNetCore
         {
         }
 
+        // todo: add logic to validate name
         public String ValidName(String name)
-        {
-            // todo: add logic to validate name
-
-            return String.Join("", name.Split(' ').Select(item => NamingConvention.GetPascalCase(item)));
-        }
+            => String.Join("", name.Split(' ').Select(item => NamingConvention.GetPascalCase(item)));
 
         public String GetInterfaceName(String value)
-        {
-            return NamingConvention.GetPascalCase(String.Format("I{0}", ValidName(value)));
-        }
+            => NamingConvention.GetPascalCase(String.Format("I{0}", ValidName(value)));
 
         public String GetClassName(String value)
-        {
-            return NamingConvention.GetPascalCase(ValidName(value));
-        }
+            => NamingConvention.GetPascalCase(ValidName(value));
 
         public String GetFieldName(String value)
-        {
-            return String.Format("m_{0}", NamingConvention.GetCamelCase(ValidName(value)));
-        }
+            => String.Format("m_{0}", NamingConvention.GetCamelCase(ValidName(value)));
 
         public String GetPropertyName(String value)
-        {
-            return NamingConvention.GetPascalCase(ValidName(value));
-        }
+            => NamingConvention.GetPascalCase(ValidName(value));
 
         public String GetMethodName(String value)
-        {
-            return NamingConvention.GetPascalCase(ValidName(value));
-        }
+            => NamingConvention.GetPascalCase(ValidName(value));
 
         public String GetParameterName(String value)
-        {
-            return NamingConvention.GetCamelCase(ValidName(value));
-        }
+            => NamingConvention.GetCamelCase(ValidName(value));
     }
 }

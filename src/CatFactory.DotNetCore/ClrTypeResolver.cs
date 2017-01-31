@@ -6,10 +6,9 @@ namespace CatFactory.DotNetCore
     {
         public ClrTypeResolver()
         {
-            UseNullableTypes = true;
         }
 
-        public Boolean UseNullableTypes { get; set; }
+        public Boolean UseNullableTypes { get; set; } = true;
 
         public virtual String Resolve(String type)
         {
@@ -74,6 +73,8 @@ namespace CatFactory.DotNetCore
                     break;
 
                 default:
+                    // todo: log unresolved data type
+                    value = "Object";
                     break;
             }
 

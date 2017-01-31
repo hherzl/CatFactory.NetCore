@@ -28,47 +28,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        public override String FileExtension
-        {
-            get
-            {
-                return "cs";
-            }
-        }
-
-        protected void AddAttributes (Int32 start, StringBuilder output)
-        {
-            foreach (var attrib in ObjectDefinition.Attributes)
-            {
-                var attributeDefinition = new StringBuilder();
-
-                attributeDefinition.Append("[");
-
-                attributeDefinition.AppendFormat("{0}", attrib.Name);
-
-                if (attrib.HasMembers)
-                {
-                    attributeDefinition.Append("(");
-
-                    if (attrib.HasArguments)
-                    {
-                        attributeDefinition.Append(String.Join(", ", attrib.Arguments));
-                    }
-
-                    if (attrib.HasSets)
-                    {
-                        attributeDefinition.Append(String.Join(", ", attrib.Sets));
-                    }
-
-                    attributeDefinition.Append(")");
-                }
-
-                attributeDefinition.Append("]");
-
-                output.AppendFormat("{0}{1}", Indent(1), attributeDefinition.ToString());
-                output.AppendLine();
-            }
-        }
+        public override String FileExtension => "cs";
 
         protected void AddEvents(Int32 start, StringBuilder output)
         {
@@ -107,7 +67,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddFields (Int32 start, StringBuilder output)
+        protected void AddFields(Int32 start, StringBuilder output)
         {
             if (ObjectDefinition.Fields != null && ObjectDefinition.Fields.Count > 0)
             {
@@ -348,8 +308,8 @@ namespace CatFactory.DotNetCore
                 }
             }
         }
-        
-        protected void AddMethods (Int32 start, StringBuilder output)
+
+        protected void AddMethods(Int32 start, StringBuilder output)
         {
             if (ObjectDefinition.Methods != null && ObjectDefinition.Methods.Count > 0)
             {
@@ -405,7 +365,7 @@ namespace CatFactory.DotNetCore
                     methodSignature.Add(String.IsNullOrEmpty(method.Type) ? "void" : method.Type);
 
                     methodSignature.Add(method.Name);
-                    
+
                     output.AppendFormat("{0}{1}", Indent(start + 1), String.Join(" ", methodSignature));
 
                     var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.IsNullOrEmpty(item.DefaultValue) ? String.Format("{0} {1}", item.Type, item.Name) : String.Format(String.Format("{0} {1} = {2}", item.Type, item.Name, item.DefaultValue))));
@@ -467,7 +427,7 @@ namespace CatFactory.DotNetCore
                 }
             }
         }
-        
+
         public override String Code
         {
             get
@@ -498,12 +458,12 @@ namespace CatFactory.DotNetCore
                     output.AppendLine();
                 }
 
-                if (! String.IsNullOrEmpty(ObjectDefinition.Documentation.Summary))
+                if (!String.IsNullOrEmpty(ObjectDefinition.Documentation.Summary))
                 {
                     AddSummary(output, start, ObjectDefinition.Documentation);
                 }
 
-                AddAttributes(start, output);
+                this.AddAttributes(output, start, ObjectDefinition);
 
                 var classDeclaration = new List<String>();
 

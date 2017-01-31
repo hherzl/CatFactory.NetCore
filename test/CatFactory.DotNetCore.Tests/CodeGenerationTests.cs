@@ -9,7 +9,35 @@ namespace CatFactory.DotNetCore.Tests
     public class CodeGenerationTests
     {
         [Fact]
-        public void TestCSharpClassGeneration()
+        public void TestContactClassGeneration()
+        {
+            var classDefinition = new CSharpClassDefinition()
+            {
+                Namespace = "ContactManager",
+                Name = "Contact",
+            };
+
+            classDefinition.Namespaces.Add("System");
+            classDefinition.Namespaces.Add("System.ComponentModel");
+
+            classDefinition.Attributes.Add(new MetadataAttribute("Table", "\"Contact\""));
+
+            classDefinition.Properties.Add(new PropertyDefinition("Int32?", "ID", new MetadataAttribute("Key")));
+            classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
+            classDefinition.Properties.Add(new PropertyDefinition("String", "MiddleName", new MetadataAttribute("StringLength", "25")));
+            classDefinition.Properties.Add(new PropertyDefinition("String", "LastName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
+
+            var classBuilder = new CSharpClassBuilder()
+            {
+                ObjectDefinition = classDefinition,
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
+            };
+
+            classBuilder.CreateFile();
+        }
+
+        [Fact]
+        public void TestPersonClassGeneration()
         {
             var classDefinition = new CSharpClassDefinition()
             {
@@ -20,7 +48,13 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Namespaces.Add("System");
             classDefinition.Namespaces.Add("System.ComponentModel");
 
-            classDefinition.Attributes.Add(new MetadataAttribute("Table", "\"Persons\""));
+            classDefinition.Attributes.Add(new MetadataAttribute("Table", "\"Persons\"")
+            {
+                Sets = new List<MetadataAttributeSet>()
+                {
+                    new MetadataAttributeSet("Schema", "\"PersonalInfo\"")
+                }
+            });
 
             classDefinition.Properties.Add(new PropertyDefinition("Int32?", "ID", new MetadataAttribute("Key")));
             classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));

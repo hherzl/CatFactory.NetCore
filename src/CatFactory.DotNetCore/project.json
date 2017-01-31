@@ -1,13 +1,13 @@
 ﻿{
-  "version": "1.0.0-alpha-build21",
+  "version": "1.0.0-alpha-build23",
   "authors": [
     "C. Herzl"
   ],
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
-    "CatFactory": "1.0.0-alpha-build20",
-    "CatFactory.SqlServer": "1.0.0-alpha-build15"
+    "CatFactory": "1.0.0-alpha-build22",
+    "CatFactory.SqlServer": "1.0.0-alpha-build16"
   },
 
   "frameworks": {
