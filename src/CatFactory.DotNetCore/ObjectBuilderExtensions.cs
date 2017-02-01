@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CatFactory.CodeFactory;
+using CatFactory.OOP;
 
 namespace CatFactory.DotNetCore
 {
     public static class ObjectBuilderExtensions
     {
-        public static void AddAttributes(this CSharpClassBuilder classBuilder, StringBuilder output, Int32 start, IDotNetClassDefinition ObjectDefinition)
+        private static void AddAttributes(CodeBuilder codeBuilder, List<MetadataAttribute> attributes, StringBuilder output, Int32 start)
         {
-            foreach (var attrib in ObjectDefinition.Attributes)
+            foreach (var attrib in attributes)
             {
                 var attributeDefinition = new StringBuilder();
 
@@ -35,9 +38,24 @@ namespace CatFactory.DotNetCore
 
                 attributeDefinition.Append("]");
 
-                output.AppendFormat("{0}{1}", classBuilder.Indent(1), attributeDefinition.ToString());
+                output.AppendFormat("{0}{1}", codeBuilder.Indent(1), attributeDefinition.ToString());
                 output.AppendLine();
             }
+        }
+
+        public static void AddAttributes(this CSharpClassBuilder classBuilder, StringBuilder output, Int32 start)
+        {
+            AddAttributes(classBuilder, classBuilder.ObjectDefinition.Attributes, output, start);
+        }
+
+        public static void AddAttributes(this CSharpInterfaceBuilder interfaceBuilder, StringBuilder output, Int32 start)
+        {
+            AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, output, start);
+        }
+
+        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, StringBuilder output, Int32 start)
+        {
+            AddAttributes(codeBuilder, propertyDefinition.Attributes, output, start);
         }
     }
 }

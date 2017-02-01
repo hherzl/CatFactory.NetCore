@@ -91,23 +91,13 @@ namespace CatFactory.DotNetCore
 
             interfaceDefinition.Namespaces = classDefinition.Namespaces;
 
-            foreach (var @event in classDefinition.Events.Where(item => item.AccessModifier == AccessModifier.Public))
+            foreach (var @event in classDefinition.Events.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {
-                if (exclusions.Contains(@event.Name))
-                {
-                    continue;
-                }
-
                 interfaceDefinition.Events.Add(new EventDefinition(@event.Type, @event.Name));
             }
 
-            foreach (var property in classDefinition.Properties.Where(item => item.AccessModifier == AccessModifier.Public))
+            foreach (var property in classDefinition.Properties.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {
-                if (exclusions.Contains(property.Name))
-                {
-                    continue;
-                }
-
                 interfaceDefinition.Properties.Add(new PropertyDefinition(property.Type, property.Name)
                 {
                     IsAutomatic = property.IsAutomatic,
@@ -115,13 +105,8 @@ namespace CatFactory.DotNetCore
                 });
             }
 
-            foreach (var method in classDefinition.Methods.Where(item => item.AccessModifier == AccessModifier.Public))
+            foreach (var method in classDefinition.Methods.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {
-                if (exclusions.Contains(method.Name))
-                {
-                    continue;
-                }
-
                 interfaceDefinition.Methods.Add(new MethodDefinition(method.Type, method.Name, method.Parameters.ToArray()));
             }
 

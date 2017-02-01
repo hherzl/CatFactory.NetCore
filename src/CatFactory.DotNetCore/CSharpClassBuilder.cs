@@ -10,10 +10,9 @@ namespace CatFactory.DotNetCore
         public CSharpClassBuilder()
             : base()
         {
-            ObjectDefinition = new CSharpClassDefinition();
         }
 
-        public IDotNetClassDefinition ObjectDefinition { get; set; }
+        public IDotNetClassDefinition ObjectDefinition { get; set; } = new CSharpClassDefinition();
 
         public override String FileName
         {
@@ -180,70 +179,49 @@ namespace CatFactory.DotNetCore
 
                     if (property.Attributes.Count > 0)
                     {
-                        foreach (var attrib in property.Attributes)
-                        {
-                            var attributeDefinition = new StringBuilder();
-
-                            attributeDefinition.Append("[");
-
-                            attributeDefinition.AppendFormat("{0}", attrib.Name);
-
-                            if (attrib.HasMembers)
-                            {
-                                attributeDefinition.Append("(");
-
-                                if (attrib.HasArguments)
-                                {
-                                    attributeDefinition.Append(String.Join(", ", attrib.Arguments));
-                                }
-
-                                if (attrib.HasSets)
-                                {
-                                    attributeDefinition.Append(String.Join(", ", attrib.Sets));
-                                }
-
-                                attributeDefinition.Append(")");
-                            }
-
-                            attributeDefinition.Append("]");
-
-                            output.AppendFormat("{0}{1}", Indent(start + 1), attributeDefinition.ToString());
-                            output.AppendLine();
-                        }
+                        this.AddAttributes(property, output, start);
                     }
 
                     if (property.IsReadOnly)
                     {
-                        output.AppendFormat("{0}{1} {2} {3}", Indent(start + 1), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
-                        output.AppendLine();
-
-                        if (property.GetBody.Count == 1)
+                        if (property.GetBody.Count == 0)
                         {
-                            output.AppendFormat("{0}=> {1}", Indent(start + 2), property.GetBody[0].Content.Replace("return ", String.Empty));
+                            output.AppendFormat("{0}{1} {2} {3} {{ get; }}", Indent(start + 1), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
                             output.AppendLine();
                         }
                         else
                         {
-                            output.AppendFormat("{0}{1}", Indent(start + 1), "{");
+                            output.AppendFormat("{0}{1} {2} {3}", Indent(start + 1), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
                             output.AppendLine();
 
-                            output.AppendFormat("{0}get", Indent(start + 2));
-                            output.AppendLine();
-
-                            output.AppendFormat("{0}{1}", Indent(start + 2), "{");
-                            output.AppendLine();
-
-                            foreach (var line in property.GetBody)
+                            if (property.GetBody.Count == 1)
                             {
-                                output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
+                                output.AppendFormat("{0}=> {1}", Indent(start + 2), property.GetBody[0].Content.Replace("return ", String.Empty));
                                 output.AppendLine();
                             }
+                            else
+                            {
+                                output.AppendFormat("{0}{1}", Indent(start + 1), "{");
+                                output.AppendLine();
 
-                            output.AppendFormat("{0}{1}", Indent(start + 2), "}");
-                            output.AppendLine();
+                                output.AppendFormat("{0}get", Indent(start + 2));
+                                output.AppendLine();
 
-                            output.AppendFormat("{0}{1}", Indent(start + 1), "}");
-                            output.AppendLine();
+                                output.AppendFormat("{0}{1}", Indent(start + 2), "{");
+                                output.AppendLine();
+
+                                foreach (var line in property.GetBody)
+                                {
+                                    output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
+                                    output.AppendLine();
+                                }
+
+                                output.AppendFormat("{0}{1}", Indent(start + 2), "}");
+                                output.AppendLine();
+
+                                output.AppendFormat("{0}{1}", Indent(start + 1), "}");
+                                output.AppendLine();
+                            }
                         }
                     }
                     else if (property.IsAutomatic)
@@ -463,7 +441,7 @@ namespace CatFactory.DotNetCore
                     AddSummary(output, start, ObjectDefinition.Documentation);
                 }
 
-                this.AddAttributes(output, start, ObjectDefinition);
+                this.AddAttributes(output, start);
 
                 var classDeclaration = new List<String>();
 

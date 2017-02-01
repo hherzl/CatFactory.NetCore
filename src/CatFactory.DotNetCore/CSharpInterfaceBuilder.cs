@@ -10,10 +10,9 @@ namespace CatFactory.DotNetCore
         public CSharpInterfaceBuilder()
             : base()
         {
-            ObjectDefinition = new CSharpInterfaceDefinition();
         }
 
-        public IDotNetInterfaceDefinition ObjectDefinition { get; set; }
+        public IDotNetInterfaceDefinition ObjectDefinition { get; set; } = new CSharpInterfaceDefinition();
 
         public override String FileName
         {
@@ -29,40 +28,6 @@ namespace CatFactory.DotNetCore
         }
 
         public override String FileExtension => "cs";
-
-        protected void AddAttributes(Int32 start, StringBuilder output)
-        {
-            foreach (var attrib in ObjectDefinition.Attributes)
-            {
-                var attributeDefinition = new StringBuilder();
-
-                attributeDefinition.Append("[");
-
-                attributeDefinition.AppendFormat("{0}", attrib.Name);
-
-                if (attrib.HasMembers)
-                {
-                    attributeDefinition.Append("(");
-
-                    if (attrib.HasArguments)
-                    {
-                        attributeDefinition.Append(String.Join(", ", attrib.Arguments));
-                    }
-
-                    if (attrib.HasSets)
-                    {
-                        attributeDefinition.Append(String.Join(", ", attrib.Sets));
-                    }
-
-                    attributeDefinition.Append(")");
-                }
-
-                attributeDefinition.Append("]");
-
-                output.AppendFormat("{0}{1}", Indent(1), attributeDefinition.ToString());
-                output.AppendLine();
-            }
-        }
 
         protected void AddEvents(Int32 start, StringBuilder output)
         {
@@ -119,36 +84,7 @@ namespace CatFactory.DotNetCore
 
                     if (property.Attributes.Count > 0)
                     {
-                        foreach (var attrib in property.Attributes)
-                        {
-                            var attributeDefinition = new StringBuilder();
-
-                            attributeDefinition.Append("[");
-
-                            attributeDefinition.AppendFormat("{0}", attrib.Name);
-
-                            if (attrib.HasMembers)
-                            {
-                                attributeDefinition.Append("(");
-
-                                if (attrib.HasArguments)
-                                {
-                                    attributeDefinition.Append(String.Join(", ", attrib.Arguments));
-                                }
-
-                                if (attrib.HasSets)
-                                {
-                                    attributeDefinition.Append(String.Join(", ", attrib.Sets));
-                                }
-
-                                attributeDefinition.Append(")");
-                            }
-
-                            attributeDefinition.Append("]");
-
-                            output.AppendFormat("{0}{1}", Indent(start + 1), attributeDefinition.ToString());
-                            output.AppendLine();
-                        }
+                        this.AddAttributes(property, output, start);
                     }
 
                     if (property.IsReadOnly)
@@ -264,13 +200,11 @@ namespace CatFactory.DotNetCore
                     output.AppendLine();
                 }
 
-                AddAttributes(start, output);
-
-                // todo: add access modifier to interface definition
+                this.AddAttributes(output, start);
 
                 var interfaceDeclaration = new List<String>();
 
-                interfaceDeclaration.Add("public");
+                interfaceDeclaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
 
                 if (ObjectDefinition.IsPartial)
                 {
