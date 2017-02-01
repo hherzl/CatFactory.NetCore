@@ -38,7 +38,7 @@ namespace CatFactory.DotNetCore
 
                 attributeDefinition.Append("]");
 
-                output.AppendFormat("{0}{1}", codeBuilder.Indent(1), attributeDefinition.ToString());
+                output.AppendFormat("{0}{1}", codeBuilder.Indent(start), attributeDefinition.ToString());
                 output.AppendLine();
             }
         }
@@ -55,7 +55,7 @@ namespace CatFactory.DotNetCore
 
         public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, StringBuilder output, Int32 start)
         {
-            AddAttributes(codeBuilder, propertyDefinition.Attributes, output, start);
+            AddAttributes(codeBuilder, propertyDefinition.Attributes, output, start + 1);
         }
     }
 }

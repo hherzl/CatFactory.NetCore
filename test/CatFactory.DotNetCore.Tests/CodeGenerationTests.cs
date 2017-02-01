@@ -56,7 +56,7 @@ namespace CatFactory.DotNetCore.Tests
                 }
             });
 
-            classDefinition.Properties.Add(new PropertyDefinition("Int32?", "ID", new MetadataAttribute("Key")));
+            classDefinition.Properties.Add(new PropertyDefinition("Int32?", "ID", new MetadataAttribute("Key")) { IsVirtual = true });
             classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
             classDefinition.Properties.Add(new PropertyDefinition("String", "MiddleName", new MetadataAttribute("StringLength", "25")));
             classDefinition.Properties.Add(new PropertyDefinition("String", "LastName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
@@ -189,6 +189,7 @@ namespace CatFactory.DotNetCore.Tests
 
             classDefinition.Properties.Add(new PropertyDefinition("String", "FullName")
             {
+                IsVirtual = true,
                 IsAutomatic = false,
                 IsReadOnly = true,
                 GetBody = new List<CodeLine>()

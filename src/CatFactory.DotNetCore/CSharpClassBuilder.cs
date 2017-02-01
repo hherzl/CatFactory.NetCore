@@ -191,9 +191,26 @@ namespace CatFactory.DotNetCore
                         }
                         else
                         {
-                            output.AppendFormat("{0}{1} {2} {3}", Indent(start + 1), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
-                            output.AppendLine();
+                            var propertySignature = new List<String>();
 
+                            propertySignature.Add(property.AccessModifier.ToString().ToLower());
+
+                            if (property.IsOverride)
+                            {
+                                // todo: add logic for override property
+                            }
+                            else if (property.IsVirtual)
+                            {
+                                propertySignature.Add("virtual");
+                            }
+
+                            propertySignature.Add(property.Type);
+
+                            propertySignature.Add(property.Name);
+
+                            output.AppendFormat("{0}{1}", Indent(start + 1), String.Join(" ", propertySignature));
+                            output.AppendLine();
+                            
                             if (property.GetBody.Count == 1)
                             {
                                 output.AppendFormat("{0}=> {1}", Indent(start + 2), property.GetBody[0].Content.Replace("return ", String.Empty));
@@ -226,7 +243,24 @@ namespace CatFactory.DotNetCore
                     }
                     else if (property.IsAutomatic)
                     {
-                        output.AppendFormat("{0}{1} {2} {3} {{ get; set; }}", Indent(start + 1), property.AccessModifier.ToString().ToLower(), property.Type, property.Name);
+                        var propertySignature = new List<String>();
+
+                        propertySignature.Add(property.AccessModifier.ToString().ToLower());
+                        
+                        if (property.IsOverride)
+                        {
+                            // todo: add logic for override property
+                        }
+                        else if (property.IsVirtual)
+                        {
+                            propertySignature.Add("virtual");
+                        }
+
+                        propertySignature.Add(property.Type);
+
+                        propertySignature.Add(property.Name);
+
+                        output.AppendFormat("{0}{1} {{ get; set; }}", Indent(start + 1), String.Join(" ", propertySignature));
                         output.AppendLine();
                     }
                     else
