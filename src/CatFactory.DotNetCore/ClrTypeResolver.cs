@@ -16,6 +16,10 @@ namespace CatFactory.DotNetCore
 
             switch (type)
             {
+                case "bit":
+                    value = "Boolean";
+                    break;
+
                 case "char":
                 case "varchar":
                 case "text":
@@ -25,6 +29,7 @@ namespace CatFactory.DotNetCore
                     value = "String";
                     break;
 
+                case "smallmoney":
                 case "money":
                 case "decimal":
                 case "numeric":
@@ -40,6 +45,10 @@ namespace CatFactory.DotNetCore
                     break;
 
                 case "image":
+                case "binary":
+                case "rowversion":
+                case "varbinary":
+                case "timestamp":
                     value = "Byte[]";
                     break;
 
@@ -59,19 +68,20 @@ namespace CatFactory.DotNetCore
                     value = "Guid";
                     break;
 
-                case "bit":
-                    value = "Boolean";
-                    break;
-
                 case "xml":
-                    value = "String";
+                    value = "Xml";
                     break;
 
+                case "smalldatetime":
                 case "datetime":
                 case "datetime2":
                     value = "DateTime";
                     break;
 
+                case "time":
+                    value = "TimeSpan";
+                    break;
+                    
                 default:
                     // todo: log unresolved data type
                     value = "Object";
@@ -83,6 +93,10 @@ namespace CatFactory.DotNetCore
                 return value;
             }
             else if (String.Compare("STRING", value, true) == 0)
+            {
+                return value;
+            }
+            else if (String.Compare("OBJECT", value, true) == 0)
             {
                 return value;
             }

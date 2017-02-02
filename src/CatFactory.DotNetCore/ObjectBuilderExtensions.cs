@@ -9,7 +9,7 @@ namespace CatFactory.DotNetCore
 {
     public static class ObjectBuilderExtensions
     {
-        private static void AddAttributes(CodeBuilder codeBuilder, List<MetadataAttribute> attributes, StringBuilder output, Int32 start)
+        private static IEnumerable<String> GetAttributes(List<MetadataAttribute> attributes)
         {
             foreach (var attrib in attributes)
             {
@@ -38,7 +38,15 @@ namespace CatFactory.DotNetCore
 
                 attributeDefinition.Append("]");
 
-                output.AppendFormat("{0}{1}", codeBuilder.Indent(start), attributeDefinition.ToString());
+                yield return attributeDefinition.ToString();
+            }
+        }
+
+        private static void AddAttributes(CodeBuilder codeBuilder, List<MetadataAttribute> attributes, StringBuilder output, Int32 start)
+        {
+            foreach (var attributeDefinition in GetAttributes(attributes))
+            {
+                output.AppendFormat("{0}{1}", codeBuilder.Indent(start), attributeDefinition);
                 output.AppendLine();
             }
         }
@@ -56,6 +64,16 @@ namespace CatFactory.DotNetCore
         public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, StringBuilder output, Int32 start)
         {
             AddAttributes(codeBuilder, propertyDefinition.Attributes, output, start + 1);
+        }
+
+        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, MethodDefinition methodDefinition, StringBuilder output, Int32 start)
+        {
+            AddAttributes(codeBuilder, methodDefinition.Attributes, output, start + 1);
+        }
+
+        public static String AddAttributes(this DotNetCodeBuilder codeBuilder, ParameterDefinition parameterDefinition)
+        {
+            return String.Join("", GetAttributes(parameterDefinition.Attributes));
         }
     }
 }

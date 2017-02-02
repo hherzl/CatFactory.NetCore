@@ -84,8 +84,17 @@ namespace CatFactory.DotNetCore
                 {
                     foreach (var field in ObjectDefinition.Fields)
                     {
-                        output.AppendFormat("{0}{1} {2} {3};", Indent(start + 1), field.AccessModifier.ToString().ToLower(), field.Type, field.Name);
-                        output.AppendLine();
+                        if (field.IsReadOnly)
+                        {
+                            output.AppendFormat("{0}{1} readonly {2} {3};", Indent(start + 1), field.AccessModifier.ToString().ToLower(), field.Type, field.Name);
+                            output.AppendLine();
+                        }
+                        else
+                        {
+                            output.AppendFormat("{0}{1} {2} {3};", Indent(start + 1), field.AccessModifier.ToString().ToLower(), field.Type, field.Name);
+                            output.AppendLine();
+                        }
+                        
                     }
 
                     output.AppendLine();
@@ -342,11 +351,7 @@ namespace CatFactory.DotNetCore
                 {
                     var method = ObjectDefinition.Methods[i];
 
-                    foreach (var attrib in method.Attributes)
-                    {
-                        output.AppendFormat("{0}[{1}]", Indent(start + 2), attrib.Name);
-                        output.AppendLine();
-                    }
+                    this.AddAttributes(method, output, start);
 
                     var methodSignature = new List<String>();
 
@@ -380,14 +385,44 @@ namespace CatFactory.DotNetCore
 
                     output.AppendFormat("{0}{1}", Indent(start + 1), String.Join(" ", methodSignature));
 
-                    var parameters = method.Parameters.Count == 0 ? String.Empty : String.Join(", ", method.Parameters.Select(item => String.IsNullOrEmpty(item.DefaultValue) ? String.Format("{0} {1}", item.Type, item.Name) : String.Format(String.Format("{0} {1} = {2}", item.Type, item.Name, item.DefaultValue))));
+                    var parameters = new List<String>();
+
+                    for (var j = 0; j < method.Parameters.Count; j++)
+                    {
+                        var parameter = method.Parameters[j];
+
+                        var parametersAttributes = this.AddAttributes(parameter);
+
+                        if (String.IsNullOrEmpty(parameter.DefaultValue))
+                        {
+                            if (String.IsNullOrEmpty(parametersAttributes))
+                            {
+                                parameters.Add(String.Format("{0} {1}", parameter.Type, parameter.Name));
+                            }
+                            else
+                            {
+                                parameters.Add(String.Format("{0}{1} {2}", parametersAttributes, parameter.Type, parameter.Name));
+                            }
+                        }
+                        else
+                        {
+                            if (String.IsNullOrEmpty(parametersAttributes))
+                            {
+                                parameters.Add(String.Format("{0} {1} = {2}", parameter.Type, parameter.Name, parameter.DefaultValue));
+                            }
+                            else
+                            {
+                                parameters.Add(String.Format("{0}{1} {2} = {3}", parametersAttributes, parameter.Type, parameter.Name, parameter.DefaultValue));
+                            }
+                        }
+                    }
 
                     if (!String.IsNullOrEmpty(method.GenericType))
                     {
                         output.AppendFormat("<{0}>", method.GenericType);
                     }
 
-                    output.AppendFormat("({0})", parameters);
+                    output.AppendFormat("({0})", String.Join(", ", parameters));
 
                     if (method.WhereConstraints.Count > 0)
                     {
