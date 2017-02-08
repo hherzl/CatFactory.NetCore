@@ -6,11 +6,11 @@ namespace CatFactory.DotNetCore
 {
     public static class ColumnExtensions
     {
-        private static INamingConvention namingConvention;
+        private static ICodeNamingConvention namingConvention;
 
         static ColumnExtensions()
         {
-            namingConvention = new DotNetNamingConvention() as INamingConvention;
+            namingConvention = new DotNetNamingConvention() as ICodeNamingConvention;
         }
 
         public static String GetParameterName(this Column column)

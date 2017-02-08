@@ -154,11 +154,11 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName")
             {
                 IsAutomatic = false,
-                GetBody = new List<CodeLine>()
+                GetBody = new List<ILine>()
                 {
                     new CodeLine("return m_firstName;")
                 },
-                SetBody = new List<CodeLine>()
+                SetBody = new List<ILine>()
                 {
                     new CodeLine("if (m_firstName != value)"),
                     new CodeLine("{{"),
@@ -172,11 +172,11 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Properties.Add(new PropertyDefinition("String", "LastName")
             {
                 IsAutomatic = false,
-                GetBody = new List<CodeLine>()
+                GetBody = new List<ILine>()
                 {
                     new CodeLine("return m_firstName;")
                 },
-                SetBody = new List<CodeLine>()
+                SetBody = new List<ILine>()
                 {
                     new CodeLine("if (m_lastName != value)"),
                     new CodeLine("{{"),
@@ -192,7 +192,7 @@ namespace CatFactory.DotNetCore.Tests
                 IsVirtual = true,
                 IsAutomatic = false,
                 IsReadOnly = true,
-                GetBody = new List<CodeLine>()
+                GetBody = new List<ILine>()
                 {
                     new CodeLine("return String.Format(\"{{0}} {{1}}\", FirstName, LastName);")
                 }
@@ -261,7 +261,7 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChangesAsync")
             {
                 IsAsync = true,
-                Lines = new List<CodeLine>()
+                Lines = new List<ILine>()
                 {
                     new CodeLine("return await DbContext.SaveChangesAsync();")
                 }
@@ -269,7 +269,7 @@ namespace CatFactory.DotNetCore.Tests
 
             classDefinition.Methods.Add(new MethodDefinition("IEnumerable<TEntity>", "GetAll")
             {
-                Lines = new List<CodeLine>()
+                Lines = new List<ILine>()
                 {
                     new CodeLine("return DbContext.Set<TEntity>();")
                 }
@@ -277,7 +277,7 @@ namespace CatFactory.DotNetCore.Tests
 
             classDefinition.Methods.Add(new MethodDefinition("void", "Add", new ParameterDefinition("TEntity", "entity"))
             {
-                Lines = new List<CodeLine>()
+                Lines = new List<ILine>()
                 {
                     new CodeLine("DbContext.Set<TEntity>().Add(entity);"),
                     new CodeLine(),
@@ -313,7 +313,7 @@ namespace CatFactory.DotNetCore.Tests
 
             classDefinition.Methods.Add(new MethodDefinition("int", "Zaz")
             {
-                Lines = new List<CodeLine>()
+                Lines = new List<ILine>()
                 {
                     new CodeLine("return 0;")
                 }
@@ -326,7 +326,7 @@ namespace CatFactory.DotNetCore.Tests
                 {
                     "T : class"
                 },
-                Lines = new List<CodeLine>()
+                Lines = new List<ILine>()
                 {
                     new CodeLine("return 0;")
                 }

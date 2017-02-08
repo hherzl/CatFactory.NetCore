@@ -13,7 +13,7 @@ namespace CatFactory.DotNetCore
             var property = new PropertyDefinition(type, name)
             {
                 IsReadOnly = true,
-                GetBody = new List<CodeLine>(codeLines)
+                GetBody = new List<ILine>(codeLines)
             };
             
             classDefinition.Properties.Add(property);
@@ -28,11 +28,11 @@ namespace CatFactory.DotNetCore
             var property = new PropertyDefinition(type, name)
             {
                 IsAutomatic = false,
-                GetBody = new List<CodeLine>()
+                GetBody = new List<ILine>()
                 {
                     new CodeLine("return {0};", fieldName)
                 },
-                SetBody = new List<CodeLine>()
+                SetBody = new List<ILine>()
                 {
                     new CodeLine("{0} = value;", fieldName)
                 }
@@ -52,7 +52,7 @@ namespace CatFactory.DotNetCore
             var property = new PropertyDefinition(type, name)
             {
                 IsAutomatic = false,
-                GetBody = new List<CodeLine>()
+                GetBody = new List<ILine>()
                 {
                     new CodeLine("return {0};", fieldName)
                 }

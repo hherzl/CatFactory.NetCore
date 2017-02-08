@@ -39,7 +39,7 @@ namespace CatFactory.DotNetCore.Tests
             classDef.Methods.Add(new MethodDefinition(AccessModifier.Protected, "void", "Disposed", new ParameterDefinition("Boolean", "disposing"))
             {
                 IsOverride = true,
-                Lines = new List<CodeLine>()
+                Lines = new List<ILine>()
                 {
                     new CodeLine("Repository?.Dispose();"),
                     new CodeLine(),

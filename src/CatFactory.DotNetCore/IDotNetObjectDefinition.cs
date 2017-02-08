@@ -8,6 +8,6 @@ namespace CatFactory.DotNetCore
     {
         Boolean UseRegionsToGroupClassMembers { get; set; }
 
-        INamingConvention NamingConvention { get; }
+        ICodeNamingConvention NamingConvention { get; }
     }
 }
