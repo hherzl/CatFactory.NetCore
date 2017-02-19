@@ -81,7 +81,7 @@ namespace CatFactory.DotNetCore
                 case "time":
                     value = "TimeSpan";
                     break;
-                    
+
                 default:
                     // todo: log unresolved data type
                     value = "Object";

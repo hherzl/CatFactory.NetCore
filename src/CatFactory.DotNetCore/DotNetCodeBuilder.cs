@@ -5,16 +5,19 @@ using CatFactory.OOP;
 
 namespace CatFactory.DotNetCore
 {
-    public class DotNetCodeBuilder : CodeBuilder
+    public abstract class DotNetCodeBuilder : CodeBuilder
     {
         public DotNetCodeBuilder()
         {
+            EventsRegionDescription = "[ Constants ]";
             EventsRegionDescription = "[ Events ]";
             FieldsRegionDescription = "[ Fields ]";
             ConstructorsRegionDescription = "[ Constructor ]";
             PropertiesRegionDescription = "[ Properties ]";
             MethodsRegionDescription = "[ Methods ]";
         }
+
+        public String ConstantsRegionDescription { get; set; }
 
         public String EventsRegionDescription { get; set; }
 
@@ -26,13 +29,8 @@ namespace CatFactory.DotNetCore
 
         public String MethodsRegionDescription { get; set; }
 
-        public virtual void AddSummary(StringBuilder output, Int32 start, Documentation documentation)
+        protected void AddDocumentation(StringBuilder output, int start, Documentation documentation)
         {
-            if (documentation == null)
-            {
-                return;
-            }
-
             output.AppendFormat("{0}/// <summary>", Indent(start));
             output.AppendLine();
 
@@ -41,6 +39,16 @@ namespace CatFactory.DotNetCore
 
             output.AppendFormat("{0}/// </summary>", Indent(start));
             output.AppendLine();
+        }
+
+        protected String GetToDo(String description)
+        {
+            return String.Format("// todo: {0}", description);
+        }
+
+        protected String GetComment(String description)
+        {
+            return String.Format("// {0}", description);
         }
     }
 }

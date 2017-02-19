@@ -28,6 +28,40 @@ namespace CatFactory.DotNetCore
         }
 
         public override String FileExtension => "cs";
+        
+        protected void AddConstants(Int32 start, StringBuilder output)
+        {
+            if (ObjectDefinition.Constants != null && ObjectDefinition.Constants.Count > 0)
+            {
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}#region {1}", Indent(start + 1), ConstantsRegionDescription);
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+
+                foreach (var constant in ObjectDefinition.Constants)
+                {
+                    output.AppendFormat("{0}{1} const {2} {3} = {4};", Indent(start + 1), constant.AccessModifier.ToString().ToLower(), constant.Type, constant.Name, constant.Value);
+                    output.AppendLine();
+                }
+
+                output.AppendLine();
+
+                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                {
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}#endregion", Indent(start + 1));
+                    output.AppendLine();
+
+                    output.AppendLine();
+                }
+            }
+        }
 
         protected void AddEvents(Int32 start, StringBuilder output)
         {
@@ -94,7 +128,7 @@ namespace CatFactory.DotNetCore
                             output.AppendFormat("{0}{1} {2} {3};", Indent(start + 1), field.AccessModifier.ToString().ToLower(), field.Type, field.Name);
                             output.AppendLine();
                         }
-                        
+
                     }
 
                     output.AppendLine();
@@ -219,7 +253,7 @@ namespace CatFactory.DotNetCore
 
                             output.AppendFormat("{0}{1}", Indent(start + 1), String.Join(" ", propertySignature));
                             output.AppendLine();
-                            
+
                             if (property.GetBody.Count == 1)
                             {
                                 output.AppendFormat("{0}=> {1}", Indent(start + 2), property.GetBody[0].Content.Replace("return ", String.Empty));
@@ -255,7 +289,7 @@ namespace CatFactory.DotNetCore
                         var propertySignature = new List<String>();
 
                         propertySignature.Add(property.AccessModifier.ToString().ToLower());
-                        
+
                         if (property.IsOverride)
                         {
                             // todo: add logic for override property
@@ -507,7 +541,7 @@ namespace CatFactory.DotNetCore
 
                 if (!String.IsNullOrEmpty(ObjectDefinition.Documentation.Summary))
                 {
-                    AddSummary(output, start, ObjectDefinition.Documentation);
+                    AddDocumentation(output, start, ObjectDefinition.Documentation);
                 }
 
                 this.AddAttributes(output, start);
@@ -550,6 +584,8 @@ namespace CatFactory.DotNetCore
 
                 output.AppendFormat("{0}{1}", Indent(start), "{");
                 output.AppendLine();
+
+                AddConstants(start, output);
 
                 AddEvents(start, output);
 
