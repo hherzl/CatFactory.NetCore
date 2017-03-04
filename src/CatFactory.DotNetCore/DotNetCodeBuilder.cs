@@ -29,7 +29,7 @@ namespace CatFactory.DotNetCore
 
         public String MethodsRegionDescription { get; set; }
 
-        protected void AddDocumentation(StringBuilder output, int start, Documentation documentation)
+        protected void AddDocumentation(StringBuilder output, Int32 start, Documentation documentation)
         {
             output.AppendFormat("{0}/// <summary>", Indent(start));
             output.AppendLine();
@@ -39,16 +39,6 @@ namespace CatFactory.DotNetCore
 
             output.AppendFormat("{0}/// </summary>", Indent(start));
             output.AppendLine();
-        }
-
-        protected String GetToDo(String description)
-        {
-            return String.Format("// todo: {0}", description);
-        }
-
-        protected String GetComment(String description)
-        {
-            return String.Format("// {0}", description);
         }
     }
 }

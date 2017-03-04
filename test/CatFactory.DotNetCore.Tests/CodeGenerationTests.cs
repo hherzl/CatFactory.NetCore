@@ -11,7 +11,7 @@ namespace CatFactory.DotNetCore.Tests
         [Fact]
         public void TestContactClassGeneration()
         {
-            var classDefinition = new CSharpClassDefinition()
+            var classDefinition = new CSharpClassDefinition
             {
                 Namespace = "ContactManager",
                 Name = "Contact",
@@ -27,7 +27,7 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Properties.Add(new PropertyDefinition("String", "MiddleName", new MetadataAttribute("StringLength", "25")));
             classDefinition.Properties.Add(new PropertyDefinition("String", "LastName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
 
-            var classBuilder = new CSharpClassBuilder()
+            var classBuilder = new CSharpClassBuilder
             {
                 ObjectDefinition = classDefinition,
                 OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
@@ -39,7 +39,7 @@ namespace CatFactory.DotNetCore.Tests
         [Fact]
         public void TestPersonClassGeneration()
         {
-            var classDefinition = new CSharpClassDefinition()
+            var classDefinition = new CSharpClassDefinition
             {
                 Namespace = "ContactManager",
                 Name = "Person",
@@ -63,7 +63,7 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Properties.Add(new PropertyDefinition("String", "Gender", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "1")));
             classDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate", new MetadataAttribute("Required")));
 
-            var classBuilder = new CSharpClassBuilder()
+            var classBuilder = new CSharpClassBuilder
             {
                 ObjectDefinition = classDefinition,
                 OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
@@ -75,7 +75,7 @@ namespace CatFactory.DotNetCore.Tests
         [Fact]
         public void TestCSharpInterfaceGeneration()
         {
-            var interfaceDefinition = new CSharpInterfaceDefinition()
+            var interfaceDefinition = new CSharpInterfaceDefinition
             {
                 Namespace = "ContactManager",
                 Name = "IPerson",
@@ -95,7 +95,7 @@ namespace CatFactory.DotNetCore.Tests
             interfaceDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate"));
             interfaceDefinition.Properties.Add(new PropertyDefinition("Int32", "Age") { IsReadOnly = true });
 
-            var classBuilder = new CSharpInterfaceBuilder()
+            var classBuilder = new CSharpInterfaceBuilder
             {
                 ObjectDefinition = interfaceDefinition,
                 OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
@@ -107,7 +107,7 @@ namespace CatFactory.DotNetCore.Tests
         [Fact]
         public void TestCSharpContractInterfaceGeneration()
         {
-            var interfaceDefinition = new CSharpInterfaceDefinition()
+            var interfaceDefinition = new CSharpInterfaceDefinition
             {
                 Namespace = "Contracts",
                 Name = "IRepository",
@@ -117,14 +117,14 @@ namespace CatFactory.DotNetCore.Tests
                     "System.Threading.Tasks"
                 }
             };
-            
+
             interfaceDefinition.Properties.Add(new PropertyDefinition("DbContext", "DbContext") { IsReadOnly = true });
 
             interfaceDefinition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChanges", new ParameterDefinition("int", "foo", "0")));
 
             interfaceDefinition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChangesAsync"));
 
-            var classBuilder = new CSharpInterfaceBuilder()
+            var classBuilder = new CSharpInterfaceBuilder
             {
                 ObjectDefinition = interfaceDefinition,
                 OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
@@ -198,7 +198,7 @@ namespace CatFactory.DotNetCore.Tests
                 }
             });
 
-            var classBuilder = new CSharpClassBuilder()
+            var classBuilder = new CSharpClassBuilder
             {
                 ObjectDefinition = classDefinition,
                 OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
@@ -228,7 +228,7 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.AddViewModelProperty("Decimal?", "UnitPrice");
             classDefinition.AddViewModelProperty("String", "ProductDescription");
 
-            var classBuilder = new CSharpClassBuilder()
+            var classBuilder = new CSharpClassBuilder
             {
                 ObjectDefinition = classDefinition,
                 OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
@@ -285,7 +285,7 @@ namespace CatFactory.DotNetCore.Tests
                 }
             });
 
-            var classBuilder = new CSharpClassBuilder()
+            var classBuilder = new CSharpClassBuilder
             {
                 ObjectDefinition = classDefinition,
                 OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
@@ -332,7 +332,7 @@ namespace CatFactory.DotNetCore.Tests
                 }
             });
 
-            var classBuilder = new CSharpClassBuilder()
+            var classBuilder = new CSharpClassBuilder
             {
                 ObjectDefinition = classDefinition,
                 OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CatFactory.CodeFactory;
 
 namespace CatFactory.DotNetCore
 {
@@ -27,8 +28,116 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        public override String FileExtension => "cs";
-        
+        public override String FileExtension
+            => "cs";
+
+        protected override String GetComment(String description)
+            => String.Format("//{0}", description);
+
+        protected String GetTodo(String description)
+            => String.Format("// todo: {0}", description);
+
+        public override String Code
+        {
+            get
+            {
+                var output = new StringBuilder();
+
+                if (ObjectDefinition.Namespaces.Count > 0)
+                {
+                    foreach (var item in ObjectDefinition.Namespaces)
+                    {
+                        output.AppendFormat("using {0};", item);
+                        output.AppendLine();
+                    }
+
+                    output.AppendLine();
+                }
+
+                var start = 0;
+
+                if (!String.IsNullOrEmpty(ObjectDefinition.Namespace))
+                {
+                    start = 1;
+
+                    output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}", "{");
+                    output.AppendLine();
+                }
+
+                if (!String.IsNullOrEmpty(ObjectDefinition.Documentation.Summary))
+                {
+                    AddDocumentation(output, start, ObjectDefinition.Documentation);
+                }
+
+                this.AddAttributes(output, start);
+
+                var classDeclaration = new List<String>();
+
+                classDeclaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
+
+                if (ObjectDefinition.IsPartial)
+                {
+                    classDeclaration.Add("partial");
+                }
+
+                classDeclaration.Add("class");
+
+                classDeclaration.Add(ObjectDefinition.Name);
+
+                if (ObjectDefinition.HasInheritance)
+                {
+                    classDeclaration.Add(":");
+
+                    var parents = new List<String>();
+
+                    if (!String.IsNullOrEmpty(ObjectDefinition.BaseClass))
+                    {
+                        parents.Add(ObjectDefinition.BaseClass);
+                    }
+
+                    if (ObjectDefinition.Implements.Count > 0)
+                    {
+                        parents.AddRange(ObjectDefinition.Implements);
+                    }
+
+                    classDeclaration.Add(String.Join(", ", parents));
+                }
+
+                output.AppendFormat("{0}{1}", Indent(start), String.Join(" ", classDeclaration));
+
+                output.AppendLine();
+
+                output.AppendFormat("{0}{1}", Indent(start), "{");
+                output.AppendLine();
+
+                AddConstants(start, output);
+
+                AddEvents(start, output);
+
+                AddFields(start, output);
+
+                AddConstructors(start, output);
+
+                AddProperties(start, output);
+
+                AddMethods(start, output);
+
+                output.AppendFormat("{0}{1}", Indent(start), "}");
+                output.AppendLine();
+
+                if (!String.IsNullOrEmpty(ObjectDefinition.Namespace))
+                {
+                    output.Append("}");
+                    output.AppendLine();
+                }
+
+                return output.ToString();
+            }
+        }
+
         protected void AddConstants(Int32 start, StringBuilder output)
         {
             if (ObjectDefinition.Constants != null && ObjectDefinition.Constants.Count > 0)
@@ -272,8 +381,18 @@ namespace CatFactory.DotNetCore
 
                                 foreach (var line in property.GetBody)
                                 {
-                                    output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
-                                    output.AppendLine();
+                                    var commentCast = line as CommentLine;
+
+                                    if (commentCast == null)
+                                    {
+                                        output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), line.Content);
+                                        output.AppendLine();
+                                    }
+                                    else
+                                    {
+                                        output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content));
+                                        output.AppendLine();
+                                    }
                                 }
 
                                 output.AppendFormat("{0}{1}", Indent(start + 2), "}");
@@ -322,8 +441,18 @@ namespace CatFactory.DotNetCore
 
                         foreach (var line in property.GetBody)
                         {
-                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
-                            output.AppendLine();
+                            var commentCast = line as CommentLine;
+
+                            if (commentCast == null)
+                            {
+                                output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line.Content);
+                                output.AppendLine();
+                            }
+                            else
+                            {
+                                output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content));
+                                output.AppendLine();
+                            }
                         }
 
                         output.AppendFormat("{0}{1}", Indent(start + 2), "}");
@@ -337,8 +466,18 @@ namespace CatFactory.DotNetCore
 
                         foreach (var line in property.SetBody)
                         {
-                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line);
-                            output.AppendLine();
+                            var commentCast = line as CommentLine;
+
+                            if (commentCast == null)
+                            {
+                                output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line.Content);
+                                output.AppendLine();
+                            }
+                            else
+                            {
+                                output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content));
+                                output.AppendLine();
+                            }
                         }
 
                         output.AppendFormat("{0}{1}", Indent(start + 2), "}");
@@ -478,15 +617,25 @@ namespace CatFactory.DotNetCore
                         output.AppendFormat("{0}=> {1}", Indent(start + 2), method.Lines[0].Content.Replace("return ", String.Empty));
                         output.AppendLine();
                     }
-                    else if (method.Lines.Count > 0)
+                    else if (method.Lines.Count > 1)
                     {
                         output.AppendFormat("{0}{1}", Indent(start + 1), "{");
                         output.AppendLine();
 
                         foreach (var line in method.Lines)
                         {
-                            output.AppendFormat("{0}{1}", Indent(3 + line.Indent), line);
-                            output.AppendLine();
+                            var commentCast = line as CommentLine;
+
+                            if (commentCast == null)
+                            {
+                                output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), line.Content);
+                                output.AppendLine();
+                            }
+                            else
+                            {
+                                output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content));
+                                output.AppendLine();
+                            }
                         }
 
                         output.AppendFormat("{0}{1}", Indent(start + 1), "}");
@@ -509,105 +658,5 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        public override String Code
-        {
-            get
-            {
-                var output = new StringBuilder();
-
-                if (ObjectDefinition.Namespaces.Count > 0)
-                {
-                    foreach (var item in ObjectDefinition.Namespaces)
-                    {
-                        output.AppendFormat("using {0};", item);
-                        output.AppendLine();
-                    }
-
-                    output.AppendLine();
-                }
-
-                var start = 0;
-
-                if (!String.IsNullOrEmpty(ObjectDefinition.Namespace))
-                {
-                    start = 1;
-
-                    output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
-                    output.AppendLine();
-
-                    output.AppendFormat("{0}", "{");
-                    output.AppendLine();
-                }
-
-                if (!String.IsNullOrEmpty(ObjectDefinition.Documentation.Summary))
-                {
-                    AddDocumentation(output, start, ObjectDefinition.Documentation);
-                }
-
-                this.AddAttributes(output, start);
-
-                var classDeclaration = new List<String>();
-
-                classDeclaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
-
-                if (ObjectDefinition.IsPartial)
-                {
-                    classDeclaration.Add("partial");
-                }
-
-                classDeclaration.Add("class");
-
-                classDeclaration.Add(ObjectDefinition.Name);
-
-                if (ObjectDefinition.HasInheritance)
-                {
-                    classDeclaration.Add(":");
-
-                    var parents = new List<String>();
-
-                    if (!String.IsNullOrEmpty(ObjectDefinition.BaseClass))
-                    {
-                        parents.Add(ObjectDefinition.BaseClass);
-                    }
-
-                    if (ObjectDefinition.Implements.Count > 0)
-                    {
-                        parents.AddRange(ObjectDefinition.Implements);
-                    }
-
-                    classDeclaration.Add(String.Join(", ", parents));
-                }
-
-                output.AppendFormat("{0}{1}", Indent(start), String.Join(" ", classDeclaration));
-
-                output.AppendLine();
-
-                output.AppendFormat("{0}{1}", Indent(start), "{");
-                output.AppendLine();
-
-                AddConstants(start, output);
-
-                AddEvents(start, output);
-
-                AddFields(start, output);
-
-                AddConstructors(start, output);
-
-                AddProperties(start, output);
-
-                AddMethods(start, output);
-
-                output.AppendFormat("{0}{1}", Indent(start), "}");
-                output.AppendLine();
-
-                if (!String.IsNullOrEmpty(ObjectDefinition.Namespace))
-                {
-                    output.Append("}");
-                    output.AppendLine();
-                }
-
-                return output.ToString();
-            }
-        }
     }
 }
