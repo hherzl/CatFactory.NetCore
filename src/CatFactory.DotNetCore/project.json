@@ -1,12 +1,12 @@
 ﻿{
-  "version": "1.0.0-alpha-build34",
+  "version": "1.0.0-alpha-build35",
   "authors": [
     "C. Herzl"
   ],
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "CatFactory": "1.0.0-alpha-build33"
+    "CatFactory": "1.0.0-alpha-build37"
   },
 
   "frameworks": {
