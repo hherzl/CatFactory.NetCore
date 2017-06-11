@@ -63,6 +63,8 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Properties.Add(new PropertyDefinition("String", "Gender", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "1")));
             classDefinition.Properties.Add(new PropertyDefinition("DateTime?", "BirthDate", new MetadataAttribute("Required")));
 
+            classDefinition.SimplifyDataTypes();
+
             var classBuilder = new CSharpClassBuilder
             {
                 ObjectDefinition = classDefinition,
