@@ -30,7 +30,7 @@ namespace CatFactory.DotNetCore.Tests
 
             classDef.Constructors.Add(new ClassConstructorDefinition(new ParameterDefinition("ISalesRepository", "repository"))
             {
-                Lines = new List<CodeLine>()
+                Lines = new List<ILine>()
                 {
                     new CodeLine("Repository = repository;")
                 }
