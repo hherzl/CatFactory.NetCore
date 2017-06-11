@@ -1,5 +1,12 @@
 ﻿{
-  "version": "1.0.0-alpha-build36",
+  "version": "1.0.0-alpha-build37",
+  "title": "CatFactory.DotNetCore",
+  "description": "CatFactory package for .Net Core",
+  "packOptions": {
+    "repository": {
+      "url": "https://github.com/hherzl/CatFactory.DotNetCore"
+    }
+  },
   "authors": [
     "C. Herzl"
   ],
