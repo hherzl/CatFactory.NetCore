@@ -4,6 +4,11 @@ using CatFactory.Mapping;
 
 namespace CatFactory.DotNetCore
 {
+    public static partial class MyClass
+    {
+
+    }
+
     public static class ColumnExtensions
     {
         private static ICodeNamingConvention namingConvention;

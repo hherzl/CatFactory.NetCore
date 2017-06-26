@@ -78,6 +78,11 @@ namespace CatFactory.DotNetCore
 
                 classDeclaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
 
+                if (ObjectDefinition.IsStatic)
+                {
+                    classDeclaration.Add("static");
+                }
+
                 if (ObjectDefinition.IsPartial)
                 {
                     classDeclaration.Add("partial");
@@ -566,28 +571,32 @@ namespace CatFactory.DotNetCore
 
                         var parametersAttributes = this.AddAttributes(parameter);
 
+                        var parameterDef = String.Empty;
+                        
                         if (String.IsNullOrEmpty(parameter.DefaultValue))
                         {
                             if (String.IsNullOrEmpty(parametersAttributes))
                             {
-                                parameters.Add(String.Format("{0} {1}", parameter.Type, parameter.Name));
+                                parameterDef = String.Format("{0} {1}", parameter.Type, parameter.Name);
                             }
                             else
                             {
-                                parameters.Add(String.Format("{0}{1} {2}", parametersAttributes, parameter.Type, parameter.Name));
+                                parameterDef = String.Format("{0}{1} {2}", parametersAttributes, parameter.Type, parameter.Name);
                             }
                         }
                         else
                         {
                             if (String.IsNullOrEmpty(parametersAttributes))
                             {
-                                parameters.Add(String.Format("{0} {1} = {2}", parameter.Type, parameter.Name, parameter.DefaultValue));
+                                parameterDef = String.Format("{0} {1} = {2}", parameter.Type, parameter.Name, parameter.DefaultValue);
                             }
                             else
                             {
-                                parameters.Add(String.Format("{0}{1} {2} = {3}", parametersAttributes, parameter.Type, parameter.Name, parameter.DefaultValue));
+                                parameterDef = String.Format("{0}{1} {2} = {3}", parametersAttributes, parameter.Type, parameter.Name, parameter.DefaultValue);
                             }
                         }
+
+                        parameters.Add(method.IsExtension && j == 0 ? String.Format("this {0}", parameterDef) : parameterDef);
                     }
 
                     if (!String.IsNullOrEmpty(method.GenericType))

@@ -342,5 +342,40 @@ namespace CatFactory.DotNetCore.Tests
 
             classBuilder.CreateFile();
         }
+
+        [Fact]
+        public void TestCSharpStaticClassWithExtensionMethods()
+        {
+            var classDefinition = new CSharpClassDefinition
+            {
+                Namespace = "Helpers",
+                Name = "Extensions",
+                IsStatic = true
+            };
+
+            classDefinition.Namespaces.Add("System");
+
+            classDefinition.Methods.Add(new MethodDefinition("void", "Foo", new ParameterDefinition("int", "foo", "0"), new ParameterDefinition("int", "bar", "1"))
+            {
+                IsStatic = true,
+                IsExtension = true
+            });
+
+            classDefinition.Methods.Add(new MethodDefinition("String", "Bar", new ParameterDefinition("long", "x", "0"))
+            {
+                IsStatic = true,
+                IsExtension = true,
+                GenericType = "TModel",
+                WhereConstraints = new List<string>() { "TModel : class" }
+            });
+
+            var classBuilder = new CSharpClassBuilder
+            {
+                ObjectDefinition = classDefinition,
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
+            };
+
+            classBuilder.CreateFile();
+        }
     }
 }
