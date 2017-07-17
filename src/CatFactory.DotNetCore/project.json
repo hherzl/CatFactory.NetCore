@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-alpha-build40",
+  "version": "2.0.0-alpha-build00",
   "title": "CatFactory.DotNetCore",
   "description": "CatFactory package for .Net Core",
   "packOptions": {
@@ -13,7 +13,7 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "CatFactory": "1.0.0-alpha-build40"
+    "CatFactory": "2.0.0-alpha-build00"
   },
 
   "frameworks": {
