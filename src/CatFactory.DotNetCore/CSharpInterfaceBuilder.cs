@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CatFactory.DotNetCore
 {
-    public class CSharpInterfaceBuilder : DotNetCodeBuilder
+    public class CSharpInterfaceBuilder : CSharpCodeBuilder
     {
         public CSharpInterfaceBuilder()
             : base()
@@ -26,8 +26,6 @@ namespace CatFactory.DotNetCore
                 return ObjectDefinition.Name;
             }
         }
-
-        public override String FileExtension => "cs";
 
         protected void AddEvents(Int32 start, StringBuilder output)
         {

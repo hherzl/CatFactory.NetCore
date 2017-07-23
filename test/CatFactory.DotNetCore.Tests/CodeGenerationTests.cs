@@ -366,8 +366,47 @@ namespace CatFactory.DotNetCore.Tests
                 IsStatic = true,
                 IsExtension = true,
                 GenericType = "TModel",
-                WhereConstraints = new List<string>() { "TModel : class" }
+                WhereConstraints = new List<String>() { "TModel : class" }
             });
+
+            var classBuilder = new CSharpClassBuilder
+            {
+                ObjectDefinition = classDefinition,
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
+            };
+
+            classBuilder.CreateFile();
+        }
+
+        [Fact]
+        public void TestCSharpClassWithFinalizer()
+        {
+            var classDefinition = new CSharpClassDefinition
+            {
+                Namespace = "Infrastructure",
+                Name = "DbContext",
+                IsStatic = true
+            };
+
+            classDefinition.Namespaces.Add("System.Data.Common");
+
+            classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, "IDbConnection", "Connection") { IsStatic = true });
+
+            classDefinition.StaticConstructor = new ClassConstructorDefinition
+            {
+                Lines = new List<ILine>()
+                {
+                    new CodeLine("Connection = DbFactory.GetDefaultInstance();")
+                }
+            };
+
+            classDefinition.Finalizer = new FinalizerDefinition
+            {
+                Lines = new List<ILine>()
+                {
+                    new CodeLine("Connection.Dispose();")
+                }
+            };
 
             var classBuilder = new CSharpClassBuilder
             {

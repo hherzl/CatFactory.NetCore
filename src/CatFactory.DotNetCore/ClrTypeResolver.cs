@@ -40,6 +40,10 @@ namespace CatFactory.DotNetCore
                     value = "Single";
                     break;
 
+                case "float":
+                    value = "Double";
+                    break;
+
                 case "tinyint":
                     value = "Byte";
                     break;
