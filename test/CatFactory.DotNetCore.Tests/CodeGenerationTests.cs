@@ -265,6 +265,7 @@ namespace CatFactory.DotNetCore.Tests
                 IsAsync = true,
                 Lines = new List<ILine>()
                 {
+                    new CommentLine("Save changes in async way"),
                     new CodeLine("return await DbContext.SaveChangesAsync();")
                 }
             });
@@ -273,6 +274,7 @@ namespace CatFactory.DotNetCore.Tests
             {
                 Lines = new List<ILine>()
                 {
+                    new TodoLine("Check generic cast"),
                     new CodeLine("return DbContext.Set<TEntity>();")
                 }
             });
@@ -281,8 +283,10 @@ namespace CatFactory.DotNetCore.Tests
             {
                 Lines = new List<ILine>()
                 {
+                    new CommentLine("Check entry state"),
                     new CodeLine("DbContext.Set<TEntity>().Add(entity);"),
                     new CodeLine(),
+                    new TodoLine("Save changes in async way"),
                     new CodeLine("DbContext.SaveChanges();")
                 }
             });
