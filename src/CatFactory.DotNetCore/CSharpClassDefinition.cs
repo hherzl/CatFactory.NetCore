@@ -14,5 +14,7 @@ namespace CatFactory.DotNetCore
         public Boolean UseRegionsToGroupClassMembers { get; set; }
 
         public ICodeNamingConvention NamingConvention { get; } = new DotNetNamingConvention();
+
+        public ITypeResolver TypeResolver { get; } = new ClrTypeResolver();
     }
 }
