@@ -27,6 +27,13 @@ namespace CatFactory.DotNetCore
             }
         }
 
+        public override void CreateFile(string subdirectory = "", string fileName = "")
+        {
+            ObjectDefinition.Init();
+
+            base.CreateFile(subdirectory, fileName);
+        }
+
         protected void AddEvents(Int32 start, StringBuilder output)
         {
             if (ObjectDefinition.Events != null && ObjectDefinition.Events.Count > 0)

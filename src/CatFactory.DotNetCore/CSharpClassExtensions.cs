@@ -8,6 +8,13 @@ namespace CatFactory.DotNetCore
 {
     public static class CSharpClassExtensions
     {
+        private static ICodeNamingConvention namingConvention;
+
+        static CSharpClassExtensions()
+        {
+            namingConvention = new DotNetNamingConvention();
+        }
+
         public static void AddReadOnlyProperty(this CSharpClassDefinition classDefinition, String type, String name, params CodeLine[] codeLines)
         {
             var property = new PropertyDefinition(type, name)
@@ -15,14 +22,12 @@ namespace CatFactory.DotNetCore
                 IsReadOnly = true,
                 GetBody = new List<ILine>(codeLines)
             };
-            
+
             classDefinition.Properties.Add(property);
         }
 
         public static void AddPropertyWithField(this CSharpClassDefinition classDefinition, String type, String name)
         {
-            var namingConvention = new DotNetNamingConvention();
-
             var fieldName = namingConvention.GetFieldName(name);
 
             var property = new PropertyDefinition(type, name)
@@ -43,10 +48,8 @@ namespace CatFactory.DotNetCore
             classDefinition.Properties.Add(property);
         }
 
-        public static void AddViewModelProperty(this CSharpClassDefinition classDefinition, String type, String name, Boolean useNullConditionalOperatorAndUseNameOfOperator = true)
+        public static void AddViewModelProperty(this CSharpClassDefinition classDefinition, String type, String name, Boolean useNullConditionalOperator = true)
         {
-            var namingConvention = new DotNetNamingConvention();
-
             var fieldName = namingConvention.GetFieldName(name);
 
             var property = new PropertyDefinition(type, name)
@@ -63,7 +66,7 @@ namespace CatFactory.DotNetCore
             property.SetBody.Add(new CodeLine(1, "{0} = value;", fieldName));
             property.SetBody.Add(new CodeLine());
 
-            if (useNullConditionalOperatorAndUseNameOfOperator)
+            if (useNullConditionalOperator)
             {
                 property.SetBody.Add(new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof({0})));", name));
             }
@@ -71,7 +74,7 @@ namespace CatFactory.DotNetCore
             {
                 property.SetBody.Add(new CodeLine(1, "if (PropertyChanged != null)"));
                 property.SetBody.Add(new CodeLine(1, "{{"));
-                property.SetBody.Add(new CodeLine(2, "PropertyChanged(this, new PropertyChangedEventArgs(\"{0}\"));", name));
+                property.SetBody.Add(new CodeLine(2, "PropertyChanged(this, new PropertyChangedEventArgs(nameof({0})));", name));
                 property.SetBody.Add(new CodeLine(1, "}}"));
             }
 
@@ -85,7 +88,6 @@ namespace CatFactory.DotNetCore
         public static CSharpInterfaceDefinition RefactInterface(this CSharpClassDefinition classDefinition, params String[] exclusions)
         {
             var interfaceDefinition = new CSharpInterfaceDefinition();
-            var namingConvention = new DotNetNamingConvention();
 
             interfaceDefinition.Name = namingConvention.GetInterfaceName(classDefinition.Name);
 
