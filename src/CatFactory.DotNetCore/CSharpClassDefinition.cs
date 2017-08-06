@@ -15,6 +15,6 @@ namespace CatFactory.DotNetCore
 
         public ICodeNamingConvention NamingConvention { get; } = new DotNetNamingConvention();
 
-        public ITypeResolver TypeResolver { get; } = new ClrTypeResolver();
+        public ITypeResolver TypeResolver { get; protected set; }
     }
 }
