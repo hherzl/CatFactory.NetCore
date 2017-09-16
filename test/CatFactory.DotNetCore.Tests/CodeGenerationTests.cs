@@ -151,7 +151,11 @@ namespace CatFactory.DotNetCore.Tests
             classDefinition.Events.Add(new EventDefinition("PropertyChangedEventHandler", "PropertyChanged"));
 
             classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, "String", "m_firstName"));
+            classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, "String", "m_middleName"));
             classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, "String", "m_lastName"));
+
+            classDefinition.Constructors.Add(new ClassConstructorDefinition());
+            classDefinition.Constructors.Add(new ClassConstructorDefinition());
 
             classDefinition.Properties.Add(new PropertyDefinition("String", "FirstName")
             {
@@ -163,11 +167,29 @@ namespace CatFactory.DotNetCore.Tests
                 SetBody = new List<ILine>()
                 {
                     new CodeLine("if (m_firstName != value)"),
-                    new CodeLine("{{"),
+                    new CodeLine("{"),
                     new CodeLine(1, "m_firstName = value;"),
                     new CodeLine(),
                     new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FirstName)));"),
-                    new CodeLine("}}")
+                    new CodeLine("}")
+                }
+            });
+
+            classDefinition.Properties.Add(new PropertyDefinition("String", "MiddleName")
+            {
+                IsAutomatic = false,
+                GetBody = new List<ILine>()
+                {
+                    new CodeLine("return m_middleName;")
+                },
+                SetBody = new List<ILine>()
+                {
+                    new CodeLine("if (m_middleName != value)"),
+                    new CodeLine("{"),
+                    new CodeLine(1, "m_middleName = value;"),
+                    new CodeLine(),
+                    new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MiddleName)));"),
+                    new CodeLine("}")
                 }
             });
 
@@ -181,11 +203,11 @@ namespace CatFactory.DotNetCore.Tests
                 SetBody = new List<ILine>()
                 {
                     new CodeLine("if (m_lastName != value)"),
-                    new CodeLine("{{"),
+                    new CodeLine("{"),
                     new CodeLine(1, "m_lastName = value;"),
                     new CodeLine(),
                     new CodeLine(1, "PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastName));"),
-                    new CodeLine("}}")
+                    new CodeLine("}")
                 }
             });
 

@@ -62,7 +62,7 @@ namespace CatFactory.DotNetCore
             };
 
             property.SetBody.Add(new CodeLine("if ({0} != value)", fieldName));
-            property.SetBody.Add(new CodeLine("{{"));
+            property.SetBody.Add(new CodeLine("{"));
             property.SetBody.Add(new CodeLine(1, "{0} = value;", fieldName));
             property.SetBody.Add(new CodeLine());
 
@@ -73,12 +73,12 @@ namespace CatFactory.DotNetCore
             else
             {
                 property.SetBody.Add(new CodeLine(1, "if (PropertyChanged != null)"));
-                property.SetBody.Add(new CodeLine(1, "{{"));
+                property.SetBody.Add(new CodeLine(1, "{"));
                 property.SetBody.Add(new CodeLine(2, "PropertyChanged(this, new PropertyChangedEventArgs(nameof({0})));", name));
-                property.SetBody.Add(new CodeLine(1, "}}"));
+                property.SetBody.Add(new CodeLine(1, "}"));
             }
 
-            property.SetBody.Add(new CodeLine("}}"));
+            property.SetBody.Add(new CodeLine("}"));
 
             classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, property.Type, fieldName));
 
