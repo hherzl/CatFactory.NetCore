@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -7,6 +6,21 @@ namespace CatFactory.DotNetCore
 {
     public class CSharpClassBuilder : CSharpCodeBuilder
     {
+        public static void Create(string outputDirectory, string subdirectory, bool forceOverwrite, params CSharpClassDefinition[] definitions)
+        {
+            foreach (var definition in definitions)
+            {
+                var codeBuilder = new CSharpClassBuilder
+                {
+                    OutputDirectory = outputDirectory,
+                    ForceOverwrite = forceOverwrite,
+                    ObjectDefinition = definition
+                };
+
+                codeBuilder.CreateFile(subdirectory);
+            }
+        }
+
         public CSharpClassBuilder()
             : base()
         {
@@ -14,20 +28,10 @@ namespace CatFactory.DotNetCore
 
         public IDotNetClassDefinition ObjectDefinition { get; set; } = new CSharpClassDefinition();
 
-        public override String FileName
-        {
-            get
-            {
-                if (ObjectDefinition != null && ObjectDefinition.Name != null && ObjectDefinition.Name.Contains("<"))
-                {
-                    return ObjectDefinition.Name.Substring(0, ObjectDefinition.Name.IndexOf("<"));
-                }
+        public override string FileName
+            => ObjectDefinition.Name;
 
-                return ObjectDefinition.Name;
-            }
-        }
-
-        public override String Code
+        public override string Code
         {
             get
             {
@@ -46,7 +50,7 @@ namespace CatFactory.DotNetCore
 
                 var start = 0;
 
-                if (!String.IsNullOrEmpty(ObjectDefinition.Namespace))
+                if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
                 {
                     start = 1;
 
@@ -57,38 +61,43 @@ namespace CatFactory.DotNetCore
                     output.AppendLine();
                 }
 
-                if (!String.IsNullOrEmpty(ObjectDefinition.Documentation.Summary))
+                if (!string.IsNullOrEmpty(ObjectDefinition.Documentation.Summary))
                 {
                     AddDocumentation(output, start, ObjectDefinition.Documentation);
                 }
 
                 this.AddAttributes(output, start);
 
-                var classDeclaration = new List<String>();
+                var declaration = new List<string>();
 
-                classDeclaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
+                declaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
 
                 if (ObjectDefinition.IsStatic)
                 {
-                    classDeclaration.Add("static");
+                    declaration.Add("static");
                 }
 
                 if (ObjectDefinition.IsPartial)
                 {
-                    classDeclaration.Add("partial");
+                    declaration.Add("partial");
                 }
 
-                classDeclaration.Add("class");
+                declaration.Add("class");
 
-                classDeclaration.Add(ObjectDefinition.Name);
+                declaration.Add(ObjectDefinition.Name);
+
+                if (!string.IsNullOrEmpty(ObjectDefinition.GenericType))
+                {
+                    declaration.Add(string.Format("<{0}>", ObjectDefinition.GenericType));
+                }
 
                 if (ObjectDefinition.HasInheritance)
                 {
-                    classDeclaration.Add(":");
+                    declaration.Add(":");
 
-                    var parents = new List<String>();
+                    var parents = new List<string>();
 
-                    if (!String.IsNullOrEmpty(ObjectDefinition.BaseClass))
+                    if (!string.IsNullOrEmpty(ObjectDefinition.BaseClass))
                     {
                         parents.Add(ObjectDefinition.BaseClass);
                     }
@@ -98,14 +107,14 @@ namespace CatFactory.DotNetCore
                         parents.AddRange(ObjectDefinition.Implements);
                     }
 
-                    classDeclaration.Add(String.Join(", ", parents));
+                    declaration.Add(string.Join(", ", parents));
                 }
 
-                output.AppendFormat("{0}{1}", Indent(start), String.Join(" ", classDeclaration));
+                output.AppendFormat("{0}{1}", Indent(start), string.Join(" ", declaration));
 
                 output.AppendLine();
 
-                output.AppendFormat("{0}{1}", Indent(start), "{");
+                output.AppendFormat("{0}{{", Indent(start));
                 output.AppendLine();
 
                 AddConstants(start, output);
@@ -124,10 +133,10 @@ namespace CatFactory.DotNetCore
 
                 AddMethods(start, output);
 
-                output.AppendFormat("{0}{1}", Indent(start), "}");
+                output.AppendFormat("{0}}}", Indent(start));
                 output.AppendLine();
 
-                if (!String.IsNullOrEmpty(ObjectDefinition.Namespace))
+                if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
                 {
                     output.Append("}");
                     output.AppendLine();
@@ -137,7 +146,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddConstants(Int32 start, StringBuilder output)
+        protected void AddConstants(int start, StringBuilder output)
         {
             if (ObjectDefinition.Constants == null || ObjectDefinition.Constants.Count == 0)
             {
@@ -173,7 +182,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddEvents(Int32 start, StringBuilder output)
+        protected void AddEvents(int start, StringBuilder output)
         {
             if (ObjectDefinition.Events == null || ObjectDefinition.Events.Count == 0)
             {
@@ -212,62 +221,64 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddFields(Int32 start, StringBuilder output)
+        protected void AddFields(int start, StringBuilder output)
         {
-            if (ObjectDefinition.Fields != null && ObjectDefinition.Fields.Count > 0)
+            if (ObjectDefinition.Fields == null || ObjectDefinition.Fields.Count == 0)
             {
-                if (ObjectDefinition.UseRegionsToGroupClassMembers)
+                return;
+            }
+
+            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            {
+                output.AppendLine();
+
+                output.AppendFormat("{0}#region {1}", Indent(start + 1), FieldsRegionDescription);
+                output.AppendLine();
+
+                output.AppendLine();
+            }
+
+            if (ObjectDefinition.Fields.Count > 0)
+            {
+                foreach (var field in ObjectDefinition.Fields)
                 {
-                    output.AppendLine();
+                    var fieldSignature = new List<string>();
 
-                    output.AppendFormat("{0}#region {1}", Indent(start + 1), FieldsRegionDescription);
-                    output.AppendLine();
+                    fieldSignature.Add(field.AccessModifier.ToString().ToLower());
 
-                    output.AppendLine();
-                }
-
-                if (ObjectDefinition.Fields.Count > 0)
-                {
-                    foreach (var field in ObjectDefinition.Fields)
+                    if (field.IsStatic)
                     {
-                        var fieldSignature = new List<String>();
-
-                        fieldSignature.Add(field.AccessModifier.ToString().ToLower());
-
-                        if (field.IsStatic)
-                        {
-                            fieldSignature.Add("static");
-                        }
-
-                        if (field.IsReadOnly)
-                        {
-                            fieldSignature.Add("readonly");
-                        }
-
-                        fieldSignature.Add(field.Type);
-
-                        fieldSignature.Add(field.Name);
-
-                        output.AppendFormat("{0}{1};", Indent(start + 1), String.Join(" ", fieldSignature));
-                        output.AppendLine();
+                        fieldSignature.Add("static");
                     }
 
+                    if (field.IsReadOnly)
+                    {
+                        fieldSignature.Add("readonly");
+                    }
+
+                    fieldSignature.Add(field.Type);
+
+                    fieldSignature.Add(field.Name);
+
+                    output.AppendFormat("{0}{1};", Indent(start + 1), string.Join(" ", fieldSignature));
                     output.AppendLine();
                 }
 
-                if (ObjectDefinition.UseRegionsToGroupClassMembers)
-                {
-                    output.AppendLine();
+                output.AppendLine();
+            }
 
-                    output.AppendFormat("{0}#endregion", Indent(start + 1));
-                    output.AppendLine();
+            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            {
+                output.AppendLine();
 
-                    output.AppendLine();
-                }
+                output.AppendFormat("{0}#endregion", Indent(start + 1));
+                output.AppendLine();
+
+                output.AppendLine();
             }
         }
 
-        protected void AddStaticConstructor(Int32 start, StringBuilder output)
+        protected void AddStaticConstructor(int start, StringBuilder output)
         {
             if (ObjectDefinition.StaticConstructor == null)
             {
@@ -308,7 +319,7 @@ namespace CatFactory.DotNetCore
             output.AppendLine();
         }
 
-        protected void AddConstructors(Int32 start, StringBuilder output)
+        protected void AddConstructors(int start, StringBuilder output)
         {
             if (ObjectDefinition.Constructors == null || ObjectDefinition.Constructors.Count == 0)
             {
@@ -321,14 +332,16 @@ namespace CatFactory.DotNetCore
                 output.AppendLine();
             }
 
-            foreach (var constructor in ObjectDefinition.Constructors)
+            for (var i = 0; i < ObjectDefinition.Constructors.Count; i++)
             {
-                output.AppendFormat("{0}{1} {2}({3})", Indent(start + 1), constructor.AccessModifier.ToString().ToLower(), ObjectDefinition.Name, constructor.Parameters.Count == 0 ? String.Empty : String.Join(", ", constructor.Parameters.Select(item => String.Format("{0} {1}", item.Type, item.Name))));
+                var constructor = ObjectDefinition.Constructors[i];
+
+                output.AppendFormat("{0}{1} {2}({3})", Indent(start + 1), constructor.AccessModifier.ToString().ToLower(), ObjectDefinition.Name, constructor.Parameters.Count == 0 ? string.Empty : string.Join(", ", constructor.Parameters.Select(item => string.Format("{0} {1}", item.Type, item.Name))));
                 output.AppendLine();
 
-                if (!String.IsNullOrEmpty(constructor.ParentInvoke))
+                if (!string.IsNullOrEmpty(constructor.Invocation))
                 {
-                    output.AppendFormat("{0}: {1}", Indent(start + 2), constructor.ParentInvoke);
+                    output.AppendFormat("{0}: {1}", Indent(start + 2), constructor.Invocation);
                     output.AppendLine();
                 }
 
@@ -340,6 +353,10 @@ namespace CatFactory.DotNetCore
                     if (line.IsComment())
                     {
                         output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content));
+                    }
+                    else if (line.IsPreprocessorDirectiveLine())
+                    {
+                        output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetWarning(line.Content));
                     }
                     else if (line.IsTodo())
                     {
@@ -360,7 +377,7 @@ namespace CatFactory.DotNetCore
                 output.AppendFormat("{0}{1}", Indent(start + 1), "}");
                 output.AppendLine();
 
-                if (ObjectDefinition.Constructors.Count > 1)
+                if (i < ObjectDefinition.Constructors.Count - 1)
                 {
                     output.AppendLine();
                 }
@@ -377,7 +394,7 @@ namespace CatFactory.DotNetCore
             output.AppendLine();
         }
 
-        protected void AddFinalizer(Int32 start, StringBuilder output)
+        protected void AddFinalizer(int start, StringBuilder output)
         {
             if (ObjectDefinition.Finalizer == null || ObjectDefinition.Finalizer.Lines == null || ObjectDefinition.Finalizer.Lines.Count == 0)
             {
@@ -414,11 +431,9 @@ namespace CatFactory.DotNetCore
 
             output.AppendFormat("{0}{1}", Indent(start + 1), "}");
             output.AppendLine();
-
-            output.AppendLine();
         }
 
-        protected void AddProperties(Int32 start, StringBuilder output)
+        protected void AddProperties(int start, StringBuilder output)
         {
             if (ObjectDefinition.Properties == null || ObjectDefinition.Properties.Count == 0)
             {
@@ -451,7 +466,7 @@ namespace CatFactory.DotNetCore
                     }
                     else
                     {
-                        var propertySignature = new List<String>();
+                        var propertySignature = new List<string>();
 
                         propertySignature.Add(property.AccessModifier.ToString().ToLower());
 
@@ -468,12 +483,12 @@ namespace CatFactory.DotNetCore
 
                         propertySignature.Add(property.Name);
 
-                        output.AppendFormat("{0}{1}", Indent(start + 1), String.Join(" ", propertySignature));
+                        output.AppendFormat("{0}{1}", Indent(start + 1), string.Join(" ", propertySignature));
                         output.AppendLine();
 
                         if (property.GetBody.Count == 1)
                         {
-                            output.AppendFormat("{0}=> {1}", Indent(start + 2), property.GetBody[0].Content.Replace("return ", String.Empty));
+                            output.AppendFormat("{0}=> {1}", Indent(start + 2), property.GetBody[0].Content.Replace("return ", string.Empty));
                             output.AppendLine();
                         }
                         else
@@ -519,7 +534,7 @@ namespace CatFactory.DotNetCore
                 }
                 else if (property.IsAutomatic)
                 {
-                    var propertySignature = new List<String>();
+                    var propertySignature = new List<string>();
 
                     propertySignature.Add(property.AccessModifier.ToString().ToLower());
 
@@ -536,7 +551,7 @@ namespace CatFactory.DotNetCore
 
                     propertySignature.Add(property.Name);
 
-                    output.AppendFormat("{0}{1} {{ get; set; }}", Indent(start + 1), String.Join(" ", propertySignature));
+                    output.AppendFormat("{0}{1} {{ get; set; }}", Indent(start + 1), string.Join(" ", propertySignature));
                     output.AppendLine();
                 }
                 else
@@ -628,7 +643,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddMethods(Int32 start, StringBuilder output)
+        protected void AddMethods(int start, StringBuilder output)
         {
             if (ObjectDefinition.Methods == null || ObjectDefinition.Methods.Count == 0)
             {
@@ -654,7 +669,7 @@ namespace CatFactory.DotNetCore
 
                 this.AddAttributes(method, output, start);
 
-                var methodSignature = new List<String>();
+                var methodSignature = new List<string>();
 
                 methodSignature.Add(method.AccessModifier.ToString().ToLower());
 
@@ -680,13 +695,20 @@ namespace CatFactory.DotNetCore
                     methodSignature.Add("abstract");
                 }
 
-                methodSignature.Add(String.IsNullOrEmpty(method.Type) ? "void" : method.Type);
+                methodSignature.Add(string.IsNullOrEmpty(method.Type) ? "void" : method.Type);
 
-                methodSignature.Add(method.Name);
+                if (string.IsNullOrEmpty(method.GenericType))
+                {
+                    methodSignature.Add(method.Name);
+                }
+                else
+                {
+                    methodSignature.Add(string.Format("{0}<{1}>", method.Name, method.GenericType));
+                }
 
-                output.AppendFormat("{0}{1}", Indent(start + 1), String.Join(" ", methodSignature));
+                output.AppendFormat("{0}{1}", Indent(start + 1), string.Join(" ", methodSignature));
 
-                var parameters = new List<String>();
+                var parameters = new List<string>();
 
                 for (var j = 0; j < method.Parameters.Count; j++)
                 {
@@ -694,44 +716,39 @@ namespace CatFactory.DotNetCore
 
                     var parametersAttributes = this.AddAttributes(parameter);
 
-                    var parameterDef = String.Empty;
+                    var parameterDef = string.Empty;
 
-                    if (String.IsNullOrEmpty(parameter.DefaultValue))
+                    if (string.IsNullOrEmpty(parameter.DefaultValue))
                     {
-                        if (String.IsNullOrEmpty(parametersAttributes))
+                        if (string.IsNullOrEmpty(parametersAttributes))
                         {
-                            parameterDef = String.Format("{0} {1}", parameter.Type, parameter.Name);
+                            parameterDef = string.Format("{0} {1}", parameter.Type, parameter.Name);
                         }
                         else
                         {
-                            parameterDef = String.Format("{0}{1} {2}", parametersAttributes, parameter.Type, parameter.Name);
+                            parameterDef = string.Format("{0}{1} {2}", parametersAttributes, parameter.Type, parameter.Name);
                         }
                     }
                     else
                     {
-                        if (String.IsNullOrEmpty(parametersAttributes))
+                        if (string.IsNullOrEmpty(parametersAttributes))
                         {
-                            parameterDef = String.Format("{0} {1} = {2}", parameter.Type, parameter.Name, parameter.DefaultValue);
+                            parameterDef = string.Format("{0} {1} = {2}", parameter.Type, parameter.Name, parameter.DefaultValue);
                         }
                         else
                         {
-                            parameterDef = String.Format("{0}{1} {2} = {3}", parametersAttributes, parameter.Type, parameter.Name, parameter.DefaultValue);
+                            parameterDef = string.Format("{0}{1} {2} = {3}", parametersAttributes, parameter.Type, parameter.Name, parameter.DefaultValue);
                         }
                     }
 
-                    parameters.Add(method.IsExtension && j == 0 ? String.Format("this {0}", parameterDef) : parameterDef);
+                    parameters.Add(method.IsExtension && j == 0 ? string.Format("this {0}", parameterDef) : parameterDef);
                 }
 
-                if (!String.IsNullOrEmpty(method.GenericType))
-                {
-                    output.AppendFormat("<{0}>", method.GenericType);
-                }
-
-                output.AppendFormat("({0})", String.Join(", ", parameters));
+                output.AppendFormat("({0})", string.Join(", ", parameters));
 
                 if (method.WhereConstraints.Count > 0)
                 {
-                    output.AppendFormat(" where {0}", String.Join(", ", method.WhereConstraints));
+                    output.AppendFormat(" where {0}", string.Join(", ", method.WhereConstraints));
                 }
 
                 output.AppendLine();
@@ -746,7 +763,7 @@ namespace CatFactory.DotNetCore
                 }
                 else if (method.Lines.Count == 1)
                 {
-                    output.AppendFormat("{0}=> {1}", Indent(start + 2), method.Lines[0].Content.Replace("return ", String.Empty));
+                    output.AppendFormat("{0}=> {1}", Indent(start + 2), method.Lines[0].Content.Replace("return ", string.Empty));
                     output.AppendLine();
                 }
                 else if (method.Lines.Count > 1)
@@ -794,6 +811,5 @@ namespace CatFactory.DotNetCore
                 output.AppendLine();
             }
         }
-
     }
 }

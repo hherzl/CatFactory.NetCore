@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace CatFactory.DotNetCore
+﻿namespace CatFactory.DotNetCore
 {
     public static class DotNetObjectDefinition
     {
-        private static String SetType(String source)
+        private static string SetType(string source)
         {
             switch (source)
             {

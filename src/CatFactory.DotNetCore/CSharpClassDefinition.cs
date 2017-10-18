@@ -1,5 +1,4 @@
-﻿using System;
-using CatFactory.CodeFactory;
+﻿using CatFactory.CodeFactory;
 using CatFactory.OOP;
 
 namespace CatFactory.DotNetCore
@@ -11,7 +10,7 @@ namespace CatFactory.DotNetCore
         {
         }
 
-        public Boolean UseRegionsToGroupClassMembers { get; set; }
+        public bool UseRegionsToGroupClassMembers { get; set; }
 
         public ICodeNamingConvention NamingConvention { get; } = new DotNetNamingConvention();
 

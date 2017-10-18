@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CatFactory.CodeFactory;
@@ -9,28 +8,28 @@ namespace CatFactory.DotNetCore
 {
     public static class ObjectBuilderExtensions
     {
-        private static IEnumerable<String> GetAttributes(List<MetadataAttribute> attributes)
+        private static IEnumerable<string> GetAttributes(List<MetadataAttribute> attributes)
         {
-            foreach (var attrib in attributes)
+            foreach (var attribute in attributes)
             {
                 var attributeDefinition = new StringBuilder();
 
                 attributeDefinition.Append("[");
 
-                attributeDefinition.AppendFormat("{0}", attrib.Name);
+                attributeDefinition.AppendFormat("{0}", attribute.Name);
 
-                if (attrib.HasMembers)
+                if (attribute.HasMembers)
                 {
                     attributeDefinition.Append("(");
 
-                    if (attrib.HasArguments)
+                    if (attribute.HasArguments)
                     {
-                        attributeDefinition.Append(String.Join(", ", attrib.Arguments));
+                        attributeDefinition.Append(string.Join(", ", attribute.Arguments));
                     }
 
-                    if (attrib.HasSets)
+                    if (attribute.HasSets)
                     {
-                        attributeDefinition.AppendFormat(", {0}", String.Join(", ", attrib.Sets.Select(item => String.Format("{0} = {1}", item.Name, item.Value))));
+                        attributeDefinition.AppendFormat(", {0}", string.Join(", ", attribute.Sets.Select(item => string.Format("{0} = {1}", item.Name, item.Value))));
                     }
 
                     attributeDefinition.Append(")");
@@ -42,7 +41,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        private static void AddAttributes(CodeBuilder codeBuilder, List<MetadataAttribute> attributes, StringBuilder output, Int32 start)
+        private static void AddAttributes(CodeBuilder codeBuilder, List<MetadataAttribute> attributes, StringBuilder output, int start)
         {
             foreach (var attributeDefinition in GetAttributes(attributes))
             {
@@ -51,29 +50,27 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        public static void AddAttributes(this CSharpClassBuilder classBuilder, StringBuilder output, Int32 start)
+        public static void AddAttributes(this CSharpClassBuilder classBuilder, StringBuilder output, int start)
         {
             AddAttributes(classBuilder, classBuilder.ObjectDefinition.Attributes, output, start);
         }
 
-        public static void AddAttributes(this CSharpInterfaceBuilder interfaceBuilder, StringBuilder output, Int32 start)
+        public static void AddAttributes(this CSharpInterfaceBuilder interfaceBuilder, StringBuilder output, int start)
         {
             AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, output, start);
         }
 
-        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, StringBuilder output, Int32 start)
+        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, StringBuilder output, int start)
         {
             AddAttributes(codeBuilder, propertyDefinition.Attributes, output, start + 1);
         }
 
-        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, MethodDefinition methodDefinition, StringBuilder output, Int32 start)
+        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, MethodDefinition methodDefinition, StringBuilder output, int start)
         {
             AddAttributes(codeBuilder, methodDefinition.Attributes, output, start + 1);
         }
 
-        public static String AddAttributes(this DotNetCodeBuilder codeBuilder, ParameterDefinition parameterDefinition)
-        {
-            return String.Join("", GetAttributes(parameterDefinition.Attributes));
-        }
+        public static string AddAttributes(this DotNetCodeBuilder codeBuilder, ParameterDefinition parameterDefinition)
+            => string.Join("", GetAttributes(parameterDefinition.Attributes));
     }
 }

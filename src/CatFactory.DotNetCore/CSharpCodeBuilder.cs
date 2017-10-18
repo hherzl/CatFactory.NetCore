@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using CatFactory.OOP;
 
 namespace CatFactory.DotNetCore
@@ -17,7 +16,7 @@ namespace CatFactory.DotNetCore
             MethodsRegionDescription = "[ Methods ]";
         }
 
-        protected override void AddDocumentation(StringBuilder output, Int32 start, Documentation documentation)
+        protected override void AddDocumentation(StringBuilder output, int start, Documentation documentation)
         {
             output.AppendFormat("{0}/// <summary>", Indent(start));
             output.AppendLine();
@@ -29,16 +28,19 @@ namespace CatFactory.DotNetCore
             output.AppendLine();
         }
 
-        public override String FileExtension
+        public override string FileExtension
             => "cs";
 
-        protected override String GetComment(String description)
-            => String.Format("//{0}", description);
+        protected override string GetComment(string description)
+            => string.Format("//{0}", description);
 
-        protected override String GetTodo(String description)
-            => String.Format("// todo: {0}", description);
+        protected override string GetPreprocessorDirective(string description)
+            => string.Format("#{0}", description);
 
-        protected override String GetWarning(String description)
-            => String.Format("#warning {0}", description);
+        protected override string GetTodo(string description)
+            => string.Format("// todo: {0}", description);
+
+        protected override string GetWarning(string description)
+            => string.Format("#warning {0}", description);
     }
 }

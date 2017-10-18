@@ -11,7 +11,7 @@ namespace CatFactory.DotNetCore.Tests
         public void TestController()
         {
             // Arrange
-            var classDef = new CSharpClassDefinition
+            var definition = new CSharpClassDefinition
             {
                 Namespace = "Controllers",
                 Name = "SalesController",
@@ -22,13 +22,13 @@ namespace CatFactory.DotNetCore.Tests
                 }
             };
 
-            classDef.Namespaces.Add("System");
-            classDef.Namespaces.Add("System.Threading.Tasks");
-            classDef.Namespaces.Add("Microsoft.AspNetCore.Mvc");
+            definition.Namespaces.Add("System");
+            definition.Namespaces.Add("System.Threading.Tasks");
+            definition.Namespaces.Add("Microsoft.AspNetCore.Mvc");
 
-            classDef.Fields.Add(new FieldDefinition(AccessModifier.Protected, "ISalesRepository", "Repository") { IsReadOnly = true });
+            definition.Fields.Add(new FieldDefinition(AccessModifier.Protected, "ISalesRepository", "Repository") { IsReadOnly = true });
 
-            classDef.Constructors.Add(new ClassConstructorDefinition(new ParameterDefinition("ISalesRepository", "repository"))
+            definition.Constructors.Add(new ClassConstructorDefinition(new ParameterDefinition("ISalesRepository", "repository"))
             {
                 Lines = new List<ILine>()
                 {
@@ -36,7 +36,7 @@ namespace CatFactory.DotNetCore.Tests
                 }
             });
 
-            classDef.Methods.Add(new MethodDefinition(AccessModifier.Protected, "void", "Disposed", new ParameterDefinition("Boolean", "disposing"))
+            definition.Methods.Add(new MethodDefinition(AccessModifier.Protected, "void", "Disposed", new ParameterDefinition("Boolean", "disposing"))
             {
                 IsOverride = true,
                 Lines = new List<ILine>()
@@ -47,65 +47,60 @@ namespace CatFactory.DotNetCore.Tests
                 }
             });
 
-            classDef.Methods.Add(new MethodDefinition("Task<IActionResult>", "GetOrdersAsync", new ParameterDefinition("Int32?", "pageSize", "10"))
+            definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "GetOrdersAsync", new ParameterDefinition("Int32?", "pageSize", "10"), new ParameterDefinition("Int32?", "pageNumber", "1"))
             {
                 Attributes = new List<MetadataAttribute>()
                 {
-                    new MetadataAttribute("HttpGet"),
-                    new MetadataAttribute("Route", "\"Order\"")
+                    new MetadataAttribute("HttpGet", "\"Order\"")
                 },
                 IsAsync = true
             });
 
-            classDef.Methods.Add(new MethodDefinition("Task<IActionResult>", "GetOrderAsync", new ParameterDefinition("Int32", "id"))
+            definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "GetOrderAsync", new ParameterDefinition("Int32", "id"))
             {
                 Attributes = new List<MetadataAttribute>()
                 {
-                    new MetadataAttribute("HttpGet"),
-                    new MetadataAttribute("Route", "\"Order/{id}\"")
+                    new MetadataAttribute("HttpGet", "\"Order/{id}\"")
                 },
                 IsAsync = true
             });
 
-            classDef.Methods.Add(new MethodDefinition("Task<IActionResult>", "CreateOrderAsync", new ParameterDefinition("OrderViewModel", "value", new MetadataAttribute("FromBody")))
+            definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "CreateOrderAsync", new ParameterDefinition("OrderViewModel", "value", new MetadataAttribute("FromBody")))
             {
                 Attributes = new List<MetadataAttribute>()
                 {
-                    new MetadataAttribute("HttpPost"),
-                    new MetadataAttribute("Route", "\"Order\"")
+                    new MetadataAttribute("HttpPost", "\"Order\"")
                 },
                 IsAsync = true
             });
 
-            classDef.Methods.Add(new MethodDefinition("Task<IActionResult>", "UpdateOrderAsync", new ParameterDefinition("Int32", "id"), new ParameterDefinition("OrderViewModel", "value", new MetadataAttribute("FromBody")))
+            definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "UpdateOrderAsync", new ParameterDefinition("Int32", "id"), new ParameterDefinition("OrderViewModel", "value", new MetadataAttribute("FromBody")))
             {
                 Attributes = new List<MetadataAttribute>()
                 {
-                    new MetadataAttribute("HttpPut"),
-                    new MetadataAttribute("Route", "\"Order/{id}\"")
+                    new MetadataAttribute("HttpPut", "\"Order/{id}\"")
                 },
                 IsAsync = true
             });
 
-            classDef.Methods.Add(new MethodDefinition("Task<IActionResult>", "DeleteOrderAsync", new ParameterDefinition("Int32", "id"))
+            definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "DeleteOrderAsync", new ParameterDefinition("Int32", "id"))
             {
                 Attributes = new List<MetadataAttribute>()
                 {
-                    new MetadataAttribute("HttpDelete"),
-                    new MetadataAttribute("Route", "\"Order/{id}\"")
+                    new MetadataAttribute("HttpDelete", "\"Order/{id}\"")
                 },
                 IsAsync = true
             });
 
             // Act
-            var classBuilder = new CSharpClassBuilder()
+            var builder = new CSharpClassBuilder
             {
-                ObjectDefinition = classDef,
-                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore"
+                ObjectDefinition = definition,
+                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore",
+                ForceOverwrite = true
             };
 
-            classBuilder.CreateFile();
-
+            builder.CreateFile();
         }
     }
 }

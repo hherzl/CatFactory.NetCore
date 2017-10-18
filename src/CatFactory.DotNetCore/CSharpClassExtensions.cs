@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CatFactory.CodeFactory;
 using CatFactory.OOP;
@@ -15,7 +14,7 @@ namespace CatFactory.DotNetCore
             namingConvention = new DotNetNamingConvention();
         }
 
-        public static void AddReadOnlyProperty(this CSharpClassDefinition classDefinition, String type, String name, params CodeLine[] codeLines)
+        public static void AddReadOnlyProperty(this CSharpClassDefinition classDefinition, string type, string name, params CodeLine[] codeLines)
         {
             var property = new PropertyDefinition(type, name)
             {
@@ -26,7 +25,7 @@ namespace CatFactory.DotNetCore
             classDefinition.Properties.Add(property);
         }
 
-        public static void AddPropertyWithField(this CSharpClassDefinition classDefinition, String type, String name)
+        public static void AddPropertyWithField(this CSharpClassDefinition classDefinition, string type, string name)
         {
             var fieldName = namingConvention.GetFieldName(name);
 
@@ -48,7 +47,7 @@ namespace CatFactory.DotNetCore
             classDefinition.Properties.Add(property);
         }
 
-        public static void AddViewModelProperty(this CSharpClassDefinition classDefinition, String type, String name, Boolean useNullConditionalOperator = true)
+        public static void AddViewModelProperty(this CSharpClassDefinition classDefinition, string type, string name, bool useNullConditionalOperator = true)
         {
             var fieldName = namingConvention.GetFieldName(name);
 
@@ -85,7 +84,7 @@ namespace CatFactory.DotNetCore
             classDefinition.Properties.Add(property);
         }
 
-        public static CSharpInterfaceDefinition RefactInterface(this CSharpClassDefinition classDefinition, params String[] exclusions)
+        public static CSharpInterfaceDefinition RefactInterface(this CSharpClassDefinition classDefinition, params string[] exclusions)
         {
             var interfaceDefinition = new CSharpInterfaceDefinition();
 

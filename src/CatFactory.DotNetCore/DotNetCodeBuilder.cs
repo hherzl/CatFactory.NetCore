@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using CatFactory.CodeFactory;
 using CatFactory.OOP;
 
@@ -11,28 +10,31 @@ namespace CatFactory.DotNetCore
         {
         }
 
-        public String ConstantsRegionDescription { get; set; }
+        public string ConstantsRegionDescription { get; set; }
 
-        public String EventsRegionDescription { get; set; }
+        public string EventsRegionDescription { get; set; }
 
-        public String FieldsRegionDescription { get; set; }
+        public string FieldsRegionDescription { get; set; }
 
-        public String ConstructorsRegionDescription { get; set; }
+        public string ConstructorsRegionDescription { get; set; }
 
-        public String FinalizerRegionDescription { get; set; }
+        public string FinalizerRegionDescription { get; set; }
 
-        public String PropertiesRegionDescription { get; set; }
+        public string PropertiesRegionDescription { get; set; }
 
-        public String MethodsRegionDescription { get; set; }
+        public string MethodsRegionDescription { get; set; }
 
-        protected virtual void AddDocumentation(StringBuilder output, Int32 start, Documentation documentation)
+        protected virtual void AddDocumentation(StringBuilder output, int start, Documentation documentation)
         {
         }
 
-        protected virtual String GetTodo(String description)
+        protected virtual string GetPreprocessorDirective(string description)
             => description;
 
-        protected virtual String GetWarning(String description)
+        protected virtual string GetTodo(string description)
+            => description;
+
+        protected virtual string GetWarning(string description)
             => description;
     }
 }

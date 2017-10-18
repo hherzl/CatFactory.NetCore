@@ -1,23 +1,19 @@
-﻿using System;
-using CatFactory.CodeFactory;
+﻿using CatFactory.CodeFactory;
 
 namespace CatFactory.DotNetCore
 {
     public static class ILineExtensions
     {
-        public static Boolean IsComment(this ILine line)
-        {
-            return line is CommentLine;
-        }
+        public static bool IsComment(this ILine line)
+            => line is CommentLine;
 
-        public static Boolean IsTodo(this ILine line)
-        {
-            return line is TodoLine;
-        }
+        public static bool IsPreprocessorDirectiveLine(this ILine line)
+            => line is PreprocessorDirectiveLine;
 
-        public static Boolean IsWarning(this ILine line)
-        {
-            return line is WarningLine;
-        }
+        public static bool IsTodo(this ILine line)
+            => line is TodoLine;
+
+        public static bool IsWarning(this ILine line)
+            => line is WarningLine;
     }
 }
