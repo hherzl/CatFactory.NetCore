@@ -31,7 +31,7 @@ namespace CatFactory.DotNetCore.Tests
             definition.Properties.Add(new PropertyDefinition("Int32", "Age") { IsReadOnly = true });
 
             // Act
-            CSharpInterfaceBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpInterfaceBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace CatFactory.DotNetCore.Tests
             definition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChangesAsync"));
 
             // Act
-            CSharpInterfaceBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpInterfaceBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
     }
 }

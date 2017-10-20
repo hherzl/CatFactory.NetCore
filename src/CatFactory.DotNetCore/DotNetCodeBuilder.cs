@@ -20,6 +20,8 @@ namespace CatFactory.DotNetCore
 
         public string FinalizerRegionDescription { get; set; }
 
+        public string IndexersRegionDescription { get; set; }
+
         public string PropertiesRegionDescription { get; set; }
 
         public string MethodsRegionDescription { get; set; }
@@ -28,13 +30,13 @@ namespace CatFactory.DotNetCore
         {
         }
 
+        protected override string GetComment(string description)
+            => description;
+
         protected virtual string GetPreprocessorDirective(string description)
             => description;
 
         protected virtual string GetTodo(string description)
-            => description;
-
-        protected virtual string GetWarning(string description)
             => description;
     }
 }

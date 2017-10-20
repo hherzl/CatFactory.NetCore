@@ -6,7 +6,7 @@ namespace CatFactory.DotNetCore
 {
     public class CSharpClassBuilder : CSharpCodeBuilder
     {
-        public static void Create(string outputDirectory, string subdirectory, bool forceOverwrite, params CSharpClassDefinition[] definitions)
+        public static void CreateFiles(string outputDirectory, string subdirectory, bool forceOverwrite, params CSharpClassDefinition[] definitions)
         {
             foreach (var definition in definitions)
             {
@@ -129,6 +129,8 @@ namespace CatFactory.DotNetCore
 
                 AddFinalizer(start, output);
 
+                AddIndexers(start, output);
+
                 AddProperties(start, output);
 
                 AddMethods(start, output);
@@ -146,7 +148,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddConstants(int start, StringBuilder output)
+        protected virtual void AddConstants(int start, StringBuilder output)
         {
             if (ObjectDefinition.Constants == null || ObjectDefinition.Constants.Count == 0)
             {
@@ -182,7 +184,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddEvents(int start, StringBuilder output)
+        protected virtual void AddEvents(int start, StringBuilder output)
         {
             if (ObjectDefinition.Events == null || ObjectDefinition.Events.Count == 0)
             {
@@ -221,7 +223,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddFields(int start, StringBuilder output)
+        protected virtual void AddFields(int start, StringBuilder output)
         {
             if (ObjectDefinition.Fields == null || ObjectDefinition.Fields.Count == 0)
             {
@@ -278,7 +280,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddStaticConstructor(int start, StringBuilder output)
+        protected virtual void AddStaticConstructor(int start, StringBuilder output)
         {
             if (ObjectDefinition.StaticConstructor == null)
             {
@@ -297,13 +299,13 @@ namespace CatFactory.DotNetCore
                 {
                     output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content));
                 }
+                else if (line.IsPreprocessorDirective())
+                {
+                    output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content));
+                }
                 else if (line.IsTodo())
                 {
                     output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content));
-                }
-                else if (line.IsWarning())
-                {
-                    output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetWarning(line.Content));
                 }
                 else
                 {
@@ -319,7 +321,7 @@ namespace CatFactory.DotNetCore
             output.AppendLine();
         }
 
-        protected void AddConstructors(int start, StringBuilder output)
+        protected virtual void AddConstructors(int start, StringBuilder output)
         {
             if (ObjectDefinition.Constructors == null || ObjectDefinition.Constructors.Count == 0)
             {
@@ -354,17 +356,13 @@ namespace CatFactory.DotNetCore
                     {
                         output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content));
                     }
-                    else if (line.IsPreprocessorDirectiveLine())
+                    else if (line.IsPreprocessorDirective())
                     {
-                        output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetWarning(line.Content));
+                        output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content));
                     }
                     else if (line.IsTodo())
                     {
                         output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content));
-                    }
-                    else if (line.IsWarning())
-                    {
-                        output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetWarning(line.Content));
                     }
                     else
                     {
@@ -394,7 +392,7 @@ namespace CatFactory.DotNetCore
             output.AppendLine();
         }
 
-        protected void AddFinalizer(int start, StringBuilder output)
+        protected virtual void AddFinalizer(int start, StringBuilder output)
         {
             if (ObjectDefinition.Finalizer == null || ObjectDefinition.Finalizer.Lines == null || ObjectDefinition.Finalizer.Lines.Count == 0)
             {
@@ -413,11 +411,11 @@ namespace CatFactory.DotNetCore
                 {
                     output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content));
                 }
-                else if (line.IsTodo())
+                else if (line.IsPreprocessorDirective())
                 {
-                    output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content));
+                    output.AppendFormat("{0}", GetPreprocessorDirective(line.Content));
                 }
-                else if (line.IsWarning())
+                else if (line.IsTodo())
                 {
                     output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content));
                 }
@@ -433,7 +431,122 @@ namespace CatFactory.DotNetCore
             output.AppendLine();
         }
 
-        protected void AddProperties(int start, StringBuilder output)
+        protected virtual void AddIndexers(int start, StringBuilder output)
+        {
+            if (ObjectDefinition.Indexers == null || ObjectDefinition.Indexers.Count == 0)
+            {
+                return;
+            }
+
+            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            {
+                output.AppendFormat("{0}#region {1}", Indent(start + 1), IndexersRegionDescription);
+                output.AppendLine();
+
+                output.AppendLine();
+            }
+
+            for (var i = 0; i < ObjectDefinition.Indexers.Count; i++)
+            {
+                var indexer = ObjectDefinition.Indexers[i];
+
+                var parameters = string.Join(", ", indexer.Parameters.Select(item => string.Format("{0} {1}", item.Type, item.Name)));
+
+                output.AppendFormat("{0}{1} {2} {3}[{4}]", Indent(start + 1), indexer.AccessModifier.ToString().ToLower(), indexer.Type, "this", parameters);
+                output.AppendLine();
+
+                output.AppendFormat("{0}{1}", Indent(start + 1), "{");
+                output.AppendLine();
+
+                if (indexer.GetBody.Count > 0)
+                {
+                    output.AppendFormat("{0}get", Indent(start + 2));
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}{1}", Indent(start + 2), "{");
+                    output.AppendLine();
+
+                    foreach (var line in indexer.GetBody)
+                    {
+                        if (line.IsComment())
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content));
+                        }
+                        else if (line.IsTodo())
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content));
+                        }
+                        else if (line.IsPreprocessorDirective())
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content));
+                        }
+                        else
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line.Content);
+                        }
+
+                        output.AppendLine();
+                    }
+
+                    output.AppendFormat("{0}{1}", Indent(start + 2), "}");
+                    output.AppendLine();
+                }
+
+                if (indexer.SetBody.Count > 0)
+                {
+                    output.AppendFormat("{0}set", Indent(start + 2));
+                    output.AppendLine();
+
+                    output.AppendFormat("{0}{1}", Indent(start + 2), "{");
+                    output.AppendLine();
+
+                    foreach (var line in indexer.SetBody)
+                    {
+                        if (line.IsComment())
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content));
+                        }
+                        else if (line.IsPreprocessorDirective())
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content));
+                        }
+                        else if (line.IsTodo())
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content));
+                        }
+                        else
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), line.Content);
+                        }
+
+                        output.AppendLine();
+                    }
+
+                    output.AppendFormat("{0}{1}", Indent(start + 2), "}");
+                    output.AppendLine();
+                }
+
+                output.AppendFormat("{0}{1}", Indent(start + 1), "}");
+                output.AppendLine();
+
+                if (i < ObjectDefinition.Indexers.Count - 1)
+                {
+                    output.AppendLine();
+                }
+            }
+
+            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            {
+                output.AppendLine();
+
+                output.AppendFormat("{0}#endregion", Indent(start + 1));
+                output.AppendLine();
+            }
+
+            output.AppendLine();
+        }
+
+        protected virtual void AddProperties(int start, StringBuilder output)
         {
             if (ObjectDefinition.Properties == null || ObjectDefinition.Properties.Count == 0)
             {
@@ -512,10 +625,6 @@ namespace CatFactory.DotNetCore
                                 {
                                     output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content));
                                 }
-                                else if (line.IsWarning())
-                                {
-                                    output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetWarning(line.Content));
-                                }
                                 else
                                 {
                                     output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), line.Content);
@@ -574,13 +683,13 @@ namespace CatFactory.DotNetCore
                         {
                             output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content));
                         }
+                        else if (line.IsPreprocessorDirective())
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content));
+                        }
                         else if (line.IsTodo())
                         {
                             output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content));
-                        }
-                        else if (line.IsWarning())
-                        {
-                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetWarning(line.Content));
                         }
                         else
                         {
@@ -605,11 +714,11 @@ namespace CatFactory.DotNetCore
                         {
                             output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content));
                         }
-                        else if (line.IsTodo())
+                        else if (line.IsPreprocessorDirective())
                         {
-                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content));
+                            output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content));
                         }
-                        else if (line.IsWarning())
+                        else if (line.IsTodo())
                         {
                             output.AppendFormat("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content));
                         }
@@ -643,7 +752,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddMethods(int start, StringBuilder output)
+        protected virtual void AddMethods(int start, StringBuilder output)
         {
             if (ObjectDefinition.Methods == null || ObjectDefinition.Methods.Count == 0)
             {
@@ -777,13 +886,13 @@ namespace CatFactory.DotNetCore
                         {
                             output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content));
                         }
+                        else if (line.IsPreprocessorDirective())
+                        {
+                            output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content));
+                        }
                         else if (line.IsTodo())
                         {
                             output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content));
-                        }
-                        else if (line.IsWarning())
-                        {
-                            output.AppendFormat("{0}{1}", Indent(start + 2 + line.Indent), GetWarning(line.Content));
                         }
                         else
                         {

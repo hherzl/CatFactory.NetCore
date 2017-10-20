@@ -13,12 +13,14 @@ namespace CatFactory.DotNetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
+                Namespaces = new List<string>()
+                {
+                    "System",
+                    "System.ComponentModel"
+                },
                 Namespace = "ContactManager",
                 Name = "Contact",
             };
-
-            definition.Namespaces.Add("System");
-            definition.Namespaces.Add("System.ComponentModel");
 
             definition.Attributes.Add(new MetadataAttribute("Table", "\"Contact\""));
 
@@ -28,7 +30,7 @@ namespace CatFactory.DotNetCore.Tests
             definition.Properties.Add(new PropertyDefinition("String", "LastName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
 
             // Act
-            CSharpClassBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -37,12 +39,14 @@ namespace CatFactory.DotNetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
+                Namespaces = new List<string>()
+                {
+                    "System",
+                    "System.ComponentModel"
+                },
                 Namespace = "ContactManager",
                 Name = "Person",
             };
-
-            definition.Namespaces.Add("System");
-            definition.Namespaces.Add("System.ComponentModel");
 
             definition.Attributes.Add(new MetadataAttribute("Table", "\"Persons\"")
             {
@@ -62,7 +66,7 @@ namespace CatFactory.DotNetCore.Tests
             definition.SimplifyDataTypes();
 
             // Act
-            CSharpClassBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -71,11 +75,11 @@ namespace CatFactory.DotNetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition();
 
-            definition.Namespace = "ViewModels";
-            definition.Name = "MyViewModel";
-
             definition.Namespaces.Add("System");
             definition.Namespaces.Add("System.ComponentModel");
+
+            definition.Namespace = "ViewModels";
+            definition.Name = "MyViewModel";
 
             definition.Implements.Add("INotifyPropertyChanged");
 
@@ -154,7 +158,7 @@ namespace CatFactory.DotNetCore.Tests
             });
 
             // Act
-            CSharpClassBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -163,11 +167,11 @@ namespace CatFactory.DotNetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition();
 
-            definition.Namespace = "ViewModels";
-            definition.Name = "ProductViewModel";
-
             definition.Namespaces.Add("System");
             definition.Namespaces.Add("System.ComponentModel");
+
+            definition.Namespace = "ViewModels";
+            definition.Name = "ProductViewModel";
 
             definition.Implements.Add("INotifyPropertyChanged");
 
@@ -180,7 +184,7 @@ namespace CatFactory.DotNetCore.Tests
             definition.AddViewModelProperty("String", "ProductDescription");
 
             // Act
-            CSharpClassBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -189,11 +193,11 @@ namespace CatFactory.DotNetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition();
 
-            definition.Namespace = "Repositories";
-            definition.Name = "DboRepository";
-
             definition.Namespaces.Add("System");
             definition.Namespaces.Add("System.Collections.Generic");
+
+            definition.Namespace = "Repositories";
+            definition.Name = "DboRepository";
 
             definition.Implements.Add("IRepository");
 
@@ -237,7 +241,7 @@ namespace CatFactory.DotNetCore.Tests
             });
 
             // Act
-            CSharpClassBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -280,7 +284,7 @@ namespace CatFactory.DotNetCore.Tests
             });
 
             // Act
-            CSharpClassBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -289,12 +293,14 @@ namespace CatFactory.DotNetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
+                Namespaces = new List<string>()
+                {
+                    "System"
+                },
                 Namespace = "Helpers",
                 Name = "Extensions",
                 IsStatic = true
             };
-
-            definition.Namespaces.Add("System");
 
             definition.Methods.Add(new MethodDefinition("void", "Foo", new ParameterDefinition("int", "foo", "0"), new ParameterDefinition("int", "bar", "1"))
             {
@@ -314,7 +320,7 @@ namespace CatFactory.DotNetCore.Tests
             });
 
             // Act
-            CSharpClassBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -323,12 +329,14 @@ namespace CatFactory.DotNetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
+                Namespaces = new List<string>()
+                {
+                    "System.Data.Common"
+                },
                 Namespace = "Infrastructure",
                 Name = "DbContext",
                 IsStatic = true
             };
-
-            definition.Namespaces.Add("System.Data.Common");
 
             definition.Fields.Add(new FieldDefinition(AccessModifier.Private, "IDbConnection", "Connection") { IsStatic = true });
 
@@ -349,7 +357,50 @@ namespace CatFactory.DotNetCore.Tests
             };
 
             // Act
-            CSharpClassBuilder.Create("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+        }
+
+        [Fact]
+        public void TestCSharpClassWithIndexer()
+        {
+            // Arrange
+            var definition = new CSharpClassDefinition
+            {
+                Namespaces = new List<string>()
+                {
+                    "System",
+                    "System.Collections.Generic"
+                },
+                Namespace = "Mapping",
+                Name = "DataSet"
+            };
+
+            definition.Indexers.Add(new Indexer
+            {
+                AccessModifier = AccessModifier.Public,
+                Type = "string",
+                Parameters = new List<ParameterDefinition>()
+                {
+                    new ParameterDefinition
+                    {
+                        Type = "int",
+                        Name = "index"
+                    }
+                },
+                GetBody = new List<ILine>()
+                {
+                    new CodeLine("return m_columns[index];")
+                },
+                SetBody = new List<ILine>()
+                {
+                    new CodeLine("m_columns = value;")
+                }
+            });
+
+            definition.AddPropertyWithField("List<string>", "Columns");
+
+            // Act
+            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
     }
 }

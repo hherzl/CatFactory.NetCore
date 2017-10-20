@@ -7,13 +7,10 @@ namespace CatFactory.DotNetCore
         public static bool IsComment(this ILine line)
             => line is CommentLine;
 
-        public static bool IsPreprocessorDirectiveLine(this ILine line)
+        public static bool IsPreprocessorDirective(this ILine line)
             => line is PreprocessorDirectiveLine;
 
         public static bool IsTodo(this ILine line)
             => line is TodoLine;
-
-        public static bool IsWarning(this ILine line)
-            => line is WarningLine;
     }
 }

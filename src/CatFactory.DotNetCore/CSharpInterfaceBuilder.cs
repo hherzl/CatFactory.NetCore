@@ -5,7 +5,7 @@ namespace CatFactory.DotNetCore
 {
     public class CSharpInterfaceBuilder : CSharpCodeBuilder
     {
-        public static void Create(string outputDirectory, string subdirectory, bool forceOverwrite, params CSharpInterfaceDefinition[] definitions)
+        public static void CreateFiles(string outputDirectory, string subdirectory, bool forceOverwrite, params CSharpInterfaceDefinition[] definitions)
         {
             foreach (var definition in definitions)
             {
@@ -30,7 +30,7 @@ namespace CatFactory.DotNetCore
         public override string FileName
             => ObjectDefinition.Name;
 
-        protected void AddEvents(int start, StringBuilder output)
+        protected virtual void AddEvents(int start, StringBuilder output)
         {
             if (ObjectDefinition.Events == null || ObjectDefinition.Events.Count == 0)
             {
@@ -69,7 +69,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddProperties(int start, StringBuilder output)
+        protected virtual void AddProperties(int start, StringBuilder output)
         {
             if (ObjectDefinition.Properties == null || ObjectDefinition.Properties.Count == 0)
             {
@@ -119,7 +119,7 @@ namespace CatFactory.DotNetCore
             }
         }
 
-        protected void AddMethods(int start, StringBuilder output)
+        protected virtual void AddMethods(int start, StringBuilder output)
         {
             if (ObjectDefinition.Methods == null || ObjectDefinition.Methods.Count == 0)
             {
