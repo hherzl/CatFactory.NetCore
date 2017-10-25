@@ -375,7 +375,7 @@ namespace CatFactory.DotNetCore.Tests
                 Name = "DataSet"
             };
 
-            definition.Indexers.Add(new Indexer
+            definition.Indexers.Add(new IndexerDefinition
             {
                 AccessModifier = AccessModifier.Public,
                 Type = "string",

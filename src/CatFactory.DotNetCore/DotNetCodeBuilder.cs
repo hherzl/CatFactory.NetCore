@@ -30,7 +30,7 @@ namespace CatFactory.DotNetCore
         {
         }
 
-        protected override string GetComment(string description)
+        protected virtual string GetComment(string description)
             => description;
 
         protected virtual string GetPreprocessorDirective(string description)
