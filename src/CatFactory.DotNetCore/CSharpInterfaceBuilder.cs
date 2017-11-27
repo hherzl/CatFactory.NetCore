@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CatFactory.DotNetCore
@@ -148,18 +149,7 @@ namespace CatFactory.DotNetCore
                 var methodSignature = new List<string>();
 
                 methodSignature.Add(string.IsNullOrEmpty(method.Type) ? "void" : method.Type);
-
-                if (string.IsNullOrEmpty(method.GenericType))
-                {
-                    methodSignature.Add(method.Name);
-                }
-                else
-                {
-                    methodSignature.Add(string.Format("{0}<{1}>", method.Name, method.GenericType));
-                }
-
-                output.AppendFormat("{0}{1}", Indent(start + 1), string.Join(" ", methodSignature));
-
+                
                 var parameters = new List<string>();
 
                 for (var j = 0; j < method.Parameters.Count; j++)
@@ -196,20 +186,22 @@ namespace CatFactory.DotNetCore
                     parameters.Add(method.IsExtension && j == 0 ? string.Format("this {0}", parameterDef) : parameterDef);
                 }
 
-                if (!string.IsNullOrEmpty(method.GenericType))
+                if (method.GenericTypes.Count == 0)
                 {
-                    output.AppendFormat("<{0}>", method.GenericType);
+                    methodSignature.Add(string.Format("{0}({1})", method.Name, string.Join(", ", parameters)));
+                }
+                else
+                {
+                    methodSignature.Add(string.Format("{0}<{1}>({2})", method.Name, string.Join(", ", method.GenericTypes.Select(item => item.Name)), string.Join(", ", parameters)));
                 }
 
-                output.AppendFormat("({0})", string.Join(", ", parameters));
-
-                if (method.WhereConstraints.Count > 0)
+                if (method.GenericTypes.Count > 0)
                 {
-                    output.AppendFormat(" where {0}", string.Join(", ", method.WhereConstraints));
+                    methodSignature.Add(string.Join(", ", method.GenericTypes.Select(item => string.Format("where {0}", item.Constraint))));
                 }
 
+                output.AppendFormat("{0}{1}", Indent(start + 1), string.Join(" ", methodSignature));
                 output.Append(";");
-
                 output.AppendLine();
 
                 if (i < ObjectDefinition.Methods.Count - 1)
@@ -270,11 +262,13 @@ namespace CatFactory.DotNetCore
 
                 declaration.Add("interface");
 
-                declaration.Add(ObjectDefinition.Name);
-
-                if (!string.IsNullOrEmpty(ObjectDefinition.GenericType))
+                if (ObjectDefinition.GenericTypes.Count == 0)
                 {
-                    declaration.Add(string.Format("<{0}>", ObjectDefinition.GenericType));
+                    declaration.Add(ObjectDefinition.Name);
+                }
+                else
+                {
+                    declaration.Add(string.Format("{0}<{1}>", ObjectDefinition.Name, string.Join(", ", ObjectDefinition.GenericTypes.Select(item => item.Name))));
                 }
 
                 if (ObjectDefinition.HasInheritance)

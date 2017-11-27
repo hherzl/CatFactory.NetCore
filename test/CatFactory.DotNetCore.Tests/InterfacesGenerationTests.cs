@@ -14,7 +14,7 @@ namespace CatFactory.DotNetCore.Tests
             {
                 Namespace = "ContactManager",
                 Name = "IPerson",
-                Namespaces = new List<string>()
+                Namespaces = new List<string>
                 {
                     "System",
                     "System.ComponentModel"
@@ -42,7 +42,7 @@ namespace CatFactory.DotNetCore.Tests
             {
                 Namespace = "Contracts",
                 Name = "IRepository",
-                Namespaces = new List<string>()
+                Namespaces = new List<string>
                 {
                     "System",
                     "System.Threading.Tasks"
@@ -54,6 +54,18 @@ namespace CatFactory.DotNetCore.Tests
             definition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChanges", new ParameterDefinition("int", "foo", "0")));
 
             definition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChangesAsync"));
+
+            definition.Methods.Add(new MethodDefinition("TEntity", "Audit")
+            {
+                GenericTypes = new List<GenericTypeDefinition>
+                {
+                    new GenericTypeDefinition
+                    {
+                        Name = "TEntity",
+                        Constraint = "TEntity : class, new()"
+                    }
+                }
+            });
 
             // Act
             CSharpInterfaceBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);

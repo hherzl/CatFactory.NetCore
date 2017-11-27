@@ -60,6 +60,11 @@ namespace CatFactory.DotNetCore
             AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, output, start);
         }
 
+        public static void AddAttributes(this CSharpEnumBuilder interfaceBuilder, StringBuilder output, int start)
+        {
+            AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, output, start);
+        }
+
         public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, StringBuilder output, int start)
         {
             AddAttributes(codeBuilder, propertyDefinition.Attributes, output, start + 1);

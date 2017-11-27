@@ -1,19 +1,24 @@
 ﻿{
-  "version": "3.0.0-alpha-build06",
+  "version": "3.0.0-alpha-build07",
   "title": "CatFactory.DotNetCore",
-  "description": "CatFactory package for .NET Core scaffolding (C#)",
+  "description": "CatFactory package for .NET Core (C#)",
   "packOptions": {
+    "summary": "CatFactory package for .NET Core (C#)",
+    "tags": [ ".NET Core", "C#" ],
+    "releaseNotes": "3.0.0-alpha-build07 version: Package update, Addition of enums generation and addition of fixes for generic types definitions change",
+    "requireLicenseAcceptance": false,
     "repository": {
+      "type": "git",
       "url": "https://github.com/hherzl/CatFactory.DotNetCore"
     }
   },
   "authors": [
-    "C. Herzl"
+    "H. Herzl"
   ],
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "CatFactory": "3.0.0-alpha-build06"
+    "CatFactory": "3.0.0-alpha-build09"
   },
 
   "frameworks": {
