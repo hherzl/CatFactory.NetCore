@@ -31,7 +31,7 @@ namespace CatFactory.DotNetCore.Tests
             definition.Properties.Add(new PropertyDefinition("Int32", "Age") { IsReadOnly = true });
 
             // Act
-            CSharpInterfaceBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -68,7 +68,52 @@ namespace CatFactory.DotNetCore.Tests
             });
 
             // Act
-            CSharpInterfaceBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+        }
+
+        [Fact]
+        public void TestCSharpGenericInterfaceGeneration()
+        {
+            // Arrange
+            var definition = new CSharpInterfaceDefinition
+            {
+                Namespaces = new List<string>
+                {
+                    "System",
+                    "System.Threading.Tasks"
+                },
+                Namespace = "Contracts",
+                IsPartial = true,
+                Name = "IGenericRepository",
+                GenericTypes = new List<GenericTypeDefinition>
+                {
+                    new GenericTypeDefinition
+                    {
+                        Name = "TEntity",
+                        Constraint = "TEntity : class, new()"
+                    }
+                }
+            };
+
+            definition.Properties.Add(new PropertyDefinition("DbContext", "DbContext") { IsReadOnly = true });
+
+            definition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChanges", new ParameterDefinition("int", "foo", "0")));
+
+            definition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChangesAsync"));
+
+            definition.Methods.Add(new MethodDefinition("void", "Audit")
+            {
+                GenericTypes = new List<GenericTypeDefinition>
+                {
+                    new GenericTypeDefinition
+                    {
+                        Name = "TEntity"
+                    }
+                }
+            });
+
+            // Act
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace CatFactory.DotNetCore.Tests
                     "System.ComponentModel"
                 },
                 Namespace = "ContactManager",
-                Name = "Contact",
+                Name = "Contact"
             };
 
             definition.Attributes.Add(new MetadataAttribute("Table", "\"Contact\""));
@@ -30,7 +30,7 @@ namespace CatFactory.DotNetCore.Tests
             definition.Properties.Add(new PropertyDefinition("String", "LastName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
 
             // Act
-            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace CatFactory.DotNetCore.Tests
             definition.SimplifyDataTypes();
 
             // Act
-            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -158,11 +158,11 @@ namespace CatFactory.DotNetCore.Tests
             });
 
             // Act
-            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestCsharpViewModelClassGenerationWithExtensionMethods()
+        public void TestCsharpViewModelClassWithExtensionMethodsGeneration()
         {
             // Arrange
             var definition = new CSharpClassDefinition();
@@ -184,7 +184,7 @@ namespace CatFactory.DotNetCore.Tests
             definition.AddViewModelProperty("String", "ProductDescription");
 
             // Act
-            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -241,7 +241,7 @@ namespace CatFactory.DotNetCore.Tests
             });
 
             // Act
-            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -287,11 +287,11 @@ namespace CatFactory.DotNetCore.Tests
             });
 
             // Act
-            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestCSharpStaticClassWithExtensionMethods()
+        public void TestCSharpStaticClassWithExtensionMethodsGeneration()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -326,11 +326,11 @@ namespace CatFactory.DotNetCore.Tests
             });
 
             // Act
-            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestCSharpClassWithFinalizer()
+        public void TestCSharpClassWithFinalizerGeneration()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -363,11 +363,11 @@ namespace CatFactory.DotNetCore.Tests
             };
 
             // Act
-            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestCSharpClassWithIndexer()
+        public void TestCSharpClassWithIndexerGeneration()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -406,7 +406,42 @@ namespace CatFactory.DotNetCore.Tests
             definition.AddPropertyWithField("List<string>", "Columns");
 
             // Act
-            CSharpClassBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+        }
+
+        [Fact]
+        public void TestCSharpGenericClassGeneration()
+        {
+            // Arrange
+            var definition = new CSharpClassDefinition
+            {
+                Namespaces = new List<string>
+                {
+                    "System",
+                    "System.Collections.Generic"
+                },
+                Namespace = "Mapping",
+                IsPartial = true,
+                Name = "GenericRepository",
+                GenericTypes = new List<GenericTypeDefinition>
+                {
+                    new GenericTypeDefinition
+                    {
+                        Name = "TEntity",
+                        Constraint = "TEntity : class, new()"
+                    }
+                },
+                Documentation = new Documentation
+                {
+                    Summary = "Contains repository methos for entity",
+                    Remarks = "This is an implementation according to design patterns."
+                }
+            };
+
+            definition.Methods.Add(new MethodDefinition("Int32", "CommitChanges"));
+
+            // Act
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
         }
     }
 }

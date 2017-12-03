@@ -61,7 +61,7 @@ namespace CatFactory.DotNetCore
                     output.AppendLine();
                 }
 
-                if (!string.IsNullOrEmpty(ObjectDefinition.Documentation.Summary))
+                if (ObjectDefinition.Documentation != null)
                 {
                     AddDocumentation(output, start, ObjectDefinition.Documentation);
                 }
@@ -110,6 +110,11 @@ namespace CatFactory.DotNetCore
                     }
 
                     declaration.Add(string.Join(", ", parents));
+                }
+
+                if (ObjectDefinition.GenericTypes.Count > 0)
+                {
+                    declaration.Add(string.Join(", ", ObjectDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
                 }
 
                 output.AppendFormat("{0}{1}", Indent(start), string.Join(" ", declaration));
@@ -855,7 +860,7 @@ namespace CatFactory.DotNetCore
 
                 if (method.GenericTypes.Count > 0)
                 {
-                    methodSignature.Add(string.Join(", ", method.GenericTypes.Select(item => string.Format("where {0}", item.Constraint))));
+                    methodSignature.Add(string.Join(", ", method.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
                 }
 
                 output.AppendFormat("{0}{1}", Indent(start + 1), string.Join(" ", methodSignature));
