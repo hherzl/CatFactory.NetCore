@@ -1,11 +1,11 @@
 ﻿{
-  "version": "3.0.0-alpha-build08",
+  "version": "3.0.0-alpha-build10",
   "title": "CatFactory.DotNetCore",
   "description": "CatFactory package for .NET Core (C#)",
   "packOptions": {
     "summary": "CatFactory package for .NET Core (C#)",
     "tags": [ ".NET Core", "C#" ],
-    "releaseNotes": "3.0.0-alpha-build08 version: Code fix for generic types in classes and interfaces, addition of static method in CSharpCodeBuilder to generate classes or interfaces",
+    "releaseNotes": "3.0.0-alpha-build10 version: Core package update and code fix for enum generation",
     "requireLicenseAcceptance": false,
     "repository": {
       "type": "git",
@@ -18,7 +18,7 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "CatFactory": "3.0.0-alpha-build09"
+    "CatFactory": "3.0.0-alpha-build10"
   },
 
   "frameworks": {

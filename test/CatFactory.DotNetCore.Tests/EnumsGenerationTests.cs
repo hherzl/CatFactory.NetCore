@@ -15,21 +15,9 @@ namespace CatFactory.DotNetCore.Tests
                 Name = "OperationMode",
                 Sets = new List<INameValue>
                 {
-                    new NameValue
-                    {
-                        Name = "First",
-                        Value = "0"
-                    },
-                    new NameValue
-                    {
-                        Name = "Second",
-                        Value = "1"
-                    },
-                    new NameValue
-                    {
-                        Name = "Third",
-                        Value = "2"
-                    }
+                    new NameValue { Name = "First", Value = "0" },
+                    new NameValue { Name = "Second", Value = "1" },
+                    new NameValue { Name = "Third", Value = "2" }
                 }
             };
 
@@ -43,33 +31,21 @@ namespace CatFactory.DotNetCore.Tests
             // Arrange
             var definition = new CSharpEnumDefinition
             {
-                Name = "CarOptions",
+                Namespaces = new List<string>
+                {
+                    "System"
+                },
                 Attributes = new List<MetadataAttribute>
                 {
                     new MetadataAttribute("Flags")
                 },
+                Name = "CarOptions",
                 Sets = new List<INameValue>
                 {
-                    new NameValue
-                    {
-                        Name = "SunRoof",
-                        Value = "0x01"
-                    },
-                    new NameValue
-                    {
-                        Name = "Spoiler",
-                        Value = "0x02"
-                    },
-                    new NameValue
-                    {
-                        Name = "FogLights",
-                        Value = "0x04"
-                    },
-                    new NameValue
-                    {
-                        Name = "TintedWindows",
-                        Value = "0x08"
-                    }
+                    new NameValue { Name = "SunRoof", Value = "0x01" },
+                    new NameValue { Name = "Spoiler", Value = "0x02" },
+                    new NameValue { Name = "FogLights", Value = "0x04" },
+                    new NameValue { Name = "TintedWindows", Value = "0x08" }
                 }
             };
 

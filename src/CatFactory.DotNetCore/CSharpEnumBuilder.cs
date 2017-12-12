@@ -25,7 +25,7 @@ namespace CatFactory.DotNetCore
         {
         }
 
-        public CSharpEnumDefinition ObjectDefinition { get; set; } = new CSharpEnumDefinition();
+        public CSharpEnumDefinition ObjectDefinition { get; set; }
 
         public override string FileName
             => ObjectDefinition.Name;
@@ -36,17 +36,16 @@ namespace CatFactory.DotNetCore
             {
                 var output = new StringBuilder();
 
-                // todo: add fix to add namespaces
-                //if (ObjectDefinition.Namespaces.Count > 0)
-                //{
-                //    foreach (var item in ObjectDefinition.Namespaces)
-                //    {
-                //        output.AppendFormat("using {0};", item);
-                //        output.AppendLine();
-                //    }
+                if (ObjectDefinition.Namespaces.Count > 0)
+                {
+                    foreach (var item in ObjectDefinition.Namespaces)
+                    {
+                        output.AppendFormat("using {0};", item);
+                        output.AppendLine();
+                    }
 
-                //    output.AppendLine();
-                //}
+                    output.AppendLine();
+                }
 
                 var start = 0;
 
@@ -67,14 +66,15 @@ namespace CatFactory.DotNetCore
 
                 declaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
 
-                if (ObjectDefinition.IsPartial)
-                {
-                    declaration.Add("partial");
-                }
-
                 declaration.Add("enum");
 
                 declaration.Add(ObjectDefinition.Name);
+
+                if (!string.IsNullOrEmpty(ObjectDefinition.BaseType))
+                {
+                    declaration.Add(":");
+                    declaration.Add(ObjectDefinition.BaseType);
+                }
 
                 output.AppendFormat("{0}{1}", Indent(start), string.Join(" ", declaration));
 

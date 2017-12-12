@@ -8,7 +8,5 @@ namespace CatFactory.DotNetCore
             : base()
         {
         }
-
-        public bool IsPartial { get; set; }
     }
 }
