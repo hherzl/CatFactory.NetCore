@@ -1,14 +1,21 @@
-﻿using CatFactory.CodeFactory;
+﻿using System.Collections.Generic;
+using CatFactory.CodeFactory;
 using CatFactory.Mapping;
 
 namespace CatFactory.DotNetCore
 {
     public static class ColumnExtensions
     {
-        private static ICodeNamingConvention namingConvention;
+        public static List<char> invalidChars;
+        public static ICodeNamingConvention namingConvention;
 
         static ColumnExtensions()
         {
+            invalidChars = new List<char>
+            {
+                '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', ';', ':', '"', ',', '.', '/', '?'
+            };
+
             namingConvention = new DotNetNamingConvention();
         }
 
@@ -16,6 +23,15 @@ namespace CatFactory.DotNetCore
             => namingConvention.GetParameterName(column.Name);
 
         public static string GetPropertyName(this Column column)
-            => namingConvention.GetPropertyName(column.Name);
+        {
+            var name = column.Name;
+
+            foreach (var item in invalidChars)
+            {
+                name = name.Replace(item, '_');
+            }
+
+            return namingConvention.GetPropertyName(name);
+        }
     }
 }

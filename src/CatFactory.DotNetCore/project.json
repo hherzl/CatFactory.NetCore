@@ -1,11 +1,11 @@
 ﻿{
-  "version": "3.0.0-alpha-build10",
+  "version": "3.0.0-alpha-build11",
   "title": "CatFactory.DotNetCore",
   "description": "CatFactory package for .NET Core (C#)",
   "packOptions": {
     "summary": "CatFactory package for .NET Core (C#)",
     "tags": [ ".NET Core", "C#" ],
-    "releaseNotes": "3.0.0-alpha-build10 version: Core package update and code fix for enum generation",
+    "releaseNotes": "3.0.0-alpha-build11 version: Addition of invalidChars field in ColumnExtensions class; change for GetPropertyName method, replace of invalid chars",
     "requireLicenseAcceptance": false,
     "repository": {
       "type": "git",
