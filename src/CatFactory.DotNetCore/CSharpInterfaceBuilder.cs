@@ -26,7 +26,7 @@ namespace CatFactory.DotNetCore
         {
         }
 
-        public IDotNetInterfaceDefinition ObjectDefinition { get; set; } = new CSharpInterfaceDefinition();
+        public new IDotNetInterfaceDefinition ObjectDefinition { get; set; } = new CSharpInterfaceDefinition();
 
         public override string FileName
             => ObjectDefinition.Name;

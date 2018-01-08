@@ -25,7 +25,7 @@ namespace CatFactory.DotNetCore
         {
         }
 
-        public CSharpEnumDefinition ObjectDefinition { get; set; }
+        public new CSharpEnumDefinition ObjectDefinition { get; set; }
 
         public override string FileName
             => ObjectDefinition.Name;

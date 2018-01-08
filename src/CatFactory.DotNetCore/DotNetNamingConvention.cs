@@ -13,8 +13,8 @@ namespace CatFactory.DotNetCore
         public string ValidName(string name)
             => string.Join("", name.Split(' ').Select(item => NamingConvention.GetPascalCase(item)));
 
-        public string GetNamespace(string value)
-            => NamingConvention.GetPascalCase(string.Format("{0}", ValidName(value)));
+        public string GetNamespace(params string[] values)
+            => string.Join(".", values);
 
         public string GetInterfaceName(string value)
             => NamingConvention.GetPascalCase(string.Format("I{0}", ValidName(value)));
