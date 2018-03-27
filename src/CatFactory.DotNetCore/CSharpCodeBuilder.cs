@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CatFactory.CodeFactory;
 using CatFactory.OOP;
 
 namespace CatFactory.DotNetCore
@@ -50,20 +51,32 @@ namespace CatFactory.DotNetCore
         {
             if (!string.IsNullOrEmpty(documentation.Summary))
             {
-                output.AppendFormat("{0}/// <summary>", Indent(start));
-                output.AppendLine();
+                //output.AppendFormat("{0}/// <summary>", Indent(start));
+                //output.AppendLine();
 
-                output.AppendFormat("{0}/// {1}", Indent(start), documentation.Summary);
-                output.AppendLine();
+                Lines.Add(new CodeLine("{0}/// <summary>", Indent(start)));
+                //Lines.Add(new CodeLine());
 
-                output.AppendFormat("{0}/// </summary>", Indent(start));
-                output.AppendLine();
+                //output.AppendFormat("{0}/// {1}", Indent(start), documentation.Summary);
+                //output.AppendLine();
+
+                Lines.Add(new CodeLine("{0}/// {1}", Indent(start), documentation.Summary));
+                //Lines.Add(new CodeLine());
+
+                //output.AppendFormat("{0}/// </summary>", Indent(start));
+                //output.AppendLine();
+
+                Lines.Add(new CodeLine("{0}/// </summary>", Indent(start)));
+                //Lines.Add(new CodeLine());
             }
 
             if (!string.IsNullOrEmpty(documentation.Remarks))
             {
-                output.AppendFormat("{0}/// <remarks>{1}</remarks>", Indent(start), documentation.Remarks);
-                output.AppendLine();
+                //output.AppendFormat("{0}/// <remarks>{1}</remarks>", Indent(start), documentation.Remarks);
+                //output.AppendLine();
+
+                Lines.Add(new CodeLine("{0}/// <remarks>{1}</remarks>", Indent(start), documentation.Remarks));
+                //Lines.Add(new CodeLine());
             }
         }
 

@@ -90,7 +90,6 @@ namespace CatFactory.DotNetCore.Tests
             definition.Fields.Add(new FieldDefinition(AccessModifier.Private, "String", "m_lastName"));
 
             definition.Constructors.Add(new ClassConstructorDefinition());
-            definition.Constructors.Add(new ClassConstructorDefinition());
 
             definition.Properties.Add(new PropertyDefinition("String", "FirstName")
             {
@@ -438,7 +437,13 @@ namespace CatFactory.DotNetCore.Tests
                 }
             };
 
-            definition.Methods.Add(new MethodDefinition("Int32", "CommitChanges"));
+            definition.Methods.Add(new MethodDefinition("Int32", "CommitChanges")
+            {
+                Lines = new List<ILine>
+                {
+                    new CodeLine("return 0;")
+                }
+            });
 
             // Act
             CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);

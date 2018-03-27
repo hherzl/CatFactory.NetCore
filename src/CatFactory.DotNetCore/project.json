@@ -1,11 +1,11 @@
 ﻿{
-  "version": "3.0.0-alpha-build13",
+  "version": "3.0.0-alpha-build14",
   "title": "CatFactory.DotNetCore",
   "description": "CatFactory package for .NET Core (C#)",
   "packOptions": {
     "summary": "CatFactory package for .NET Core (C#)",
     "tags": [ ".NET Core", "C#" ],
-    "releaseNotes": "3.0.0-alpha-build13 version: Core package update",
+    "releaseNotes": "3.0.0-alpha-build14 version: Core package update: addition of translating logic to scaffolding",
     "requireLicenseAcceptance": false,
     "repository": {
       "type": "git",
@@ -18,7 +18,7 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "CatFactory": "3.0.0-alpha-build12"
+    "CatFactory": "3.0.0-alpha-build13"
   },
 
   "frameworks": {

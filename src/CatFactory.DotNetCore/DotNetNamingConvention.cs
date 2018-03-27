@@ -1,17 +1,35 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CatFactory.CodeFactory;
 
 namespace CatFactory.DotNetCore
 {
     public class DotNetNamingConvention : ICodeNamingConvention
     {
+        public static List<char> invalidChars;
+
+        static DotNetNamingConvention()
+        {
+            invalidChars = new List<char>
+            {
+                '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', ';', ':', '"', ',', '.', '/', '?'
+            };
+        }
+
         public DotNetNamingConvention()
         {
         }
 
         // todo: add logic to validate name
-        public string ValidName(string name)
-            => string.Join("", name.Split(' ').Select(item => NamingConvention.GetPascalCase(item)));
+        public string ValidName(string value)
+        {
+            foreach (var item in invalidChars)
+            {
+                value = value.Replace(item, '_');
+            }
+
+            return string.Join("", value.Split(' ').Select(item => NamingConvention.GetPascalCase(item)));
+        }
 
         public string GetNamespace(params string[] values)
             => string.Join(".", values);
@@ -29,7 +47,7 @@ namespace CatFactory.DotNetCore
             => string.Format("{0}", NamingConvention.GetCamelCase(ValidName(value)));
 
         public string GetPropertyName(string value)
-            => NamingConvention.GetPascalCase(ValidName(value));
+            => string.Format("{0}", NamingConvention.GetPascalCase(ValidName(value)));
 
         public string GetMethodName(string value)
             => NamingConvention.GetPascalCase(ValidName(value));

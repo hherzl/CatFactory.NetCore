@@ -23,14 +23,10 @@ namespace CatFactory.DotNetCore
                     attributeDefinition.Append("(");
 
                     if (attribute.HasArguments)
-                    {
                         attributeDefinition.Append(string.Join(", ", attribute.Arguments));
-                    }
 
                     if (attribute.HasSets)
-                    {
                         attributeDefinition.AppendFormat(", {0}", string.Join(", ", attribute.Sets.Select(item => string.Format("{0} = {1}", item.Name, item.Value))));
-                    }
 
                     attributeDefinition.Append(")");
                 }
@@ -45,8 +41,10 @@ namespace CatFactory.DotNetCore
         {
             foreach (var attributeDefinition in GetAttributes(attributes))
             {
-                output.AppendFormat("{0}{1}", codeBuilder.Indent(start), attributeDefinition);
-                output.AppendLine();
+                //output.AppendFormat("{0}{1}", codeBuilder.Indent(start), attributeDefinition);
+                //output.AppendLine();
+
+                codeBuilder.Lines.Add(new CodeLine("{0}{1}", codeBuilder.Indent(start), attributeDefinition));
             }
         }
 
