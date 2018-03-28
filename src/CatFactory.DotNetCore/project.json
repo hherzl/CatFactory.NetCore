@@ -1,11 +1,11 @@
 ﻿{
-  "version": "3.0.0-alpha-build14",
+  "version": "3.0.0-alpha-build15",
   "title": "CatFactory.DotNetCore",
   "description": "CatFactory package for .NET Core (C#)",
   "packOptions": {
     "summary": "CatFactory package for .NET Core (C#)",
     "tags": [ ".NET Core", "C#" ],
-    "releaseNotes": "3.0.0-alpha-build14 version: Core package update: addition of translating logic to scaffolding",
+    "releaseNotes": "3.0.0-alpha-build15 version: Code fix on interface scaffolding",
     "requireLicenseAcceptance": false,
     "repository": {
       "type": "git",

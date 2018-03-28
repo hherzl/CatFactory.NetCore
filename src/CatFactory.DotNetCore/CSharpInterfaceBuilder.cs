@@ -290,7 +290,7 @@ namespace CatFactory.DotNetCore
                     //output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
                     //output.AppendLine();
 
-                    Lines.Add(new CodeLine("namespace {0};", ObjectDefinition.Namespace));
+                    Lines.Add(new CodeLine("namespace {0}", ObjectDefinition.Namespace));
 
                     //output.AppendFormat("{0}", "{");
                     //output.AppendLine();
