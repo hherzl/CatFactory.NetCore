@@ -280,93 +280,93 @@ namespace CatFactory.DotNetCore
                 }
 
                 Lines.Add(new CodeLine());
+            }
 
-                var start = 0;
+            var start = 0;
 
-                if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
-                {
-                    start = 1;
+            if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
+            {
+                start = 1;
 
-                    //output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
-                    //output.AppendLine();
-
-                    Lines.Add(new CodeLine("namespace {0}", ObjectDefinition.Namespace));
-
-                    //output.AppendFormat("{0}", "{");
-                    //output.AppendLine();
-
-                    Lines.Add(new CodeLine("{"));
-                }
-
-                if (ObjectDefinition.Documentation != null)
-                {
-                    AddDocumentation(output, start, ObjectDefinition.Documentation);
-                }
-
-
-                this.AddAttributes(output, start);
-
-
-                var declaration = new List<string>();
-
-                declaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
-
-                if (ObjectDefinition.IsPartial)
-                    declaration.Add("partial");
-
-                declaration.Add("interface");
-
-                if (ObjectDefinition.GenericTypes.Count == 0)
-                    declaration.Add(ObjectDefinition.Name);
-                else
-                    declaration.Add(string.Format("{0}<{1}>", ObjectDefinition.Name, string.Join(", ", ObjectDefinition.GenericTypes.Select(item => item.Name))));
-
-                if (ObjectDefinition.HasInheritance)
-                {
-                    declaration.Add(":");
-
-                    var parents = new List<string>();
-
-                    if (ObjectDefinition.Implements.Count > 0)
-                        parents.AddRange(ObjectDefinition.Implements);
-
-                    declaration.Add(string.Join(", ", parents));
-                }
-
-                if (ObjectDefinition.GenericTypes.Count > 0)
-                    declaration.Add(string.Join(", ", ObjectDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
-
-                //output.AppendFormat("{0}{1}", Indent(start), string.Join(" ", declaration));
-                Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
-
-                //output.AppendLine();
-                //Lines.Add(new CodeLine());
-
-                //output.AppendFormat("{0}{1}", Indent(start), "{");
+                //output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
                 //output.AppendLine();
 
-                Lines.Add(new CodeLine("{0}{1}", Indent(start), "{"));
-                //Lines.Add(new CodeLine());
+                Lines.Add(new CodeLine("namespace {0}", ObjectDefinition.Namespace));
 
-                AddEvents(start, output);
-
-                AddProperties(start, output);
-
-                AddMethods(start, output);
-
-                //output.AppendFormat("{0}{1}", Indent(start), "}");
+                //output.AppendFormat("{0}", "{");
                 //output.AppendLine();
 
-                Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
-                //Lines.Add(new CodeLine());
+                Lines.Add(new CodeLine("{"));
+            }
 
-                if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
-                {
-                    //output.Append("}");
-                    //output.AppendLine();
+            if (ObjectDefinition.Documentation != null)
+            {
+                AddDocumentation(output, start, ObjectDefinition.Documentation);
+            }
 
-                    Lines.Add(new CodeLine("}"));
-                }
+
+            this.AddAttributes(output, start);
+
+
+            var declaration = new List<string>();
+
+            declaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
+
+            if (ObjectDefinition.IsPartial)
+                declaration.Add("partial");
+
+            declaration.Add("interface");
+
+            if (ObjectDefinition.GenericTypes.Count == 0)
+                declaration.Add(ObjectDefinition.Name);
+            else
+                declaration.Add(string.Format("{0}<{1}>", ObjectDefinition.Name, string.Join(", ", ObjectDefinition.GenericTypes.Select(item => item.Name))));
+
+            if (ObjectDefinition.HasInheritance)
+            {
+                declaration.Add(":");
+
+                var parents = new List<string>();
+
+                if (ObjectDefinition.Implements.Count > 0)
+                    parents.AddRange(ObjectDefinition.Implements);
+
+                declaration.Add(string.Join(", ", parents));
+            }
+
+            if (ObjectDefinition.GenericTypes.Count > 0)
+                declaration.Add(string.Join(", ", ObjectDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
+
+            //output.AppendFormat("{0}{1}", Indent(start), string.Join(" ", declaration));
+            Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
+
+            //output.AppendLine();
+            //Lines.Add(new CodeLine());
+
+            //output.AppendFormat("{0}{1}", Indent(start), "{");
+            //output.AppendLine();
+
+            Lines.Add(new CodeLine("{0}{1}", Indent(start), "{"));
+            //Lines.Add(new CodeLine());
+
+            AddEvents(start, output);
+
+            AddProperties(start, output);
+
+            AddMethods(start, output);
+
+            //output.AppendFormat("{0}{1}", Indent(start), "}");
+            //output.AppendLine();
+
+            Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
+            //Lines.Add(new CodeLine());
+
+            if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
+            {
+                //output.Append("}");
+                //output.AppendLine();
+
+                Lines.Add(new CodeLine("}"));
             }
         }
 
