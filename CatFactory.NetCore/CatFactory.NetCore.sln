@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatFactory.NetCore", "CatFactory.NetCore\CatFactory.NetCore.csproj", "{28709753-8947-4260-95EF-F3FEFF4DC689}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatFactory.NetCore.Tests", "CatFactory.NetCore.Tests\CatFactory.NetCore.Tests.csproj", "{EA88FD64-A67C-40B3-9EC4-7D296863A877}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28709753-8947-4260-95EF-F3FEFF4DC689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28709753-8947-4260-95EF-F3FEFF4DC689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28709753-8947-4260-95EF-F3FEFF4DC689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28709753-8947-4260-95EF-F3FEFF4DC689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA88FD64-A67C-40B3-9EC4-7D296863A877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA88FD64-A67C-40B3-9EC4-7D296863A877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA88FD64-A67C-40B3-9EC4-7D296863A877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA88FD64-A67C-40B3-9EC4-7D296863A877}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B41D888-37C3-42D3-9D8D-B6ADE00A441A}
+	EndGlobalSection
+EndGlobal
