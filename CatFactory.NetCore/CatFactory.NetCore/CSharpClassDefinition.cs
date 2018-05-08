@@ -1,7 +1,7 @@
 ﻿using CatFactory.CodeFactory;
 using CatFactory.OOP;
 
-namespace CatFactory.DotNetCore
+namespace CatFactory.NetCore
 {
     public class CSharpClassDefinition : ClassDefinition, IDotNetClassDefinition
     {

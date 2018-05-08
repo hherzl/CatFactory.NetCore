@@ -3,7 +3,7 @@ using CatFactory.CodeFactory;
 using CatFactory.OOP;
 using Xunit;
 
-namespace CatFactory.DotNetCore.Tests
+namespace CatFactory.NetCore.Tests
 {
     public class ClassesGenerationTests
     {

@@ -1,6 +1,6 @@
 ﻿using CatFactory.OOP;
 
-namespace CatFactory.DotNetCore
+namespace CatFactory.NetCore
 {
     public interface IDotNetClassDefinition : IDotNetObjectDefinition, IClassDefinition
     {

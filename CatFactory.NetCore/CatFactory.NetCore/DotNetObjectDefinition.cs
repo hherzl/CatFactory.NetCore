@@ -1,4 +1,4 @@
-﻿namespace CatFactory.DotNetCore
+﻿namespace CatFactory.NetCore
 {
     public static class DotNetObjectDefinition
     {

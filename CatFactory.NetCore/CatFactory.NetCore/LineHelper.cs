@@ -1,6 +1,6 @@
 ﻿using CatFactory.CodeFactory;
 
-namespace CatFactory.DotNetCore
+namespace CatFactory.NetCore
 {
     public static class LineHelper
     {

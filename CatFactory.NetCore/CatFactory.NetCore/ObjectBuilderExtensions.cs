@@ -4,7 +4,7 @@ using System.Text;
 using CatFactory.CodeFactory;
 using CatFactory.OOP;
 
-namespace CatFactory.DotNetCore
+namespace CatFactory.NetCore
 {
     public static class ObjectBuilderExtensions
     {

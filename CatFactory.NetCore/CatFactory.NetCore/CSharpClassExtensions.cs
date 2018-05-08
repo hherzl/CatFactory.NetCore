@@ -3,7 +3,7 @@ using System.Linq;
 using CatFactory.CodeFactory;
 using CatFactory.OOP;
 
-namespace CatFactory.DotNetCore
+namespace CatFactory.NetCore
 {
     public static class CSharpClassExtensions
     {
@@ -86,11 +86,11 @@ namespace CatFactory.DotNetCore
 
         public static CSharpInterfaceDefinition RefactInterface(this CSharpClassDefinition classDefinition, params string[] exclusions)
         {
-            var interfaceDefinition = new CSharpInterfaceDefinition();
-
-            interfaceDefinition.Name = namingConvention.GetInterfaceName(classDefinition.Name);
-
-            interfaceDefinition.Namespaces = classDefinition.Namespaces;
+            var interfaceDefinition = new CSharpInterfaceDefinition
+            {
+                Name = namingConvention.GetInterfaceName(classDefinition.Name),
+                Namespaces = classDefinition.Namespaces
+            };
 
             foreach (var @event in classDefinition.Events.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {

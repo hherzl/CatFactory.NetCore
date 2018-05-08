@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using CatFactory.CodeFactory;
 
-namespace CatFactory.DotNetCore
+namespace CatFactory.NetCore
 {
     public class CSharpEnumBuilder : CSharpCodeBuilder
     {
@@ -39,13 +39,9 @@ namespace CatFactory.DotNetCore
             {
                 foreach (var item in ObjectDefinition.Namespaces)
                 {
-                    // output.AppendFormat("using {0};", item);
-                    // output.AppendLine();
-
                     Lines.Add(new CodeLine("using {0};", item));
                 }
 
-                //output.AppendLine();
                 Lines.Add(new CodeLine());
             }
 
@@ -55,22 +51,17 @@ namespace CatFactory.DotNetCore
             {
                 start = 1;
 
-                //output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine("namespace {0}", ObjectDefinition.Namespace));
-
-                //output.AppendFormat("{0}", "{");
-                //output.AppendLine();
 
                 Lines.Add(new CodeLine("{0}", "{"));
             }
 
             this.AddAttributes(output, start);
 
-            var declaration = new List<string>();
-
-            declaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
+            var declaration = new List<string>
+            {
+                ObjectDefinition.AccessModifier.ToString().ToLower()
+            };
 
             declaration.Add("enum");
 
@@ -82,104 +73,17 @@ namespace CatFactory.DotNetCore
                 declaration.Add(ObjectDefinition.BaseType);
             }
 
-            //output.AppendFormat("{0}{1}", Indent(start), string.Join(" ", declaration));
-
             Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
-
-            //output.AppendLine();
-
-            //Lines.Add(new CodeLine());
-
-            //output.AppendFormat("{0}{1}", Indent(start), "{");
-            //output.AppendLine();
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "{"));
 
-            //output.AppendFormat("{0}{1}", Indent(start + 1), string.Join(", ", ObjectDefinition.Sets.Select(item => string.Format("{0} = {1}", item.Name, item.Value))));
-            //output.AppendLine();
-
             Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), string.Join(", ", ObjectDefinition.Sets.Select(item => string.Format("{0} = {1}", item.Name, item.Value)))));
-
-            //output.AppendFormat("{0}{1}", Indent(start), "}");
-            //output.AppendLine();
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
 
             if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
             {
-                //output.Append("}");
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine("}"));
-            }
-        }
-
-        public override string Code
-        {
-            get
-            {
-                var output = new StringBuilder();
-
-                if (ObjectDefinition.Namespaces.Count > 0)
-                {
-                    foreach (var item in ObjectDefinition.Namespaces)
-                    {
-                        output.AppendFormat("using {0};", item);
-                        output.AppendLine();
-                    }
-
-                    output.AppendLine();
-                }
-
-                var start = 0;
-
-                if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
-                {
-                    start = 1;
-
-                    output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
-                    output.AppendLine();
-
-                    output.AppendFormat("{0}", "{");
-                    output.AppendLine();
-                }
-
-                this.AddAttributes(output, start);
-
-                var declaration = new List<string>();
-
-                declaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
-
-                declaration.Add("enum");
-
-                declaration.Add(ObjectDefinition.Name);
-
-                if (!string.IsNullOrEmpty(ObjectDefinition.BaseType))
-                {
-                    declaration.Add(":");
-                    declaration.Add(ObjectDefinition.BaseType);
-                }
-
-                output.AppendFormat("{0}{1}", Indent(start), string.Join(" ", declaration));
-
-                output.AppendLine();
-
-                output.AppendFormat("{0}{1}", Indent(start), "{");
-                output.AppendLine();
-
-                output.AppendFormat("{0}{1}", Indent(start + 1), string.Join(", ", ObjectDefinition.Sets.Select(item => string.Format("{0} = {1}", item.Name, item.Value))));
-                output.AppendLine();
-
-                output.AppendFormat("{0}{1}", Indent(start), "}");
-                output.AppendLine();
-
-                if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
-                {
-                    output.Append("}");
-                    output.AppendLine();
-                }
-
-                return output.ToString();
             }
         }
     }

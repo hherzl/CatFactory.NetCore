@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using CatFactory.CodeFactory;
 
-namespace CatFactory.DotNetCore
+namespace CatFactory.NetCore
 {
     public class CSharpInterfaceBuilder : CSharpCodeBuilder
     {
@@ -39,18 +39,9 @@ namespace CatFactory.DotNetCore
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
-
-                //output.AppendLine();
-
-                //output.AppendFormat("{0}#region {1}", Indent(start + 1), EventsRegionDescription);
-                //output.AppendLine();
-
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine());
 
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), EventsRegionDescription));
-                //Lines.Add(new CodeLine());
 
                 Lines.Add(new CodeLine());
             }
@@ -59,31 +50,17 @@ namespace CatFactory.DotNetCore
             {
                 foreach (var @event in ObjectDefinition.Events)
                 {
-                    //output.AppendFormat("{0}event {1} {2};", Indent(start + 1), @event.Type, @event.Name);
-                    //output.AppendLine();
-
                     Lines.Add(new CodeLine("{0}event {1} {2};", Indent(start + 1), @event.Type, @event.Name));
-                    //Lines.Add(new CodeLine());
                 }
-
-                //output.AppendLine();
 
                 Lines.Add(new CodeLine());
             }
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
-                //output.AppendLine();
-
-                //output.AppendFormat("{0}#endregion", Indent(start + 1));
-                //output.AppendLine();
-
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine());
 
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-                //Lines.Add(new CodeLine());
 
                 Lines.Add(new CodeLine());
             }
@@ -96,15 +73,7 @@ namespace CatFactory.DotNetCore
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
-                //output.AppendFormat("{0}#region {1}", Indent(start + 1), PropertiesRegionDescription);
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), PropertiesRegionDescription));
-
-                //output.AppendLine();
-
-
-                //Lines.Add(new CodeLine());
 
                 Lines.Add(new CodeLine());
             }
@@ -118,39 +87,22 @@ namespace CatFactory.DotNetCore
 
                 if (property.IsReadOnly)
                 {
-                    //output.AppendFormat("{0}{1} {2} {{ get; }}", Indent(start + 1), property.Type, property.Name);
-                    //output.AppendLine();
-
                     Lines.Add(new CodeLine("{0}{1} {2} {{ get; }}", Indent(start + 1), property.Type, property.Name));
-                    //Lines.Add(new CodeLine());
                 }
                 else
                 {
-                    //output.AppendFormat("{0}{1} {2} {{ get; set; }}", Indent(start + 1), property.Type, property.Name);
-                    //output.AppendLine();
-
                     Lines.Add(new CodeLine("{0}{1} {2} {{ get; set; }}", Indent(start + 1), property.Type, property.Name));
-                    //Lines.Add(new CodeLine());
                 }
 
                 if (i < ObjectDefinition.Properties.Count - 1)
                 {
-                    //output.AppendLine();
-
                     Lines.Add(new CodeLine());
                 }
             }
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
-                //output.AppendFormat("{0}#endregion", Indent(start + 1));
-                //output.AppendLine();
-
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-
-                //Lines.Add(new CodeLine());
 
                 Lines.Add(new CodeLine());
             }
@@ -163,21 +115,13 @@ namespace CatFactory.DotNetCore
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
-                //output.AppendFormat("{0}#region {1}", Indent(2), MethodsRegionDescription);
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(2), MethodsRegionDescription));
-                //Lines.Add(new CodeLine());
-
-                //output.AppendLine();
 
                 Lines.Add(new CodeLine());
             }
 
             if (ObjectDefinition.Properties != null && ObjectDefinition.Properties.Count > 0)
             {
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine());
             }
 
@@ -187,9 +131,10 @@ namespace CatFactory.DotNetCore
 
                 this.AddAttributes(method, output, start);
 
-                var methodSignature = new List<string>();
-
-                methodSignature.Add(string.IsNullOrEmpty(method.Type) ? "void" : method.Type);
+                var methodSignature = new List<string>
+                {
+                    string.IsNullOrEmpty(method.Type) ? "void" : method.Type
+                };
 
                 var parameters = new List<string>();
 
@@ -227,32 +172,17 @@ namespace CatFactory.DotNetCore
                 if (method.GenericTypes.Count > 0)
                     methodSignature.Add(string.Join(", ", method.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
 
-                //output.AppendFormat("{0}{1}", Indent(start + 1), string.Join(" ", methodSignature));
-                //output.Append(";");
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine("{0}{1};", Indent(start + 1), string.Join(" ", methodSignature)));
-                //Lines.Add(new CodeLine());
-
-                //Lines.Add(new CodeLine());
 
                 if (i < ObjectDefinition.Methods.Count - 1)
                 {
-                    //output.AppendLine();
-
                     Lines.Add(new CodeLine());
                 }
             }
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
-                //output.AppendFormat("{0}#endregion", Indent(2));
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine("{0}#endregion", Indent(2)));
-                //Lines.Add(new CodeLine());
-
-                //output.AppendLine();
 
                 Lines.Add(new CodeLine());
             }
@@ -266,14 +196,6 @@ namespace CatFactory.DotNetCore
 
             if (ObjectDefinition.Namespaces.Count > 0)
             {
-                //foreach (var item in ObjectDefinition.Namespaces)
-                //{
-                //    output.AppendFormat("using {0};", item);
-                //    output.AppendLine();
-                //}
-
-                //output.AppendLine();
-
                 foreach (var item in ObjectDefinition.Namespaces)
                 {
                     Lines.Add(new CodeLine("using {0};", item));
@@ -288,13 +210,7 @@ namespace CatFactory.DotNetCore
             {
                 start = 1;
 
-                //output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine("namespace {0}", ObjectDefinition.Namespace));
-
-                //output.AppendFormat("{0}", "{");
-                //output.AppendLine();
 
                 Lines.Add(new CodeLine("{"));
             }
@@ -304,13 +220,12 @@ namespace CatFactory.DotNetCore
                 AddDocumentation(output, start, ObjectDefinition.Documentation);
             }
 
-
             this.AddAttributes(output, start);
 
-
-            var declaration = new List<string>();
-
-            declaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
+            var declaration = new List<string>
+            {
+                ObjectDefinition.AccessModifier.ToString().ToLower()
+            };
 
             if (ObjectDefinition.IsPartial)
                 declaration.Add("partial");
@@ -337,17 +252,9 @@ namespace CatFactory.DotNetCore
             if (ObjectDefinition.GenericTypes.Count > 0)
                 declaration.Add(string.Join(", ", ObjectDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
 
-            //output.AppendFormat("{0}{1}", Indent(start), string.Join(" ", declaration));
             Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
 
-            //output.AppendLine();
-            //Lines.Add(new CodeLine());
-
-            //output.AppendFormat("{0}{1}", Indent(start), "{");
-            //output.AppendLine();
-
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "{"));
-            //Lines.Add(new CodeLine());
 
             AddEvents(start, output);
 
@@ -355,108 +262,11 @@ namespace CatFactory.DotNetCore
 
             AddMethods(start, output);
 
-            //output.AppendFormat("{0}{1}", Indent(start), "}");
-            //output.AppendLine();
-
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
-            //Lines.Add(new CodeLine());
 
             if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
             {
-                //output.Append("}");
-                //output.AppendLine();
-
                 Lines.Add(new CodeLine("}"));
-            }
-        }
-
-        public override string Code
-        {
-            get
-            {
-                var output = new StringBuilder();
-
-                if (ObjectDefinition.Namespaces.Count > 0)
-                {
-                    foreach (var item in ObjectDefinition.Namespaces)
-                    {
-                        output.AppendFormat("using {0};", item);
-                        output.AppendLine();
-                    }
-
-                    output.AppendLine();
-                }
-
-                var start = 0;
-
-                if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
-                {
-                    start = 1;
-
-                    output.AppendFormat("namespace {0}", ObjectDefinition.Namespace);
-                    output.AppendLine();
-
-                    output.AppendFormat("{0}", "{");
-                    output.AppendLine();
-                }
-
-                if (ObjectDefinition.Documentation != null)
-                    AddDocumentation(output, start, ObjectDefinition.Documentation);
-
-                this.AddAttributes(output, start);
-
-                var declaration = new List<string>();
-
-                declaration.Add(ObjectDefinition.AccessModifier.ToString().ToLower());
-
-                if (ObjectDefinition.IsPartial)
-                    declaration.Add("partial");
-
-                declaration.Add("interface");
-
-                if (ObjectDefinition.GenericTypes.Count == 0)
-                    declaration.Add(ObjectDefinition.Name);
-                else
-                    declaration.Add(string.Format("{0}<{1}>", ObjectDefinition.Name, string.Join(", ", ObjectDefinition.GenericTypes.Select(item => item.Name))));
-
-                if (ObjectDefinition.HasInheritance)
-                {
-                    declaration.Add(":");
-
-                    var parents = new List<string>();
-
-                    if (ObjectDefinition.Implements.Count > 0)
-                        parents.AddRange(ObjectDefinition.Implements);
-
-                    declaration.Add(string.Join(", ", parents));
-                }
-
-                if (ObjectDefinition.GenericTypes.Count > 0)
-                    declaration.Add(string.Join(", ", ObjectDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
-
-                output.AppendFormat("{0}{1}", Indent(start), string.Join(" ", declaration));
-
-                output.AppendLine();
-
-                output.AppendFormat("{0}{1}", Indent(start), "{");
-                output.AppendLine();
-
-                AddEvents(start, output);
-
-                AddProperties(start, output);
-
-                AddMethods(start, output);
-
-                output.AppendFormat("{0}{1}", Indent(start), "}");
-                output.AppendLine();
-
-                if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
-                {
-                    output.Append("}");
-                    output.AppendLine();
-                }
-
-                return output.ToString();
             }
         }
     }

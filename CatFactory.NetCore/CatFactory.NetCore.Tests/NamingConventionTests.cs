@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace CatFactory.DotNetCore.Tests
+namespace CatFactory.NetCore.Tests
 {
     public class NamingConventionTests
     {

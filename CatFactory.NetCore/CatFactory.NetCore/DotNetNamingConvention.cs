@@ -2,7 +2,7 @@
 using System.Linq;
 using CatFactory.CodeFactory;
 
-namespace CatFactory.DotNetCore
+namespace CatFactory.NetCore
 {
     public class DotNetNamingConvention : ICodeNamingConvention
     {
