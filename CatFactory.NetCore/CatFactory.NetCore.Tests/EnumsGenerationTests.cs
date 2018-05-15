@@ -22,7 +22,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
     }
 }

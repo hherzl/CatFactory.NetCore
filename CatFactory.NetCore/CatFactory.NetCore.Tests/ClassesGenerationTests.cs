@@ -30,7 +30,7 @@ namespace CatFactory.NetCore.Tests
             definition.Properties.Add(new PropertyDefinition("String", "LastName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "25")));
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace CatFactory.NetCore.Tests
             definition.SimplifyDataTypes();
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -157,7 +157,7 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -183,7 +183,7 @@ namespace CatFactory.NetCore.Tests
             definition.AddViewModelProperty("String", "ProductDescription");
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -240,7 +240,7 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -286,7 +286,7 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -325,7 +325,7 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -362,7 +362,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -405,7 +405,7 @@ namespace CatFactory.NetCore.Tests
             definition.AddPropertyWithField("List<string>", "Columns");
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -446,7 +446,7 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
     }
 }

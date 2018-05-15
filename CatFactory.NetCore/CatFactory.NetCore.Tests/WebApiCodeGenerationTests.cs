@@ -96,7 +96,7 @@ namespace CatFactory.NetCore.Tests
             var builder = new CSharpClassBuilder
             {
                 ObjectDefinition = definition,
-                OutputDirectory = "C:\\Temp\\CatFactory.DotNetCore",
+                OutputDirectory = "C:\\Temp\\CatFactory.NetCore",
                 ForceOverwrite = true
             };
 

@@ -31,7 +31,7 @@ namespace CatFactory.NetCore.Tests
             definition.Properties.Add(new PropertyDefinition("Int32", "Age") { IsReadOnly = true });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
 
         [Fact]
@@ -113,7 +113,7 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.DotNetCore", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
         }
     }
 }
