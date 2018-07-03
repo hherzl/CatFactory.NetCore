@@ -13,7 +13,5 @@ namespace CatFactory.NetCore
         public bool UseRegionsToGroupClassMembers { get; set; }
 
         public ICodeNamingConvention NamingConvention { get; } = new DotNetNamingConvention();
-
-        public ITypeResolver TypeResolver { get; protected set; }
     }
 }
