@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CatFactory.OOP;
+﻿using CatFactory.OOP;
 using Xunit;
 
 namespace CatFactory.NetCore.Tests
@@ -13,7 +12,7 @@ namespace CatFactory.NetCore.Tests
             var definition = new CSharpEnumDefinition
             {
                 Name = "OperationMode",
-                Sets = new List<INameValue>
+                Sets =
                 {
                     new NameValue { Name = "First", Value = "0" },
                     new NameValue { Name = "Second", Value = "1" },
@@ -31,16 +30,16 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = new CSharpEnumDefinition
             {
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System"
                 },
-                Attributes = new List<MetadataAttribute>
+                Attributes =
                 {
                     new MetadataAttribute("Flags")
                 },
                 Name = "CarOptions",
-                Sets = new List<INameValue>
+                Sets =
                 {
                     new NameValue { Name = "SunRoof", Value = "0x01" },
                     new NameValue { Name = "Spoiler", Value = "0x02" },

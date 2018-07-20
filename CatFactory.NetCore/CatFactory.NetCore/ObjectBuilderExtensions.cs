@@ -25,8 +25,11 @@ namespace CatFactory.NetCore
                     if (attribute.HasArguments)
                         attributeDefinition.Append(string.Join(", ", attribute.Arguments));
 
+                    if (attribute.HasArguments && attribute.HasSets)
+                        attributeDefinition.Append(", ");
+
                     if (attribute.HasSets)
-                        attributeDefinition.AppendFormat(", {0}", string.Join(", ", attribute.Sets.Select(item => string.Format("{0} = {1}", item.Name, item.Value))));
+                        attributeDefinition.AppendFormat("{0}", string.Join(", ", attribute.Sets.Select(item => string.Format("{0} = {1}", item.Name, item.Value))));
 
                     attributeDefinition.Append(")");
                 }
@@ -41,9 +44,6 @@ namespace CatFactory.NetCore
         {
             foreach (var attributeDefinition in GetAttributes(attributes))
             {
-                //output.AppendFormat("{0}{1}", codeBuilder.Indent(start), attributeDefinition);
-                //output.AppendLine();
-
                 codeBuilder.Lines.Add(new CodeLine("{0}{1}", codeBuilder.Indent(start), attributeDefinition));
             }
         }

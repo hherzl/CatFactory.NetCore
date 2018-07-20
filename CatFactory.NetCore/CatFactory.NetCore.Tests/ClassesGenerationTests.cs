@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CatFactory.CodeFactory;
+﻿using CatFactory.CodeFactory;
 using CatFactory.OOP;
 using Xunit;
 
@@ -13,7 +12,7 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System",
                     "System.ComponentModel"
@@ -39,7 +38,7 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System",
                     "System.ComponentModel"
@@ -50,7 +49,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Attributes.Add(new MetadataAttribute("Table", "\"Persons\"")
             {
-                Sets = new List<MetadataAttributeSet>
+                Sets =
                 {
                     new MetadataAttributeSet("Schema", "\"PersonalInfo\"")
                 }
@@ -94,11 +93,11 @@ namespace CatFactory.NetCore.Tests
             definition.Properties.Add(new PropertyDefinition("String", "FirstName")
             {
                 IsAutomatic = false,
-                GetBody = new List<ILine>
+                GetBody =
                 {
                     new CodeLine("return m_firstName;")
                 },
-                SetBody = new List<ILine>
+                SetBody =
                 {
                     new CodeLine("if (m_firstName != value)"),
                     new CodeLine("{"),
@@ -112,11 +111,11 @@ namespace CatFactory.NetCore.Tests
             definition.Properties.Add(new PropertyDefinition("String", "MiddleName")
             {
                 IsAutomatic = false,
-                GetBody = new List<ILine>
+                GetBody =
                 {
                     new CodeLine("return m_middleName;")
                 },
-                SetBody = new List<ILine>
+                SetBody =
                 {
                     new CodeLine("if (m_middleName != value)"),
                     new CodeLine("{"),
@@ -130,11 +129,11 @@ namespace CatFactory.NetCore.Tests
             definition.Properties.Add(new PropertyDefinition("String", "LastName")
             {
                 IsAutomatic = false,
-                GetBody = new List<ILine>
+                GetBody =
                 {
                     new CodeLine("return m_firstName;")
                 },
-                SetBody = new List<ILine>
+                SetBody =
                 {
                     new CodeLine("if (m_lastName != value)"),
                     new CodeLine("{"),
@@ -150,7 +149,7 @@ namespace CatFactory.NetCore.Tests
                 IsVirtual = true,
                 IsAutomatic = false,
                 IsReadOnly = true,
-                GetBody = new List<ILine>
+                GetBody =
                 {
                     new CodeLine("return String.Format(\"{0} {1} {2}\", FirstName, MiddleName, LastName);")
                 }
@@ -211,7 +210,7 @@ namespace CatFactory.NetCore.Tests
             definition.Methods.Add(new MethodDefinition("Task<Int32>", "CommitChangesAsync")
             {
                 IsAsync = true,
-                Lines = new List<ILine>
+                Lines =
                 {
                     new CommentLine("Save changes in async way"),
                     new CodeLine("return await DbContext.SaveChangesAsync();")
@@ -220,7 +219,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("IEnumerable<TEntity>", "GetAll")
             {
-                Lines = new List<ILine>
+                Lines =
                 {
                     new TodoLine("Check generic cast"),
                     new CodeLine("return DbContext.Set<TEntity>();")
@@ -229,13 +228,33 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("void", "Add", new ParameterDefinition("TEntity", "entity"))
             {
-                Lines = new List<ILine>
+                Lines =
                 {
                     new CommentLine("Check entry state"),
                     new CodeLine("DbContext.Set<TEntity>().Add(entity);"),
                     new CodeLine(),
                     new TodoLine("Save changes in async way"),
                     new CodeLine("DbContext.SaveChanges();")
+                }
+            });
+
+            definition.Methods.Add(new MethodDefinition("int", "ProductionUfnGetStock", new ParameterDefinition("int", "productID"))
+            {
+                IsStatic = true,
+                Attributes =
+                {
+                    new MetadataAttribute("DbFunction")
+                    {
+                        Sets =
+                        {
+                            new MetadataAttributeSet("FunctionName", string.Format("\"{0}\"", "UfnGetStock")),
+                            new MetadataAttributeSet("Schema", string.Format("\"{0}\"", "Production"))
+                        }
+                    }
+                },
+                Lines =
+                {
+                    new CodeLine("return 0;"),
                 }
             });
 
@@ -263,7 +282,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("int", "Zaz")
             {
-                Lines = new List<ILine>
+                Lines =
                 {
                     new CodeLine("return 0;")
                 }
@@ -271,7 +290,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("int", "Qux")
             {
-                GenericTypes = new List<GenericTypeDefinition>
+                GenericTypes =
                 {
                     new GenericTypeDefinition
                     {
@@ -279,7 +298,7 @@ namespace CatFactory.NetCore.Tests
                         Constraint = "T : class"
                     }
                 },
-                Lines = new List<ILine>
+                Lines =
                 {
                     new CodeLine("return 0;")
                 }
@@ -295,7 +314,7 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System"
                 },
@@ -314,7 +333,7 @@ namespace CatFactory.NetCore.Tests
             {
                 IsStatic = true,
                 IsExtension = true,
-                GenericTypes = new List<GenericTypeDefinition>
+                GenericTypes =
                 {
                     new GenericTypeDefinition
                     {
@@ -334,7 +353,7 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System.Data.Common"
                 },
@@ -347,7 +366,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.StaticConstructor = new ClassConstructorDefinition
             {
-                Lines = new List<ILine>
+                Lines =
                 {
                     new CodeLine("Connection = DbFactory.GetDefaultInstance();")
                 }
@@ -355,7 +374,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Finalizer = new FinalizerDefinition
             {
-                Lines = new List<ILine>
+                Lines =
                 {
                     new CodeLine("Connection.Dispose();")
                 }
@@ -371,7 +390,7 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System",
                     "System.Collections.Generic"
@@ -384,7 +403,7 @@ namespace CatFactory.NetCore.Tests
             {
                 AccessModifier = AccessModifier.Public,
                 Type = "string",
-                Parameters = new List<ParameterDefinition>
+                Parameters =
                 {
                     new ParameterDefinition
                     {
@@ -392,11 +411,11 @@ namespace CatFactory.NetCore.Tests
                         Name = "index"
                     }
                 },
-                GetBody = new List<ILine>
+                GetBody =
                 {
                     new CodeLine("return m_columns[index];")
                 },
-                SetBody = new List<ILine>
+                SetBody =
                 {
                     new CodeLine("m_columns = value;")
                 }
@@ -414,7 +433,7 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = new CSharpClassDefinition
             {
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System",
                     "System.Collections.Generic"
@@ -422,7 +441,7 @@ namespace CatFactory.NetCore.Tests
                 Namespace = "Mapping",
                 IsPartial = true,
                 Name = "GenericRepository",
-                GenericTypes = new List<GenericTypeDefinition>
+                GenericTypes =
                 {
                     new GenericTypeDefinition
                     {
@@ -439,7 +458,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("Int32", "CommitChanges")
             {
-                Lines = new List<ILine>
+                Lines =
                 {
                     new CodeLine("return 0;")
                 }

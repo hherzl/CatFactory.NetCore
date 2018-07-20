@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CatFactory.CodeFactory;
+﻿using CatFactory.CodeFactory;
 using CatFactory.OOP;
 using Xunit;
 
@@ -16,7 +15,7 @@ namespace CatFactory.NetCore.Tests
                 Namespace = "Controllers",
                 Name = "SalesController",
                 BaseClass = "Controller",
-                Attributes = new List<MetadataAttribute>
+                Attributes =
                 {
                     new MetadataAttribute("Route", "\"api/[controller]\"")
                 }
@@ -30,7 +29,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Constructors.Add(new ClassConstructorDefinition(new ParameterDefinition("ISalesRepository", "repository"))
             {
-                Lines = new List<ILine>
+                Lines =
                 {
                     new CodeLine("Repository = repository;")
                 }
@@ -39,7 +38,7 @@ namespace CatFactory.NetCore.Tests
             definition.Methods.Add(new MethodDefinition(AccessModifier.Protected, "void", "Disposed", new ParameterDefinition("Boolean", "disposing"))
             {
                 IsOverride = true,
-                Lines = new List<ILine>
+                Lines =
                 {
                     new CodeLine("Repository?.Dispose();"),
                     new CodeLine(),
@@ -49,7 +48,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "GetOrdersAsync", new ParameterDefinition("Int32?", "pageSize", "10"), new ParameterDefinition("Int32?", "pageNumber", "1"))
             {
-                Attributes = new List<MetadataAttribute>
+                Attributes =
                 {
                     new MetadataAttribute("HttpGet", "\"Order\"")
                 },
@@ -58,7 +57,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "GetOrderAsync", new ParameterDefinition("Int32", "id"))
             {
-                Attributes = new List<MetadataAttribute>
+                Attributes =
                 {
                     new MetadataAttribute("HttpGet", "\"Order/{id}\"")
                 },
@@ -67,7 +66,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "CreateOrderAsync", new ParameterDefinition("OrderViewModel", "value", new MetadataAttribute("FromBody")))
             {
-                Attributes = new List<MetadataAttribute>
+                Attributes =
                 {
                     new MetadataAttribute("HttpPost", "\"Order\"")
                 },
@@ -76,7 +75,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "UpdateOrderAsync", new ParameterDefinition("Int32", "id"), new ParameterDefinition("OrderViewModel", "value", new MetadataAttribute("FromBody")))
             {
-                Attributes = new List<MetadataAttribute>
+                Attributes =
                 {
                     new MetadataAttribute("HttpPut", "\"Order/{id}\"")
                 },
@@ -85,7 +84,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("Task<IActionResult>", "DeleteOrderAsync", new ParameterDefinition("Int32", "id"))
             {
-                Attributes = new List<MetadataAttribute>
+                Attributes =
                 {
                     new MetadataAttribute("HttpDelete", "\"Order/{id}\"")
                 },

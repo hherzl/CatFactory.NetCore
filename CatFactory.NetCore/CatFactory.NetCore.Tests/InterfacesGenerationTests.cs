@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CatFactory.OOP;
+﻿using CatFactory.OOP;
 using Xunit;
 
 namespace CatFactory.NetCore.Tests
@@ -14,7 +13,7 @@ namespace CatFactory.NetCore.Tests
             {
                 Namespace = "ContactManager",
                 Name = "IPerson",
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System",
                     "System.ComponentModel"
@@ -42,7 +41,7 @@ namespace CatFactory.NetCore.Tests
             {
                 Namespace = "Contracts",
                 Name = "IRepository",
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System",
                     "System.Threading.Tasks"
@@ -57,7 +56,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("TEntity", "Audit")
             {
-                GenericTypes = new List<GenericTypeDefinition>
+                GenericTypes =
                 {
                     new GenericTypeDefinition
                     {
@@ -77,7 +76,7 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = new CSharpInterfaceDefinition
             {
-                Namespaces = new List<string>
+                Namespaces =
                 {
                     "System",
                     "System.Threading.Tasks"
@@ -85,7 +84,7 @@ namespace CatFactory.NetCore.Tests
                 Namespace = "Contracts",
                 IsPartial = true,
                 Name = "IGenericRepository",
-                GenericTypes = new List<GenericTypeDefinition>
+                GenericTypes =
                 {
                     new GenericTypeDefinition
                     {
@@ -103,7 +102,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.Methods.Add(new MethodDefinition("void", "Audit")
             {
-                GenericTypes = new List<GenericTypeDefinition>
+                GenericTypes =
                 {
                     new GenericTypeDefinition
                     {
