@@ -2,20 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>1.0.0-beta-sun-build07</Version>
+    <Version>1.0.0-beta-sun-build08</Version>
     <Description>CatFactory Package for .NET Core (C#)</Description>
     <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
     <PackageTags>.NET Core, C#</PackageTags>
-    <PackageReleaseNotes>1.0.0-beta-sun-build07 Version: Core package update.
+    <PackageReleaseNotes>1.0.0-beta-sun-build08 Version: Core package update.
 
 Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory</PackageReleaseNotes>
     <Authors>H. Herzl</Authors>
     <Company>Herzl Corp.</Company>
     <PackageProjectUrl>https://github.com/hherzl/CatFactory.NetCore</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build06" />
+    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build07" />
   </ItemGroup>
 
 </Project>
