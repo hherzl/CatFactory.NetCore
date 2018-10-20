@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using CatFactory.CodeFactory;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.CodeFactory
 {
     public class CSharpEnumBuilder : CSharpCodeBuilder
     {
@@ -56,7 +55,9 @@ namespace CatFactory.NetCore
                 Lines.Add(new CodeLine("{0}", "{"));
             }
 
-            this.AddAttributes(output, start);
+            AddDocumentation(start, ObjectDefinition);
+
+            this.AddAttributes(start);
 
             var declaration = new List<string>
             {
@@ -77,14 +78,19 @@ namespace CatFactory.NetCore
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "{"));
 
-            Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), string.Join(", ", ObjectDefinition.Sets.Select(item => string.Format("{0} = {1}", item.Name, item.Value)))));
+            for (var i = 0; i < ObjectDefinition.Sets.Count; i++)
+            {
+                var set = ObjectDefinition.Sets[i];
+
+                // todo: Add attributes for options
+
+                Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), string.Format("{0} = {1}{2}", set.Name, set.Value, i < ObjectDefinition.Sets.Count - 1 ? "," : "")));
+            }
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
 
             if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
-            {
                 Lines.Add(new CodeLine("}"));
-            }
         }
     }
 }

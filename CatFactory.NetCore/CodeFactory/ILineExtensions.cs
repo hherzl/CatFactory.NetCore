@@ -1,6 +1,6 @@
 ﻿using CatFactory.CodeFactory;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.CodeFactory
 {
     public static class ILineExtensions
     {

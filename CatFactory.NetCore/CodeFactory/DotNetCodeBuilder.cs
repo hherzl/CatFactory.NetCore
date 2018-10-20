@@ -1,10 +1,9 @@
-﻿using System.Text;
-using CatFactory.CodeFactory;
+﻿using CatFactory.CodeFactory;
 using CatFactory.OOP;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.CodeFactory
 {
-    public class DotNetCodeBuilder : CodeBuilder
+    public abstract class DotNetCodeBuilder : CodeBuilder
     {
         public DotNetCodeBuilder()
         {
@@ -26,9 +25,13 @@ namespace CatFactory.NetCore
 
         public string MethodsRegionDescription { get; set; }
 
-        protected virtual void AddDocumentation(StringBuilder output, int start, Documentation documentation)
-        {
-        }
+        protected abstract void AddDocumentation(int start, IObjectDefinition definition);
+
+        protected abstract void AddDocumentation(int start, ClassConstructorDefinition definition);
+
+        protected abstract void AddDocumentation(int start, PropertyDefinition definition);
+
+        protected abstract void AddDocumentation(int start, MethodDefinition definition);
 
         protected virtual string GetComment(string description)
             => description;

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using CatFactory.CodeFactory;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.CodeFactory
 {
     public class CSharpClassBuilder : CSharpCodeBuilder
     {
@@ -27,7 +27,20 @@ namespace CatFactory.NetCore
         {
         }
 
-        public new IDotNetClassDefinition ObjectDefinition { get; set; } = new CSharpClassDefinition();
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private IDotNetClassDefinition m_objectDefinition;
+
+        public new IDotNetClassDefinition ObjectDefinition
+        {
+            get
+            {
+                return m_objectDefinition ?? (m_objectDefinition = new CSharpClassDefinition());
+            }
+            set
+            {
+                m_objectDefinition = value;
+            }
+        }
 
         public override string FileName
             => ObjectDefinition.Name;
@@ -54,12 +67,9 @@ namespace CatFactory.NetCore
                 Lines.Add(new CodeLine("{"));
             }
 
-            var output = new StringBuilder();
+            AddDocumentation(start, ObjectDefinition);
 
-            if (ObjectDefinition.Documentation != null)
-                AddDocumentation(output, start, ObjectDefinition.Documentation);
-
-            this.AddAttributes(output, start);
+            this.AddAttributes(start);
 
             var declaration = new List<string>
             {
@@ -86,54 +96,46 @@ namespace CatFactory.NetCore
                 var parents = new List<string>();
 
                 if (!string.IsNullOrEmpty(ObjectDefinition.BaseClass))
-                {
                     parents.Add(ObjectDefinition.BaseClass);
-                }
 
                 if (ObjectDefinition.Implements.Count > 0)
-                {
                     parents.AddRange(ObjectDefinition.Implements);
-                }
 
                 declaration.Add(string.Join(", ", parents));
             }
 
             if (ObjectDefinition.GenericTypes.Count > 0)
-            {
                 declaration.Add(string.Join(", ", ObjectDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
-            }
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
 
             Lines.Add(new CodeLine("{0}{{", Indent(start)));
 
-            AddConstants(start, output);
+            AddConstants(start);
 
-            AddEvents(start, output);
+            AddEvents(start);
 
-            AddFields(start, output);
+            AddFields(start);
 
-            AddStaticConstructor(start, output);
+            AddStaticConstructor(start);
 
-            AddConstructors(start, output);
+            AddConstructors(start);
 
-            AddFinalizer(start, output);
+            AddFinalizer(start);
 
-            AddIndexers(start, output);
+            AddIndexers(start);
 
-            AddProperties(start, output);
+            AddProperties(start);
 
-            AddMethods(start, output);
+            AddMethods(start);
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
 
             if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
-            {
                 Lines.Add(new CodeLine("}"));
-            }
         }
 
-        protected virtual void AddConstants(int start, StringBuilder output)
+        protected virtual void AddConstants(int start)
         {
             if (ObjectDefinition.Constants == null || ObjectDefinition.Constants.Count == 0)
                 return;
@@ -164,7 +166,7 @@ namespace CatFactory.NetCore
             }
         }
 
-        protected virtual void AddEvents(int start, StringBuilder output)
+        protected virtual void AddEvents(int start)
         {
             if (ObjectDefinition.Events == null || ObjectDefinition.Events.Count == 0)
                 return;
@@ -198,7 +200,7 @@ namespace CatFactory.NetCore
             }
         }
 
-        protected virtual void AddFields(int start, StringBuilder output)
+        protected virtual void AddFields(int start)
         {
             if (ObjectDefinition.Fields == null || ObjectDefinition.Fields.Count == 0)
                 return;
@@ -234,8 +236,6 @@ namespace CatFactory.NetCore
                     Lines.Add(new CodeLine("{0}{1};", Indent(start + 1), string.Join(" ", fieldSignature)));
                 }
 
-                output.AppendLine();
-
                 Lines.Add(new CodeLine());
             }
 
@@ -249,7 +249,7 @@ namespace CatFactory.NetCore
             }
         }
 
-        protected virtual void AddStaticConstructor(int start, StringBuilder output)
+        protected virtual void AddStaticConstructor(int start)
         {
             if (ObjectDefinition.StaticConstructor == null)
                 return;
@@ -261,75 +261,55 @@ namespace CatFactory.NetCore
             foreach (var line in ObjectDefinition.StaticConstructor.Lines)
             {
                 if (line.IsComment())
-                {
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
-                }
                 else if (line.IsPreprocessorDirective())
-                {
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
-                }
                 else if (line.IsTodo())
-                {
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
-                }
                 else
-                {
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
-                }
             }
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
         }
 
-        protected virtual void AddConstructors(int start, StringBuilder output)
+        protected virtual void AddConstructors(int start)
         {
             if (ObjectDefinition.Constructors == null || ObjectDefinition.Constructors.Count == 0)
                 return;
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
-            {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), ConstructorsRegionDescription));
-            }
 
             for (var i = 0; i < ObjectDefinition.Constructors.Count; i++)
             {
                 var constructor = ObjectDefinition.Constructors[i];
 
+                AddDocumentation(start + 1, constructor);
+
                 Lines.Add(new CodeLine("{0}{1} {2}({3})", Indent(start + 1), constructor.AccessModifier.ToString().ToLower(), ObjectDefinition.Name, constructor.Parameters.Count == 0 ? string.Empty : string.Join(", ", constructor.Parameters.Select(item => string.Format("{0} {1}", item.Type, item.Name)))));
 
                 if (!string.IsNullOrEmpty(constructor.Invocation))
-                {
                     Lines.Add(new CodeLine("{0}: {1}", Indent(start + 2), constructor.Invocation));
-                }
 
                 Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
 
                 foreach (var line in constructor.Lines)
                 {
                     if (line.IsComment())
-                    {
                         Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
-                    }
                     else if (line.IsPreprocessorDirective())
-                    {
                         Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
-                    }
                     else if (line.IsTodo())
-                    {
                         Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
-                    }
                     else
-                    {
                         Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
-                    }
                 }
 
                 Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
 
                 if (i < ObjectDefinition.Constructors.Count - 1)
-                {
                     Lines.Add(new CodeLine());
-                }
             }
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
@@ -342,7 +322,7 @@ namespace CatFactory.NetCore
             Lines.Add(new CodeLine());
         }
 
-        protected virtual void AddFinalizer(int start, StringBuilder output)
+        protected virtual void AddFinalizer(int start)
         {
             if (ObjectDefinition.Finalizer == null || ObjectDefinition.Finalizer.Lines == null || ObjectDefinition.Finalizer.Lines.Count == 0)
                 return;
@@ -356,37 +336,25 @@ namespace CatFactory.NetCore
             foreach (var line in ObjectDefinition.Finalizer.Lines)
             {
                 if (line.IsComment())
-                {
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
-                }
                 else if (line.IsPreprocessorDirective())
-                {
                     Lines.Add(new CodeLine("{0}", GetPreprocessorDirective(line.Content)));
-                }
                 else if (line.IsTodo())
-                {
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
-                }
                 else
-                {
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
-                }
-
-                output.AppendLine();
             }
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
         }
 
-        protected virtual void AddIndexers(int start, StringBuilder output)
+        protected virtual void AddIndexers(int start)
         {
             if (ObjectDefinition.Indexers == null || ObjectDefinition.Indexers.Count == 0)
                 return;
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
-            {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), IndexersRegionDescription));
-            }
 
             for (var i = 0; i < ObjectDefinition.Indexers.Count; i++)
             {
@@ -407,23 +375,13 @@ namespace CatFactory.NetCore
                     foreach (var line in indexer.GetBody)
                     {
                         if (line.IsComment())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
-                        }
                         else if (line.IsTodo())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
-                        }
                         else if (line.IsPreprocessorDirective())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
-                        }
                         else
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), line.Content));
-                        }
-
-                        output.AppendLine();
                     }
 
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2), "}"));
@@ -438,21 +396,13 @@ namespace CatFactory.NetCore
                     foreach (var line in indexer.SetBody)
                     {
                         if (line.IsComment())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
-                        }
                         else if (line.IsPreprocessorDirective())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
-                        }
                         else if (line.IsTodo())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
-                        }
                         else
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), line.Content));
-                        }
                     }
 
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2), "}"));
@@ -461,9 +411,7 @@ namespace CatFactory.NetCore
                 Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
 
                 if (i < ObjectDefinition.Indexers.Count - 1)
-                {
                     Lines.Add(new CodeLine());
-                }
             }
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
@@ -476,7 +424,7 @@ namespace CatFactory.NetCore
             Lines.Add(new CodeLine());
         }
 
-        protected virtual void AddProperties(int start, StringBuilder output)
+        protected virtual void AddProperties(int start)
         {
             if (ObjectDefinition.Properties == null || ObjectDefinition.Properties.Count == 0)
                 return;
@@ -493,9 +441,7 @@ namespace CatFactory.NetCore
                 var property = ObjectDefinition.Properties[i];
 
                 if (property.Attributes.Count > 0)
-                {
-                    this.AddAttributes(property, output, start);
-                }
+                    this.AddAttributes(property, start);
 
                 if (property.IsReadOnly)
                 {
@@ -511,13 +457,9 @@ namespace CatFactory.NetCore
                         };
 
                         if (property.IsOverride)
-                        {
-                            // todo: add logic for override property
-                        }
+                            propertySignature.Add("override");
                         else if (property.IsVirtual)
-                        {
                             propertySignature.Add("virtual");
-                        }
 
                         propertySignature.Add(property.Type);
 
@@ -540,19 +482,11 @@ namespace CatFactory.NetCore
                             foreach (var line in property.GetBody)
                             {
                                 if (line.IsComment())
-                                {
                                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
-                                }
                                 else if (line.IsTodo())
-                                {
                                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
-                                }
                                 else
-                                {
                                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
-                                }
-
-                                output.AppendLine();
                             }
 
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 2), "}"));
@@ -569,13 +503,9 @@ namespace CatFactory.NetCore
                     };
 
                     if (property.IsOverride)
-                    {
-                        // todo: add logic for override property
-                    }
+                        propertySignature.Add("override");
                     else if (property.IsVirtual)
-                    {
                         propertySignature.Add("virtual");
-                    }
 
                     propertySignature.Add(property.Type);
 
@@ -596,23 +526,13 @@ namespace CatFactory.NetCore
                     foreach (var line in property.GetBody)
                     {
                         if (line.IsComment())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
-                        }
                         else if (line.IsPreprocessorDirective())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
-                        }
                         else if (line.IsTodo())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
-                        }
                         else
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), line.Content));
-                        }
-
-                        output.AppendLine();
                     }
 
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2), "}"));
@@ -624,23 +544,13 @@ namespace CatFactory.NetCore
                     foreach (var line in property.SetBody)
                     {
                         if (line.IsComment())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
-                        }
                         else if (line.IsPreprocessorDirective())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
-                        }
                         else if (line.IsTodo())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
-                        }
                         else
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), line.Content));
-                        }
-
-                        output.AppendLine();
                     }
 
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2), "}"));
@@ -649,9 +559,7 @@ namespace CatFactory.NetCore
                 }
 
                 if (i < ObjectDefinition.Properties.Count - 1)
-                {
                     Lines.Add(new CodeLine());
-                }
             }
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
@@ -662,7 +570,7 @@ namespace CatFactory.NetCore
             }
         }
 
-        protected virtual void AddMethods(int start, StringBuilder output)
+        protected virtual void AddMethods(int start)
         {
             if (ObjectDefinition.Methods == null || ObjectDefinition.Methods.Count == 0)
                 return;
@@ -674,15 +582,13 @@ namespace CatFactory.NetCore
             }
 
             if (ObjectDefinition.Properties != null && ObjectDefinition.Properties.Count > 0)
-            {
                 Lines.Add(new CodeLine());
-            }
 
             for (var i = 0; i < ObjectDefinition.Methods.Count; i++)
             {
                 var method = ObjectDefinition.Methods[i];
 
-                this.AddAttributes(method, output, start);
+                this.AddAttributes(method, start);
 
                 var methodSignature = new List<string>
                 {
@@ -690,26 +596,16 @@ namespace CatFactory.NetCore
                 };
 
                 if (method.IsAsync)
-                {
                     methodSignature.Add("async");
-                }
 
                 if (method.IsStatic)
-                {
                     methodSignature.Add("static");
-                }
                 else if (method.IsOverride)
-                {
                     methodSignature.Add("override");
-                }
                 else if (method.IsVirtual)
-                {
                     methodSignature.Add("virtual");
-                }
                 else if (method.IsAbstract)
-                {
                     methodSignature.Add("abstract");
-                }
 
                 methodSignature.Add(string.IsNullOrEmpty(method.Type) ? "void" : method.Type);
 
@@ -726,42 +622,28 @@ namespace CatFactory.NetCore
                     if (string.IsNullOrEmpty(parameter.DefaultValue))
                     {
                         if (string.IsNullOrEmpty(parametersAttributes))
-                        {
                             parameterDef = string.Format("{0} {1}", parameter.Type, parameter.Name);
-                        }
                         else
-                        {
                             parameterDef = string.Format("{0}{1} {2}", parametersAttributes, parameter.Type, parameter.Name);
-                        }
                     }
                     else
                     {
                         if (string.IsNullOrEmpty(parametersAttributes))
-                        {
                             parameterDef = string.Format("{0} {1} = {2}", parameter.Type, parameter.Name, parameter.DefaultValue);
-                        }
                         else
-                        {
                             parameterDef = string.Format("{0}{1} {2} = {3}", parametersAttributes, parameter.Type, parameter.Name, parameter.DefaultValue);
-                        }
                     }
 
                     parameters.Add(method.IsExtension && j == 0 ? string.Format("this {0}", parameterDef) : parameterDef);
                 }
 
                 if (method.GenericTypes.Count == 0)
-                {
                     methodSignature.Add(string.Format("{0}({1})", method.Name, string.Join(", ", parameters)));
-                }
                 else
-                {
                     methodSignature.Add(string.Format("{0}<{1}>({2})", method.Name, string.Join(", ", method.GenericTypes.Select(item => item.Name)), string.Join(", ", parameters)));
-                }
 
                 if (method.GenericTypes.Count > 0)
-                {
                     methodSignature.Add(string.Join(", ", method.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
-                }
 
                 Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), string.Join(" ", methodSignature)));
 
@@ -773,44 +655,49 @@ namespace CatFactory.NetCore
                 }
                 else if (method.Lines.Count == 1)
                 {
-                    Lines.Add(new CodeLine("{0}=> {1}", Indent(start + 2), method.Lines[0].Content.Replace("return ", string.Empty)));
+                    var line = method.Lines[0];
+
+                    if (line.Content.StartsWith("return"))
+                    {
+                        Lines.Add(new CodeLine("{0}=> {1}", Indent(start + 2), method.Lines[0].Content.Replace("return ", string.Empty)));
+                    }
+                    else
+                    {
+                        Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
+
+                        if (line.IsComment())
+                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                        else if (line.IsPreprocessorDirective())
+                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                        else if (line.IsTodo())
+                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
+                        else
+                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
+
+                        Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
+                    }
                 }
                 else if (method.Lines.Count > 1)
                 {
-                    output.AppendFormat("{0}{1}", Indent(start + 1), "{");
-                    output.AppendLine();
-
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
 
                     foreach (var line in method.Lines)
                     {
                         if (line.IsComment())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
-                        }
                         else if (line.IsPreprocessorDirective())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
-                        }
                         else if (line.IsTodo())
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
-                        }
                         else
-                        {
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
-                        }
-
-                        output.AppendLine();
                     }
 
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
                 }
 
                 if (i < ObjectDefinition.Methods.Count - 1)
-                {
                     Lines.Add(new CodeLine());
-                }
             }
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)

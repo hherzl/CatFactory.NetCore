@@ -4,9 +4,9 @@ using System.Text;
 using CatFactory.CodeFactory;
 using CatFactory.OOP;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.CodeFactory
 {
-    public static class ObjectBuilderExtensions
+    public static class ObjectBuilderHelper
     {
         private static IEnumerable<string> GetAttributes(List<MetadataAttribute> attributes)
         {
@@ -40,7 +40,7 @@ namespace CatFactory.NetCore
             }
         }
 
-        private static void AddAttributes(CodeBuilder codeBuilder, List<MetadataAttribute> attributes, StringBuilder output, int start)
+        private static void AddAttributes(CodeBuilder codeBuilder, List<MetadataAttribute> attributes, int start)
         {
             foreach (var attributeDefinition in GetAttributes(attributes))
             {
@@ -48,29 +48,29 @@ namespace CatFactory.NetCore
             }
         }
 
-        public static void AddAttributes(this CSharpClassBuilder classBuilder, StringBuilder output, int start)
+        public static void AddAttributes(this CSharpClassBuilder classBuilder, int start)
         {
-            AddAttributes(classBuilder, classBuilder.ObjectDefinition.Attributes, output, start);
+            AddAttributes(classBuilder, classBuilder.ObjectDefinition.Attributes, start);
         }
 
-        public static void AddAttributes(this CSharpInterfaceBuilder interfaceBuilder, StringBuilder output, int start)
+        public static void AddAttributes(this CSharpInterfaceBuilder interfaceBuilder, int start)
         {
-            AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, output, start);
+            AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, start);
         }
 
-        public static void AddAttributes(this CSharpEnumBuilder interfaceBuilder, StringBuilder output, int start)
+        public static void AddAttributes(this CSharpEnumBuilder interfaceBuilder, int start)
         {
-            AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, output, start);
+            AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, start);
         }
 
-        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, StringBuilder output, int start)
+        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, int start)
         {
-            AddAttributes(codeBuilder, propertyDefinition.Attributes, output, start + 1);
+            AddAttributes(codeBuilder, propertyDefinition.Attributes, start + 1);
         }
 
-        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, MethodDefinition methodDefinition, StringBuilder output, int start)
+        public static void AddAttributes(this DotNetCodeBuilder codeBuilder, MethodDefinition methodDefinition, int start)
         {
-            AddAttributes(codeBuilder, methodDefinition.Attributes, output, start + 1);
+            AddAttributes(codeBuilder, methodDefinition.Attributes, start + 1);
         }
 
         public static string AddAttributes(this DotNetCodeBuilder codeBuilder, ParameterDefinition parameterDefinition)

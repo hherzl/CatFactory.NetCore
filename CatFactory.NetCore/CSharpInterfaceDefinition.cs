@@ -1,4 +1,5 @@
-﻿using CatFactory.CodeFactory;
+﻿using System.Diagnostics;
+using CatFactory.CodeFactory;
 using CatFactory.OOP;
 
 namespace CatFactory.NetCore
@@ -12,6 +13,19 @@ namespace CatFactory.NetCore
 
         public bool UseRegionsToGroupClassMembers { get; set; }
 
-        public ICodeNamingConvention NamingConvention { get; } = new DotNetNamingConvention();
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ICodeNamingConvention m_namingConvention;
+
+        public ICodeNamingConvention NamingConvention
+        {
+            get
+            {
+                return m_namingConvention ?? (m_namingConvention = new DotNetNamingConvention());
+            }
+            set
+            {
+                m_namingConvention = value;
+            }
+        }
     }
 }

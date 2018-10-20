@@ -1,9 +1,10 @@
-﻿using CatFactory.OOP;
+﻿using CatFactory.NetCore.CodeFactory;
+using CatFactory.OOP;
 using Xunit;
 
 namespace CatFactory.NetCore.Tests
 {
-    public class EnumsGenerationTests
+    public class EnumScaffoldingTests
     {
         [Fact]
         public void TestSimpleEnumGeneration()
@@ -11,7 +12,12 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = new CSharpEnumDefinition
             {
+                Namespace = "DesignPatterns",
                 Name = "OperationMode",
+                Documentation = new Documentation
+                {
+                    Summary = "Represents operation mode for persistance"
+                },
                 Sets =
                 {
                     new NameValue { Name = "First", Value = "0" },
@@ -21,7 +27,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
+            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
@@ -49,7 +55,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore", string.Empty, true, definition);
+            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
         }
     }
 }

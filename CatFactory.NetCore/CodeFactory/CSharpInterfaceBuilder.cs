@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using CatFactory.CodeFactory;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.CodeFactory
 {
     public class CSharpInterfaceBuilder : CSharpCodeBuilder
     {
@@ -27,12 +27,25 @@ namespace CatFactory.NetCore
         {
         }
 
-        public new IDotNetInterfaceDefinition ObjectDefinition { get; set; } = new CSharpInterfaceDefinition();
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private IDotNetInterfaceDefinition m_objectDefinition;
+
+        public new IDotNetInterfaceDefinition ObjectDefinition
+        {
+            get
+            {
+                return m_objectDefinition ?? (m_objectDefinition = new CSharpInterfaceDefinition());
+            }
+            set
+            {
+                m_objectDefinition = value;
+            }
+        }
 
         public override string FileName
             => ObjectDefinition.Name;
 
-        protected virtual void AddEvents(int start, StringBuilder output)
+        protected virtual void AddEvents(int start)
         {
             if (ObjectDefinition.Events == null || ObjectDefinition.Events.Count == 0)
                 return;
@@ -66,7 +79,7 @@ namespace CatFactory.NetCore
             }
         }
 
-        protected virtual void AddProperties(int start, StringBuilder output)
+        protected virtual void AddProperties(int start)
         {
             if (ObjectDefinition.Properties == null || ObjectDefinition.Properties.Count == 0)
                 return;
@@ -83,16 +96,12 @@ namespace CatFactory.NetCore
                 var property = ObjectDefinition.Properties[i];
 
                 if (property.Attributes.Count > 0)
-                    this.AddAttributes(property, output, start);
+                    this.AddAttributes(property, start);
 
                 if (property.IsReadOnly)
-                {
                     Lines.Add(new CodeLine("{0}{1} {2} {{ get; }}", Indent(start + 1), property.Type, property.Name));
-                }
                 else
-                {
                     Lines.Add(new CodeLine("{0}{1} {2} {{ get; set; }}", Indent(start + 1), property.Type, property.Name));
-                }
 
                 if (i < ObjectDefinition.Properties.Count - 1)
                 {
@@ -108,7 +117,7 @@ namespace CatFactory.NetCore
             }
         }
 
-        protected virtual void AddMethods(int start, StringBuilder output)
+        protected virtual void AddMethods(int start)
         {
             if (ObjectDefinition.Methods == null || ObjectDefinition.Methods.Count == 0)
                 return;
@@ -121,15 +130,15 @@ namespace CatFactory.NetCore
             }
 
             if (ObjectDefinition.Properties != null && ObjectDefinition.Properties.Count > 0)
-            {
                 Lines.Add(new CodeLine());
-            }
 
             for (var i = 0; i < ObjectDefinition.Methods.Count; i++)
             {
                 var method = ObjectDefinition.Methods[i];
 
-                this.AddAttributes(method, output, start);
+                AddDocumentation(start + 1, method);
+
+                this.AddAttributes(method, start);
 
                 var methodSignature = new List<string>
                 {
@@ -175,9 +184,7 @@ namespace CatFactory.NetCore
                 Lines.Add(new CodeLine("{0}{1};", Indent(start + 1), string.Join(" ", methodSignature)));
 
                 if (i < ObjectDefinition.Methods.Count - 1)
-                {
                     Lines.Add(new CodeLine());
-                }
             }
 
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
@@ -190,8 +197,6 @@ namespace CatFactory.NetCore
 
         public override void Translating()
         {
-            var output = new StringBuilder();
-
             Lines = new List<ILine>();
 
             if (ObjectDefinition.Namespaces.Count > 0)
@@ -215,12 +220,9 @@ namespace CatFactory.NetCore
                 Lines.Add(new CodeLine("{"));
             }
 
-            if (ObjectDefinition.Documentation != null)
-            {
-                AddDocumentation(output, start, ObjectDefinition.Documentation);
-            }
+            AddDocumentation(start, ObjectDefinition);
 
-            this.AddAttributes(output, start);
+            this.AddAttributes(start);
 
             var declaration = new List<string>
             {
@@ -256,18 +258,16 @@ namespace CatFactory.NetCore
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "{"));
 
-            AddEvents(start, output);
+            AddEvents(start);
 
-            AddProperties(start, output);
+            AddProperties(start);
 
-            AddMethods(start, output);
+            AddMethods(start);
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
 
             if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
-            {
                 Lines.Add(new CodeLine("}"));
-            }
         }
     }
 }

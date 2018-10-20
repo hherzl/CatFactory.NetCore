@@ -13,6 +13,9 @@
                 case "Nullable<Boolean>":
                     return "bool?";
 
+                case "Byte[]":
+                    return "byte[]";
+
                 case "Byte":
                     return "byte";
 
@@ -34,6 +37,10 @@
                 case "Nullable<Decimal>":
                     return "decimal?";
 
+                case "Double?":
+                case "Nullable<Double>":
+                    return "double?";
+
                 case "Int16":
                     return "short";
 
@@ -46,7 +53,7 @@
 
                 case "Int32?":
                 case "Nullable<Int32>":
-                    return "int";
+                    return "int?";
 
                 case "Int64":
                     return "long";
@@ -70,11 +77,9 @@
             }
         }
 
-        public static void SimplifyDataTypes(this IDotNetObjectDefinition objectDefinition)
+        public static void SimplifyDataTypes(this IDotNetObjectDefinition objDefinition)
         {
-            var classDef = objectDefinition as CSharpClassDefinition;
-
-            if (classDef != null)
+            if (objDefinition is CSharpClassDefinition classDef)
             {
                 foreach (var field in classDef.Fields)
                 {
@@ -105,9 +110,7 @@
                 }
             }
 
-            var interfaceDef = objectDefinition as CSharpInterfaceDefinition;
-
-            if (interfaceDef != null)
+            if (objDefinition is CSharpInterfaceDefinition interfaceDef)
             {
                 foreach (var property in interfaceDef.Properties)
                 {

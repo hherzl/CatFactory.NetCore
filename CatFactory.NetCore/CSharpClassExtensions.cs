@@ -32,11 +32,11 @@ namespace CatFactory.NetCore
             var property = new PropertyDefinition(type, name)
             {
                 IsAutomatic = false,
-                GetBody = new List<ILine>
+                GetBody =
                 {
                     new CodeLine("return {0};", fieldName)
                 },
-                SetBody = new List<ILine>
+                SetBody =
                 {
                     new CodeLine("{0} = value;", fieldName)
                 }
@@ -54,7 +54,7 @@ namespace CatFactory.NetCore
             var property = new PropertyDefinition(type, name)
             {
                 IsAutomatic = false,
-                GetBody = new List<ILine>
+                GetBody =
                 {
                     new CodeLine("return {0};", fieldName)
                 }
