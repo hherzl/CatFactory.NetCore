@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using CatFactory.NetCore.CodeFactory;
+using Xunit;
 
 namespace CatFactory.NetCore.Tests
 {

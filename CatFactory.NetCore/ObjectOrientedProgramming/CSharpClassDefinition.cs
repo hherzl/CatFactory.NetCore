@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics;
 using CatFactory.CodeFactory;
-using CatFactory.OOP;
+using CatFactory.NetCore.CodeFactory;
+using CatFactory.ObjectOrientedProgramming;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
-    public class CSharpInterfaceDefinition : InterfaceDefinition, IDotNetInterfaceDefinition
+    public class CSharpClassDefinition : ClassDefinition, IDotNetClassDefinition
     {
-        public CSharpInterfaceDefinition()
+        public CSharpClassDefinition()
             : base()
         {
         }

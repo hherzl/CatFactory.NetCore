@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using CatFactory.CodeFactory;
+using CatFactory.NetCore.ObjectOrientedProgramming;
 
 namespace CatFactory.NetCore.CodeFactory
 {
@@ -78,6 +79,9 @@ namespace CatFactory.NetCore.CodeFactory
 
             if (ObjectDefinition.IsStatic)
                 declaration.Add("static");
+
+            if (ObjectDefinition.IsAbstract)
+                declaration.Add("abstract");
 
             if (ObjectDefinition.IsPartial)
                 declaration.Add("partial");

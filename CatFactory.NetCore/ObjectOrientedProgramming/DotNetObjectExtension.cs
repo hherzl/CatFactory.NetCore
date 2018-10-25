@@ -1,6 +1,6 @@
-﻿namespace CatFactory.NetCore
+﻿namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
-    public static class DotNetObjectDefinition
+    public static class DotNetObjectExtension
     {
         private static string SetType(string source)
         {
@@ -77,9 +77,9 @@
             }
         }
 
-        public static void SimplifyDataTypes(this IDotNetObjectDefinition objDefinition)
+        public static void SimplifyDataTypes(this IDotNetObjectDefinition objDef)
         {
-            if (objDefinition is CSharpClassDefinition classDef)
+            if (objDef is CSharpClassDefinition classDef)
             {
                 foreach (var field in classDef.Fields)
                 {
@@ -110,7 +110,7 @@
                 }
             }
 
-            if (objDefinition is CSharpInterfaceDefinition interfaceDef)
+            if (objDef is CSharpInterfaceDefinition interfaceDef)
             {
                 foreach (var property in interfaceDef.Properties)
                 {

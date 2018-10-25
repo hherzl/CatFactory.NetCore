@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using CatFactory.CodeFactory;
+using CatFactory.NetCore.ObjectOrientedProgramming;
 
 namespace CatFactory.NetCore.CodeFactory
 {

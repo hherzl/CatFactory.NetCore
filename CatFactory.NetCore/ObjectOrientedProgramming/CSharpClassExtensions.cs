@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CatFactory.CodeFactory;
-using CatFactory.OOP;
+using CatFactory.NetCore.CodeFactory;
+using CatFactory.ObjectOrientedProgramming;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public static class CSharpClassExtensions
     {

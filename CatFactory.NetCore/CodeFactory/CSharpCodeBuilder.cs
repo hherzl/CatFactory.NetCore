@@ -1,5 +1,6 @@
 ﻿using CatFactory.CodeFactory;
-using CatFactory.OOP;
+using CatFactory.NetCore.ObjectOrientedProgramming;
+using CatFactory.ObjectOrientedProgramming;
 
 namespace CatFactory.NetCore.CodeFactory
 {
@@ -51,14 +52,14 @@ namespace CatFactory.NetCore.CodeFactory
             if (definition.Documentation == null)
                 return;
 
-            if (!string.IsNullOrEmpty(definition.Documentation.Summary))
+            if (definition.Documentation.HasSummary)
             {
                 Lines.Add(new CodeLine("{0}/// <summary>", Indent(start)));
                 Lines.Add(new CodeLine("{0}/// {1}", Indent(start), definition.Documentation.Summary));
                 Lines.Add(new CodeLine("{0}/// </summary>", Indent(start)));
             }
 
-            if (!string.IsNullOrEmpty(definition.Documentation.Remarks))
+            if (definition.Documentation.HasRemarks)
                 Lines.Add(new CodeLine("{0}/// <remarks>{1}</remarks>", Indent(start), definition.Documentation.Remarks));
         }
 
@@ -67,7 +68,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (definition.Documentation == null)
                 return;
 
-            if (!string.IsNullOrEmpty(definition.Documentation.Summary))
+            if (definition.Documentation.HasSummary)
             {
                 Lines.Add(new CodeLine("{0}/// <summary>", Indent(start)));
                 Lines.Add(new CodeLine("{0}/// {1}", Indent(start), definition.Documentation.Summary));
@@ -83,7 +84,7 @@ namespace CatFactory.NetCore.CodeFactory
                     Lines.Add(new CodeLine("{0}/// <param name=\"{1}\">{2}</param>", Indent(start), parameter.Name, parameter.Documentation.Summary));
             }
 
-            if (!string.IsNullOrEmpty(definition.Documentation.Remarks))
+            if (definition.Documentation.HasRemarks)
                 Lines.Add(new CodeLine("{0}/// <remarks>{1}</remarks>", Indent(start), definition.Documentation.Remarks));
         }
 
@@ -92,14 +93,14 @@ namespace CatFactory.NetCore.CodeFactory
             if (definition.Documentation == null)
                 return;
 
-            if (!string.IsNullOrEmpty(definition.Documentation.Summary))
+            if (definition.Documentation.HasSummary)
             {
                 Lines.Add(new CodeLine("{0}/// <summary>", Indent(start)));
                 Lines.Add(new CodeLine("{0}/// {1}", Indent(start), definition.Documentation.Summary));
                 Lines.Add(new CodeLine("{0}/// </summary>", Indent(start)));
             }
 
-            if (!string.IsNullOrEmpty(definition.Documentation.Remarks))
+            if (definition.Documentation.HasRemarks)
                 Lines.Add(new CodeLine("{0}/// <remarks>{1}</remarks>", Indent(start), definition.Documentation.Remarks));
         }
 
@@ -108,25 +109,26 @@ namespace CatFactory.NetCore.CodeFactory
             if (definition.Documentation == null)
                 return;
 
-            if (!string.IsNullOrEmpty(definition.Documentation.Summary))
+            if (definition.Documentation.HasSummary)
             {
                 Lines.Add(new CodeLine("{0}/// <summary>", Indent(start)));
                 Lines.Add(new CodeLine("{0}/// {1}", Indent(start), definition.Documentation.Summary));
                 Lines.Add(new CodeLine("{0}/// </summary>", Indent(start)));
             }
 
-            // todo: Add returns tag
+            if (definition.Documentation.HasReturns)
+                Lines.Add(new CodeLine("{0}/// <returns>{1}</returns>", Indent(start), definition.Documentation.Returns));
 
             foreach (var parameter in definition.Parameters)
             {
                 if (parameter.Documentation == null)
                     continue;
 
-                if (!string.IsNullOrEmpty(parameter.Documentation.Summary))
+                if (parameter.Documentation.HasSummary)
                     Lines.Add(new CodeLine("{0}/// <param name=\"{1}\">{2}</param>", Indent(start), definition.Name, definition.Documentation.Summary));
             }
 
-            if (!string.IsNullOrEmpty(definition.Documentation.Remarks))
+            if (definition.Documentation.HasRemarks)
                 Lines.Add(new CodeLine("{0}/// <remarks>{1}</remarks>", Indent(start), definition.Documentation.Remarks));
         }
 

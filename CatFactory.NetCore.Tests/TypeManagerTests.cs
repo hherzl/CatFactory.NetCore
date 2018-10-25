@@ -1,4 +1,5 @@
-﻿using CatFactory.OOP;
+﻿using CatFactory.NetCore.ObjectOrientedProgramming;
+using CatFactory.ObjectOrientedProgramming;
 using Xunit;
 
 namespace CatFactory.NetCore.Tests

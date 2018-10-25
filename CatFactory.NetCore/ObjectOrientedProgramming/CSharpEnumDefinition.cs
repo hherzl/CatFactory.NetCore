@@ -1,6 +1,6 @@
-﻿using CatFactory.OOP;
+﻿using CatFactory.ObjectOrientedProgramming;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public class CSharpEnumDefinition : EnumDefinition
     {

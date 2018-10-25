@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 using CatFactory.CodeFactory;
-using CatFactory.OOP;
+using CatFactory.ObjectOrientedProgramming;
 
 namespace CatFactory.NetCore.CodeFactory
 {
@@ -58,9 +58,9 @@ namespace CatFactory.NetCore.CodeFactory
             AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, start);
         }
 
-        public static void AddAttributes(this CSharpEnumBuilder interfaceBuilder, int start)
+        public static void AddAttributes(this CSharpEnumBuilder enumBuilder, int start)
         {
-            AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, start);
+            AddAttributes(enumBuilder, enumBuilder.ObjectDefinition.Attributes, start);
         }
 
         public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, int start)

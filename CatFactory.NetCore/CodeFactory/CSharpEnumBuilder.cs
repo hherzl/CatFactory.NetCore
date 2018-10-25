@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using CatFactory.CodeFactory;
+using CatFactory.NetCore.ObjectOrientedProgramming;
 
 namespace CatFactory.NetCore.CodeFactory
 {

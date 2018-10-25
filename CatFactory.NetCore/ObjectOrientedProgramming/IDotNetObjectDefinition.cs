@@ -1,7 +1,7 @@
 ﻿using CatFactory.CodeFactory;
-using CatFactory.OOP;
+using CatFactory.ObjectOrientedProgramming;
 
-namespace CatFactory.NetCore
+namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public interface IDotNetObjectDefinition : IObjectDefinition
     {
