@@ -2,23 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>1.0.0-beta-sun-build13</Version>
+    <Version>1.0.0-beta-sun-build14</Version>
     <Description>CatFactory Package for .NET Core (C#)</Description>
     <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
     <PackageTags>.NET Core, C#</PackageTags>
-    <PackageReleaseNotes>1.0.0-beta-sun-build13 Version:
+    <PackageReleaseNotes>1.0.0-beta-sun-build14 Version:
 
-* Addition of CodeFactory namespace
-* Fix for xml documentation in class scaffolding
-* Fix for xml documentation in interface scaffolding
-* Fix for xml documentation in enum scaffolding
-* Fix for xml documentation in class constructors
-* Fix for xml documentation in methods
-* Addition of xml documentation for properties
-* Addition of xml documentation for methods
-* Fix for Int32? data simplification
-* Addition of double in SimplifyDataTypes method
-* Code review
+* Core package update
 
 Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
 </PackageReleaseNotes>
@@ -29,7 +19,7 @@ Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-wi
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build11" />
+    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build12" />
   </ItemGroup>
 
 </Project>
