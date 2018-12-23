@@ -10,6 +10,9 @@ namespace CatFactory.NetCore.CodeFactory
         public static bool IsPreprocessorDirective(this ILine line)
             => line is PreprocessorDirectiveLine;
 
+        public static bool IsReturn(this ILine line)
+            => line is ReturnLine;
+
         public static bool IsTodo(this ILine line)
             => line is TodoLine;
     }

@@ -8,11 +8,11 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public static class CSharpClassExtensions
     {
-        private static ICodeNamingConvention namingConvention;
+        private static ICodeNamingConvention NamingConvention;
 
         static CSharpClassExtensions()
         {
-            namingConvention = new DotNetNamingConvention();
+            NamingConvention = new DotNetNamingConvention();
         }
 
         public static void AddReadOnlyProperty(this CSharpClassDefinition classDefinition, string type, string name, params CodeLine[] codeLines)
@@ -28,7 +28,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 
         public static void AddPropertyWithField(this CSharpClassDefinition classDefinition, string type, string name)
         {
-            var fieldName = namingConvention.GetFieldName(name);
+            var fieldName = NamingConvention.GetFieldName(name);
 
             var property = new PropertyDefinition(type, name)
             {
@@ -50,7 +50,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 
         public static void AddViewModelProperty(this CSharpClassDefinition classDefinition, string type, string name, bool useNullConditionalOperator = true)
         {
-            var fieldName = namingConvention.GetFieldName(name);
+            var fieldName = NamingConvention.GetFieldName(name);
 
             var property = new PropertyDefinition(type, name)
             {
@@ -89,7 +89,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
         {
             var interfaceDefinition = new CSharpInterfaceDefinition
             {
-                Name = namingConvention.GetInterfaceName(classDefinition.Name),
+                Name = NamingConvention.GetInterfaceName(classDefinition.Name),
                 Namespaces = classDefinition.Namespaces
             };
 

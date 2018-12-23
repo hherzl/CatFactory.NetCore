@@ -1,6 +1,6 @@
 ﻿namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
-    public static class DotNetObjectExtension
+    public static class DotNetObjectExtensions
     {
         private static string SetType(string source)
         {
@@ -82,21 +82,15 @@
             if (objDef is CSharpClassDefinition classDef)
             {
                 foreach (var field in classDef.Fields)
-                {
                     field.Type = SetType(field.Type);
-                }
 
                 foreach (var property in classDef.Properties)
-                {
                     property.Type = SetType(property.Type);
-                }
 
                 foreach (var constructor in classDef.Constructors)
                 {
                     foreach (var parameter in constructor.Parameters)
-                    {
                         parameter.Type = SetType(parameter.Type);
-                    }
                 }
 
                 foreach (var method in classDef.Methods)
@@ -104,27 +98,21 @@
                     method.Type = SetType(method.Type);
 
                     foreach (var parameter in method.Parameters)
-                    {
                         parameter.Type = SetType(parameter.Type);
-                    }
                 }
             }
 
             if (objDef is CSharpInterfaceDefinition interfaceDef)
             {
                 foreach (var property in interfaceDef.Properties)
-                {
                     property.Type = SetType(property.Type);
-                }
 
                 foreach (var method in interfaceDef.Methods)
                 {
                     method.Type = SetType(method.Type);
 
                     foreach (var parameter in method.Parameters)
-                    {
                         parameter.Type = SetType(parameter.Type);
-                    }
                 }
             }
         }

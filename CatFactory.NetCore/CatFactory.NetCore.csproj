@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>1.0.0-beta-sun-build16</Version>
+    <Version>1.0.0-beta-sun-build17</Version>
     <Description>CatFactory Package for .NET Core (C#)</Description>
     <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
     <PackageTags>.NET Core, C#</PackageTags>
-    <PackageReleaseNotes>1.0.0-beta-sun-build16 Version:
+    <PackageReleaseNotes>1.0.0-beta-sun-build17 Version:
 
-* Core package update
+* Code fix for : Fix name for ResolveDatabaseType method
 
 Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
 </PackageReleaseNotes>
