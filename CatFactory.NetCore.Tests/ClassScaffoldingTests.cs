@@ -124,10 +124,7 @@ namespace CatFactory.NetCore.Tests
                     "System",
                     "Microsoft.EntityFrameworkCore"
                 },
-                Documentation = new Documentation
-                {
-                    Summary = "Represents Northwind database in EF Core Model"
-                },
+                Documentation = new Documentation("Represents Northwind database in EF Core Model"),
                 Namespace = "DesignPatterns",
                 IsPartial = true,
                 Name = "NorthwindDbContext",
@@ -137,18 +134,12 @@ namespace CatFactory.NetCore.Tests
                     new ClassConstructorDefinition
                     {
                         Invocation = "base(options)",
-                        Documentation = new Documentation
-                        {
-                            Summary = "Initializes a new instance of NorthwindDbContext class"
-                        },
+                        Documentation = new Documentation("Initializes a new instance of NorthwindDbContext class"),
                         Parameters =
                         {
                             new ParameterDefinition("DbContextOptions<NorthwindDbContext>", "options")
                             {
-                                Documentation = new Documentation
-                                {
-                                    Summary = "Instance of DbContext options"
-                                }
+                                Documentation = new Documentation("Instance of DbContext options")
                             }
                         }
                     }

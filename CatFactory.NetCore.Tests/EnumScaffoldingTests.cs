@@ -15,15 +15,12 @@ namespace CatFactory.NetCore.Tests
             {
                 Namespace = "DesignPatterns",
                 Name = "OperationMode",
-                Documentation = new Documentation
-                {
-                    Summary = "Represents operation mode for persistance"
-                },
+                Documentation = new Documentation("Represents operation mode for persistance"),
                 Sets =
                 {
-                    new NameValue { Name = "First", Value = "0" },
-                    new NameValue { Name = "Second", Value = "1" },
-                    new NameValue { Name = "Third", Value = "2" }
+                    new NameValue("First", "0"),
+                    new NameValue("Second", "1"),
+                    new NameValue("Third", "2")
                 }
             };
 
@@ -48,10 +45,10 @@ namespace CatFactory.NetCore.Tests
                 Name = "CarOptions",
                 Sets =
                 {
-                    new NameValue { Name = "SunRoof", Value = "0x01" },
-                    new NameValue { Name = "Spoiler", Value = "0x02" },
-                    new NameValue { Name = "FogLights", Value = "0x04" },
-                    new NameValue { Name = "TintedWindows", Value = "0x08" }
+                    new NameValue("SunRoof", "0x01"),
+                    new NameValue("Spoiler", "0x02"),
+                    new NameValue("FogLights", "0x04"),
+                    new NameValue("TintedWindows", "0x08")
                 }
             };
 

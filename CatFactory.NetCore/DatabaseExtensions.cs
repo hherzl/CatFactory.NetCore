@@ -1,7 +1,4 @@
 ﻿using System.Linq;
-using System.Text.RegularExpressions;
-using CatFactory.CodeFactory;
-using CatFactory.NetCore.CodeFactory;
 using CatFactory.ObjectRelationalMapping;
 using CatFactory.ObjectRelationalMapping.Programmability;
 
@@ -9,67 +6,97 @@ namespace CatFactory.NetCore
 {
     public static class DatabaseExtensions
     {
-        public static ICodeNamingConvention NamingConvention;
-        public static string PropertyNamePattern;
-
-        static DatabaseExtensions()
+        public static DatabaseTypeMap GetClrMapForType(this Database database, Column column)
         {
-            NamingConvention = new DotNetNamingConvention();
-            PropertyNamePattern = @"^[0-9]+$";
+            var type = database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == column.Type);
+
+            if (type == null)
+                return null;
+
+            if (!string.IsNullOrEmpty(type.ParentDatabaseType))
+            {
+                var parentType = type.GetParentType(database.DatabaseTypeMaps);
+
+                if (parentType == null)
+                    return null;
+                else
+                    return parentType;
+            }
+
+            if (type.GetClrType() != null)
+                return type;
+
+            return null;
         }
 
-        public static string GetPropertyName(this Column column)
+        public static DatabaseTypeMap GetClrMapForType(this Database database, Parameter parameter)
         {
-            var name = column.Name;
+            var type = database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == parameter.Type);
 
-            foreach (var item in DotNetNamingConvention.invalidChars)
-                name = name.Replace(item, '_');
+            if (type == null)
+                return null;
 
-            return NamingConvention.GetPropertyName(name);
+            if (!string.IsNullOrEmpty(type.ParentDatabaseType))
+            {
+                var parentType = type.GetParentType(database.DatabaseTypeMaps);
+
+                if (parentType == null)
+                    return null;
+                else
+                    return parentType;
+            }
+
+            if (type.GetClrType() != null)
+                return type;
+
+            return null;
         }
 
-        public static string GetPropertyName(this Parameter parameter)
+        public static bool HasTypeMappedToClr(this Database database, Column column)
         {
-            var name = parameter.Name;
+            var type = database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == column.Type);
 
-            foreach (var item in DotNetNamingConvention.invalidChars)
-                name = name.Replace(item, '_');
+            if (type == null)
+                return false;
 
-            return NamingConvention.GetPropertyName(name);
+            if (!string.IsNullOrEmpty(type.ParentDatabaseType))
+            {
+                var parentType = type.GetParentType(database.DatabaseTypeMaps);
+
+                if (parentType == null)
+                    return false;
+                else
+                    return true;
+            }
+
+            if (type.GetClrType() != null)
+                return true;
+
+            return false;
         }
 
-        public static string GetPropertyNameHack(this ITable table, Column column)
+        public static bool HasTypeMappedToClr(this Database database, Parameter parameter)
         {
-            var propertyName = column.HasSameNameEnclosingType(table) ? column.GetNameForEnclosing() : column.GetPropertyName();
+            var type = database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == parameter.Type);
 
-            var regex = new Regex(PropertyNamePattern);
+            if (type == null)
+                return false;
 
-            if (regex.IsMatch(propertyName))
-                propertyName = string.Format("V{0}", propertyName);
+            if (!string.IsNullOrEmpty(type.ParentDatabaseType))
+            {
+                var parentType = type.GetParentType(database.DatabaseTypeMaps);
 
-            return propertyName;
+                if (parentType == null)
+                    return false;
+                else
+                    return true;
+            }
+
+            if (type.GetClrType() != null)
+                return true;
+
+            return false;
         }
-
-        public static string GetPropertyNameHack(this IView view, Column column)
-        {
-            var propertyName = column.HasSameNameEnclosingType(view) ? column.GetNameForEnclosing() : column.GetPropertyName();
-
-            var regex = new Regex(PropertyNamePattern);
-
-            if (regex.IsMatch(propertyName))
-                propertyName = string.Format("V{0}", propertyName);
-
-            return propertyName;
-        }
-
-        public static bool HasSameNameEnclosingType(this Column column, ITable table)
-            => column.Name == table.Name;
-
-        public static bool HasSameNameEnclosingType(this Column column, IView view)
-            => column.Name == view.Name;
-
-        public static string GetNameForEnclosing(this Column column)
-            => string.Format("{0}1", column.Name);
 
         public static string ResolveDatabaseType(this Database database, Column column)
         {

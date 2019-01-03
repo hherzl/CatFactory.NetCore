@@ -41,10 +41,7 @@ namespace CatFactory.NetCore.Tests
                     "System.Linq"
                 },
                 Namespace = "DesignPatterns",
-                Documentation = new Documentation
-                {
-                    Summary = "Contains all operations related to Northwind database access"
-                },
+                Documentation = new Documentation("Contains all operations related to Northwind database access"),
                 Name = "INorthwindRepository",
                 Implements =
                 {
@@ -54,10 +51,7 @@ namespace CatFactory.NetCore.Tests
                 {
                     new MethodDefinition("IQueryable<Product>", "GetProducts")
                     {
-                        Documentation = new Documentation
-                        {
-                            Summary = "Retrieves all products"
-                        }
+                        Documentation = new Documentation("Retrieves all products")
                     },
                     new MethodDefinition("IQueryable<Shipper>", "GetShippers"),
                     new MethodDefinition("IQueryable<Order>", "GetOrders")
