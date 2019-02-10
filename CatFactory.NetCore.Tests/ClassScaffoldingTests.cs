@@ -21,6 +21,7 @@ namespace CatFactory.NetCore.Tests
                     "System.ComponentModel.DataAnnotations.Schema"
                 },
                 Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
                 Name = "Shipper"
             };
 
@@ -32,9 +33,26 @@ namespace CatFactory.NetCore.Tests
                 }
             });
 
-            definition.Properties.Add(new PropertyDefinition("int?", "ShipperID", new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity")));
-            definition.Properties.Add(new PropertyDefinition("string", "CompanyName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "80")));
-            definition.Properties.Add(new PropertyDefinition("string", "Phone", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "48")));
+            definition.Properties.Add(
+                new PropertyDefinition(AccessModifier.Public, "int?", "ShipperID", new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity"))
+                {
+                    IsAutomatic = true
+                }
+            );
+
+            definition.Properties.Add(
+                new PropertyDefinition(AccessModifier.Public, "string", "CompanyName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "80"))
+                {
+                    IsAutomatic = true
+                }
+            );
+
+            definition.Properties.Add(
+                new PropertyDefinition(AccessModifier.Public, "string", "Phone", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "48"))
+                {
+                    IsAutomatic = true
+                }
+            );
 
             // Act
             CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
@@ -52,6 +70,7 @@ namespace CatFactory.NetCore.Tests
                     "System.ComponentModel"
                 },
                 Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
                 Name = "Product",
                 Implements =
                 {
@@ -60,6 +79,9 @@ namespace CatFactory.NetCore.Tests
                 Events =
                 {
                     new EventDefinition("PropertyChangedEventHandler", "PropertyChanged")
+                    {
+                        AccessModifier = AccessModifier.Public
+                    }
                 }
             };
 
@@ -91,6 +113,7 @@ namespace CatFactory.NetCore.Tests
                     "System.ComponentModel.DataAnnotations.Schema"
                 },
                 Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
                 Name = "Order"
             };
 
@@ -102,10 +125,25 @@ namespace CatFactory.NetCore.Tests
                 }
             });
 
-            definition.Properties.Add(new PropertyDefinition("Int32?", "OrderID", new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity")));
-            definition.Properties.Add(new PropertyDefinition("DateTime?", "OrderDate", new MetadataAttribute("Column")));
-            definition.Properties.Add(new PropertyDefinition("String", "CustomerID", new MetadataAttribute("Column"), new MetadataAttribute("StringLength", "5")));
-            definition.Properties.Add(new PropertyDefinition("Int32?", "ShipperID", new MetadataAttribute("Column")));
+            definition.Properties.Add(new PropertyDefinition(AccessModifier.Public, "Int32?", "OrderID", new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity"))
+            {
+                IsAutomatic = true
+            });
+
+            definition.Properties.Add(new PropertyDefinition(AccessModifier.Public, "DateTime?", "OrderDate", new MetadataAttribute("Column"))
+            {
+                IsAutomatic = true
+            });
+
+            definition.Properties.Add(new PropertyDefinition(AccessModifier.Public, "String", "CustomerID", new MetadataAttribute("Column"), new MetadataAttribute("StringLength", "5"))
+            {
+                IsAutomatic = true
+            });
+
+            definition.Properties.Add(new PropertyDefinition(AccessModifier.Public, "Int32?", "ShipperID", new MetadataAttribute("Column"))
+            {
+                IsAutomatic = true
+            });
 
             definition.SimplifyDataTypes();
 
@@ -126,6 +164,7 @@ namespace CatFactory.NetCore.Tests
                 },
                 Documentation = new Documentation("Represents Northwind database in EF Core Model"),
                 Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
                 IsPartial = true,
                 Name = "NorthwindDbContext",
                 BaseClass = "DbContext",
@@ -133,6 +172,7 @@ namespace CatFactory.NetCore.Tests
                 {
                     new ClassConstructorDefinition
                     {
+                        AccessModifier = AccessModifier.Public,
                         Invocation = "base(options)",
                         Documentation = new Documentation("Initializes a new instance of NorthwindDbContext class"),
                         Parameters =
@@ -146,9 +186,9 @@ namespace CatFactory.NetCore.Tests
                 },
                 Properties =
                 {
-                    new PropertyDefinition("DbSet<Product>", "Products"),
-                    new PropertyDefinition("DbSet<Shipper>", "Shippers"),
-                    new PropertyDefinition("DbSet<Order>", "Orders")
+                    new PropertyDefinition(AccessModifier.Public, "DbSet<Product>", "Products") { IsAutomatic = true },
+                    new PropertyDefinition(AccessModifier.Public, "DbSet<Shipper>", "Shippers") { IsAutomatic = true },
+                    new PropertyDefinition(AccessModifier.Public, "DbSet<Order>", "Orders") { IsAutomatic = true }
                 },
                 Methods =
                 {
@@ -185,6 +225,7 @@ namespace CatFactory.NetCore.Tests
                     "System"
                 },
                 Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
                 IsPartial = true,
                 Name = "Repository",
                 Implements =
@@ -193,7 +234,7 @@ namespace CatFactory.NetCore.Tests
                 },
                 Constructors =
                 {
-                    new ClassConstructorDefinition(new ParameterDefinition("NorthwindDbContext", "dbContext"))
+                    new ClassConstructorDefinition(AccessModifier.Public, new ParameterDefinition("NorthwindDbContext", "dbContext"))
                     {
                         Lines =
                         {
@@ -211,7 +252,7 @@ namespace CatFactory.NetCore.Tests
                 },
                 Methods =
                 {
-                    new MethodDefinition("void", "Dispose")
+                    new MethodDefinition(AccessModifier.Public, "void", "Dispose")
                     {
                         Lines =
                         {
@@ -238,6 +279,7 @@ namespace CatFactory.NetCore.Tests
                     "Microsoft.EntityFrameworkCore"
                 },
                 Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
                 Name = "NorthwindRepository",
                 BaseClass = "Repository",
                 Implements =
@@ -246,14 +288,14 @@ namespace CatFactory.NetCore.Tests
                 },
                 Constructors =
                 {
-                    new ClassConstructorDefinition(new ParameterDefinition("NorthwindDbContext", "dbContext"))
+                    new ClassConstructorDefinition(AccessModifier.Public, new ParameterDefinition("NorthwindDbContext", "dbContext"))
                     {
                         Invocation = "base(dbContext)"
                     }
                 }
             };
 
-            definition.Methods.Add(new MethodDefinition("IQueryable<Product>", "GetProducts")
+            definition.Methods.Add(new MethodDefinition(AccessModifier.Public, "IQueryable<Product>", "GetProducts")
             {
                 Lines =
                 {
@@ -261,7 +303,7 @@ namespace CatFactory.NetCore.Tests
                 }
             });
 
-            definition.Methods.Add(new MethodDefinition("IQueryable<Shipper>", "GetShippers")
+            definition.Methods.Add(new MethodDefinition(AccessModifier.Public, "IQueryable<Shipper>", "GetShippers")
             {
                 Lines =
                 {
@@ -269,7 +311,7 @@ namespace CatFactory.NetCore.Tests
                 }
             });
 
-            definition.Methods.Add(new MethodDefinition("IQueryable<Order>", "GetOrders")
+            definition.Methods.Add(new MethodDefinition(AccessModifier.Public, "IQueryable<Order>", "GetOrders")
             {
                 Lines =
                 {

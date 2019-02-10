@@ -18,6 +18,7 @@ namespace CatFactory.NetCore.Tests
                     "System"
                 },
                 Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
                 Name = "IRepository",
                 Implements =
                 {
@@ -42,6 +43,7 @@ namespace CatFactory.NetCore.Tests
                 },
                 Namespace = "DesignPatterns",
                 Documentation = new Documentation("Contains all operations related to Northwind database access"),
+                AccessModifier = AccessModifier.Public,
                 Name = "INorthwindRepository",
                 Implements =
                 {

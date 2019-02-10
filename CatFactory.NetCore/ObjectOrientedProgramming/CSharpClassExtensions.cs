@@ -30,7 +30,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
         {
             var fieldName = NamingConvention.GetFieldName(name);
 
-            var property = new PropertyDefinition(type, name)
+            var property = new PropertyDefinition(AccessModifier.Public, type, name)
             {
                 IsAutomatic = false,
                 GetBody =
@@ -54,6 +54,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 
             var property = new PropertyDefinition(type, name)
             {
+                AccessModifier = AccessModifier.Public,
                 IsAutomatic = false,
                 GetBody =
                 {

@@ -14,6 +14,7 @@ namespace CatFactory.NetCore.Tests
             var definition = new CSharpEnumDefinition
             {
                 Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
                 Name = "OperationMode",
                 Documentation = new Documentation("Represents operation mode for persistance"),
                 Sets =
@@ -42,6 +43,7 @@ namespace CatFactory.NetCore.Tests
                 {
                     new MetadataAttribute("Flags")
                 },
+                AccessModifier = AccessModifier.Public,
                 Name = "CarOptions",
                 Sets =
                 {

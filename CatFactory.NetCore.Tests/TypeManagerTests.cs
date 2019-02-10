@@ -12,12 +12,14 @@ namespace CatFactory.NetCore.Tests
             var interfaceDefinition = new CSharpInterfaceDefinition
             {
                 Namespace = "Entities",
+                AccessModifier = AccessModifier.Public,
                 Name = "IEntity"
             };
 
             var classDefinition = new CSharpClassDefinition
             {
                 Namespace = "Entities",
+                AccessModifier = AccessModifier.Public,
                 Name = "OrderHeader",
                 Implements =
                 {
