@@ -10,6 +10,7 @@
 
 * Core package update
 * Fix refact interface method: set access modifier as class
+* Fix SimplifyDataTypes method in DotNetObjectExtensions class, for types Task&lt;Int32&gt; =&gt; Task&lt;int&gt;
 * Use CommentLine in class builder
 * Use PreprocessorDirectiveLine in class builder
 * Use TodoLine in class builder

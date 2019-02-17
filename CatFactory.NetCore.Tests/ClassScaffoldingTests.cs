@@ -34,24 +34,15 @@ namespace CatFactory.NetCore.Tests
             });
 
             definition.Properties.Add(
-                new PropertyDefinition(AccessModifier.Public, "int?", "ShipperID", new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity"))
-                {
-                    IsAutomatic = true
-                }
+                CSharpClassDefinition.CreateAutomaticProperty("Int32?", "ShipperID", attributes: new[] { new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity") })
             );
 
             definition.Properties.Add(
-                new PropertyDefinition(AccessModifier.Public, "string", "CompanyName", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "80"))
-                {
-                    IsAutomatic = true
-                }
+                CSharpClassDefinition.CreateAutomaticProperty("String", "CompanyName", attributes: new[] { new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "80") })
             );
 
             definition.Properties.Add(
-                new PropertyDefinition(AccessModifier.Public, "string", "Phone", new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "48"))
-                {
-                    IsAutomatic = true
-                }
+                CSharpClassDefinition.CreateAutomaticProperty("String", "Phone", attributes: new[] { new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "48") })
             );
 
             // Act
@@ -126,25 +117,21 @@ namespace CatFactory.NetCore.Tests
                 }
             });
 
-            definition.Properties.Add(new PropertyDefinition(AccessModifier.Public, "Int32?", "OrderID", new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity"))
-            {
-                IsAutomatic = true
-            });
+            definition.Properties.Add(
+                CSharpClassDefinition.CreateAutomaticProperty("Int32?", "OrderID", attributes: new[] { new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity") })
+            );
 
-            definition.Properties.Add(new PropertyDefinition(AccessModifier.Public, "DateTime?", "OrderDate", new MetadataAttribute("Column"))
-            {
-                IsAutomatic = true
-            });
+            definition.Properties.Add(
+                CSharpClassDefinition.CreateAutomaticProperty("DateTime?", "OrderDate", attributes: new[] { new MetadataAttribute("Column") })
+            );
 
-            definition.Properties.Add(new PropertyDefinition(AccessModifier.Public, "String", "CustomerID", new MetadataAttribute("Column"), new MetadataAttribute("StringLength", "5"))
-            {
-                IsAutomatic = true
-            });
+            definition.Properties.Add(
+                CSharpClassDefinition.CreateAutomaticProperty("String", "CustomerID", attributes: new[] { new MetadataAttribute("Column"), new MetadataAttribute("StringLength", "5") })
+            );
 
-            definition.Properties.Add(new PropertyDefinition(AccessModifier.Public, "Int32?", "ShipperID", new MetadataAttribute("Column"))
-            {
-                IsAutomatic = true
-            });
+            definition.Properties.Add(
+                CSharpClassDefinition.CreateAutomaticProperty("Int32?", "ShipperID", attributes: new[] { new MetadataAttribute("Column") })
+            );
 
             definition.SimplifyDataTypes();
 
@@ -212,18 +199,9 @@ namespace CatFactory.NetCore.Tests
                 },
                 Properties =
                 {
-                    new PropertyDefinition(AccessModifier.Public, "DbSet<Product>", "Products")
-                    {
-                        IsAutomatic = true
-                    },
-                    new PropertyDefinition(AccessModifier.Public, "DbSet<Shipper>", "Shippers")
-                    {
-                        IsAutomatic = true
-                    },
-                    new PropertyDefinition(AccessModifier.Public, "DbSet<Order>", "Orders")
-                    {
-                        IsAutomatic = true
-                    }
+                    CSharpClassDefinition.CreateAutomaticProperty("DbSet<Product>", "Products"),
+                    CSharpClassDefinition.CreateAutomaticProperty("DbSet<Shipper>", "Shippers"),
+                    CSharpClassDefinition.CreateAutomaticProperty("DbSet<Order>", "Orders")
                 },
                 Methods =
                 {
@@ -361,11 +339,7 @@ namespace CatFactory.NetCore.Tests
                 },
                 Properties =
                 {
-                    new PropertyDefinition(AccessModifier.Protected, "NorthwindDbContext", "DbContext")
-                    {
-                        IsAutomatic = true,
-                        IsReadOnly = true
-                    }
+                    CSharpClassDefinition.CreateReadonlyProperty("NorthwindDbContext", "DbContext", accessModifier: AccessModifier.Protected),
                 },
                 Methods =
                 {
