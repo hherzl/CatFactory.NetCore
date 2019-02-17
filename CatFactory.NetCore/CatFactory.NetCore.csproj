@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>1.0.0-beta-sun-build19</Version>
+    <Version>1.0.0-beta-sun-build20</Version>
     <Description>CatFactory Package for .NET Core (C#)</Description>
     <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
     <PackageTags>C# NET Core OOP ORM Scaffolding</PackageTags>
-    <PackageReleaseNotes>1.0.0-beta-sun-build19 Version:
+    <PackageReleaseNotes>1.0.0-beta-sun-build20 Version:
 
 * Core package update
+* Fix refact interface method: set access modifier as class
 
 Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
 </PackageReleaseNotes>
@@ -19,7 +20,7 @@ Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-wi
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build16" />
+    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build17" />
   </ItemGroup>
 
 </Project>

@@ -14,19 +14,9 @@ namespace CatFactory.NetCore
                 return null;
 
             if (!string.IsNullOrEmpty(type.ParentDatabaseType))
-            {
-                var parentType = type.GetParentType(database.DatabaseTypeMaps);
+                return type.GetParentType(database.DatabaseTypeMaps);
 
-                if (parentType == null)
-                    return null;
-                else
-                    return parentType;
-            }
-
-            if (type.GetClrType() != null)
-                return type;
-
-            return null;
+            return type.GetClrType() == null ? null : type;
         }
 
         public static DatabaseTypeMap GetClrMapForType(this Database database, Parameter parameter)
@@ -37,19 +27,9 @@ namespace CatFactory.NetCore
                 return null;
 
             if (!string.IsNullOrEmpty(type.ParentDatabaseType))
-            {
-                var parentType = type.GetParentType(database.DatabaseTypeMaps);
+                return type.GetParentType(database.DatabaseTypeMaps);
 
-                if (parentType == null)
-                    return null;
-                else
-                    return parentType;
-            }
-
-            if (type.GetClrType() != null)
-                return type;
-
-            return null;
+            return type.GetClrType() == null ? null : type;
         }
 
         public static bool HasTypeMappedToClr(this Database database, Column column)
@@ -60,14 +40,7 @@ namespace CatFactory.NetCore
                 return false;
 
             if (!string.IsNullOrEmpty(type.ParentDatabaseType))
-            {
-                var parentType = type.GetParentType(database.DatabaseTypeMaps);
-
-                if (parentType == null)
-                    return false;
-                else
-                    return true;
-            }
+                return type.GetParentType(database.DatabaseTypeMaps) == null ? false : true;
 
             if (type.GetClrType() != null)
                 return true;
@@ -83,14 +56,7 @@ namespace CatFactory.NetCore
                 return false;
 
             if (!string.IsNullOrEmpty(type.ParentDatabaseType))
-            {
-                var parentType = type.GetParentType(database.DatabaseTypeMaps);
-
-                if (parentType == null)
-                    return false;
-                else
-                    return true;
-            }
+                return type.GetParentType(database.DatabaseTypeMaps) == null ? false : true;
 
             if (type.GetClrType() != null)
                 return true;
@@ -100,25 +66,25 @@ namespace CatFactory.NetCore
 
         public static string ResolveDatabaseType(this Database database, Column column)
         {
-            var map = database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == column.Type);
+            var databaseTypeMap = database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == column.Type);
 
-            if (map == null || map.GetClrType() == null)
+            if (databaseTypeMap == null || databaseTypeMap.GetClrType() == null)
                 return "object";
 
-            return map.AllowClrNullable ? string.Format("{0}?", map.GetClrType().Name) : map.GetClrType().Name;
+            return databaseTypeMap.AllowClrNullable ? string.Format("{0}?", databaseTypeMap.GetClrType().Name) : databaseTypeMap.GetClrType().Name;
         }
 
-        public static DatabaseTypeMap ResolveType(this Database database, string type)
+        public static DatabaseTypeMap ResolveDatabaseType(this Database database, string type)
             => database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == type);
 
         public static string ResolveDbType(this Database database, Column column)
         {
-            var map = database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == column.Type);
+            var databaseTypeMap = database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == column.Type);
 
-            if (map == null || map.GetClrType() == null)
+            if (databaseTypeMap == null || databaseTypeMap.GetClrType() == null)
                 return "object";
 
-            return string.Format("DbType.{0}", map.DbTypeEnum);
+            return string.Format("DbType.{0}", databaseTypeMap.DbTypeEnum);
         }
     }
 }

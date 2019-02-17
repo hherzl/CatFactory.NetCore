@@ -8,7 +8,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public static class CSharpClassExtensions
     {
-        private static ICodeNamingConvention NamingConvention;
+        public static ICodeNamingConvention NamingConvention;
 
         static CSharpClassExtensions()
         {
@@ -52,9 +52,8 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
         {
             var fieldName = NamingConvention.GetFieldName(name);
 
-            var property = new PropertyDefinition(type, name)
+            var property = new PropertyDefinition(AccessModifier.Public, type, name)
             {
-                AccessModifier = AccessModifier.Public,
                 IsAutomatic = false,
                 GetBody =
                 {
@@ -90,18 +89,19 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
         {
             var interfaceDefinition = new CSharpInterfaceDefinition
             {
-                Name = NamingConvention.GetInterfaceName(classDefinition.Name),
-                Namespaces = classDefinition.Namespaces
+                AccessModifier = classDefinition.AccessModifier,
+                Namespaces = classDefinition.Namespaces,
+                Name = NamingConvention.GetInterfaceName(classDefinition.Name)
             };
 
             foreach (var @event in classDefinition.Events.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {
-                interfaceDefinition.Events.Add(new EventDefinition(@event.Type, @event.Name));
+                interfaceDefinition.Events.Add(new EventDefinition(@event.AccessModifier, @event.Type, @event.Name));
             }
 
             foreach (var property in classDefinition.Properties.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {
-                interfaceDefinition.Properties.Add(new PropertyDefinition(property.Type, property.Name)
+                interfaceDefinition.Properties.Add(new PropertyDefinition(property.AccessModifier, property.Type, property.Name)
                 {
                     IsAutomatic = property.IsAutomatic,
                     IsReadOnly = property.IsReadOnly
@@ -110,7 +110,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 
             foreach (var method in classDefinition.Methods.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {
-                interfaceDefinition.Methods.Add(new MethodDefinition(method.Type, method.Name, method.Parameters.ToArray()));
+                interfaceDefinition.Methods.Add(new MethodDefinition(method.AccessModifier, method.Type, method.Name, method.Parameters.ToArray()));
             }
 
             return interfaceDefinition;
