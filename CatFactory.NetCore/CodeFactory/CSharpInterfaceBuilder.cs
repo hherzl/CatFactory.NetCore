@@ -54,9 +54,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
-
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), EventsRegionDescription));
-
                 Lines.Add(new CodeLine());
             }
 
@@ -73,9 +71,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
-
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-
                 Lines.Add(new CodeLine());
             }
         }
@@ -113,7 +109,6 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-
                 Lines.Add(new CodeLine());
             }
         }
@@ -126,7 +121,6 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(2), MethodsRegionDescription));
-
                 Lines.Add(new CodeLine());
             }
 
@@ -191,7 +185,6 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#endregion", Indent(2)));
-
                 Lines.Add(new CodeLine());
             }
         }

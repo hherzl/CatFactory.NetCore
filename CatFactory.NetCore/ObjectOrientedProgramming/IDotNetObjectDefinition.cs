@@ -1,4 +1,5 @@
-﻿using CatFactory.CodeFactory;
+﻿using System;
+using CatFactory.CodeFactory;
 using CatFactory.ObjectOrientedProgramming;
 
 namespace CatFactory.NetCore.ObjectOrientedProgramming
@@ -7,6 +8,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
     {
         bool UseRegionsToGroupClassMembers { get; set; }
 
+        [Obsolete("Set instance for ICodeNamingConvention in CodeBuilder instance")]
         ICodeNamingConvention NamingConvention { get; }
     }
 }

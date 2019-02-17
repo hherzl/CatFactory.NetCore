@@ -53,7 +53,11 @@ namespace CatFactory.NetCore.Tests
                 {
                     new MethodDefinition("IQueryable<Product>", "GetProducts")
                     {
-                        Documentation = new Documentation("Retrieves all products")
+                        Documentation = new Documentation("Retrieves all products"),
+                        Parameters =
+                        {
+                            new ParameterDefinition("int?", "supplierID")
+                        },
                     },
                     new MethodDefinition("IQueryable<Shipper>", "GetShippers"),
                     new MethodDefinition("IQueryable<Order>", "GetOrders")

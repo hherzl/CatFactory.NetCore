@@ -147,9 +147,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
-
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), ConstantsRegionDescription));
-
                 Lines.Add(new CodeLine());
             }
 
@@ -163,9 +161,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
-
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-
                 Lines.Add(new CodeLine());
             }
         }
@@ -178,9 +174,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
-
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), EventsRegionDescription));
-
                 Lines.Add(new CodeLine());
             }
 
@@ -197,9 +191,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
-
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-
                 Lines.Add(new CodeLine());
             }
         }
@@ -212,9 +204,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
-
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), FieldsRegionDescription));
-
                 Lines.Add(new CodeLine());
             }
 
@@ -246,9 +236,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
-
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-
                 Lines.Add(new CodeLine());
             }
         }
@@ -265,11 +253,13 @@ namespace CatFactory.NetCore.CodeFactory
             foreach (var line in ObjectDefinition.StaticConstructor.Lines)
             {
                 if (line.IsComment())
-                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                    Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
                 else if (line.IsPreprocessorDirective())
-                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                    Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                else if (line.IsReturn())
+                    Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
                 else if (line.IsTodo())
-                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
+                    Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
                 else
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
             }
@@ -301,11 +291,13 @@ namespace CatFactory.NetCore.CodeFactory
                 foreach (var line in constructor.Lines)
                 {
                     if (line.IsComment())
-                        Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                        Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
                     else if (line.IsPreprocessorDirective())
-                        Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                        Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                    else if (line.IsReturn())
+                        Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
                     else if (line.IsTodo())
-                        Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
+                        Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
                     else
                         Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
                 }
@@ -340,11 +332,13 @@ namespace CatFactory.NetCore.CodeFactory
             foreach (var line in ObjectDefinition.Finalizer.Lines)
             {
                 if (line.IsComment())
-                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                    Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
                 else if (line.IsPreprocessorDirective())
-                    Lines.Add(new CodeLine("{0}", GetPreprocessorDirective(line.Content)));
+                    Lines.Add(new PreprocessorDirectiveLine("{0}", GetPreprocessorDirective(line.Content)));
+                else if (line.IsReturn())
+                    Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
                 else if (line.IsTodo())
-                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
+                    Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
                 else
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
             }
@@ -379,11 +373,13 @@ namespace CatFactory.NetCore.CodeFactory
                     foreach (var line in indexer.GetBody)
                     {
                         if (line.IsComment())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
-                        else if (line.IsTodo())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
+                            Lines.Add(new CommentLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
                         else if (line.IsPreprocessorDirective())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
+                            Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
+                        else if (line.IsReturn())
+                            Lines.Add(new ReturnLine("{0}{1}", Indent(start + 3 + line.Indent), GetReturn(line.Content)));
+                        else if (line.IsTodo())
+                            Lines.Add(new TodoLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
                         else
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), line.Content));
                     }
@@ -400,11 +396,13 @@ namespace CatFactory.NetCore.CodeFactory
                     foreach (var line in indexer.SetBody)
                     {
                         if (line.IsComment())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
+                            Lines.Add(new CommentLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
                         else if (line.IsPreprocessorDirective())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
+                            Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
+                        else if (line.IsReturn())
+                            Lines.Add(new ReturnLine("{0}{1}", Indent(start + 3 + line.Indent), GetReturn(line.Content)));
                         else if (line.IsTodo())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
+                            Lines.Add(new TodoLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
                         else
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), line.Content));
                     }
@@ -421,7 +419,6 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
-
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
             }
 
@@ -436,7 +433,6 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), PropertiesRegionDescription));
-
                 Lines.Add(new CodeLine());
             }
 
@@ -486,9 +482,11 @@ namespace CatFactory.NetCore.CodeFactory
                             foreach (var line in property.GetBody)
                             {
                                 if (line.IsComment())
-                                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                                    Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                                else if (line.IsReturn())
+                                    Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
                                 else if (line.IsTodo())
-                                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
+                                    Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
                                 else
                                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
                             }
@@ -530,11 +528,13 @@ namespace CatFactory.NetCore.CodeFactory
                     foreach (var line in property.GetBody)
                     {
                         if (line.IsComment())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
+                            Lines.Add(new CommentLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
                         else if (line.IsPreprocessorDirective())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
+                            Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
+                        else if (line.IsReturn())
+                            Lines.Add(new ReturnLine("{0}{1}", Indent(start + 3 + line.Indent), GetReturn(line.Content)));
                         else if (line.IsTodo())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
+                            Lines.Add(new TodoLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
                         else
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), line.Content));
                     }
@@ -548,11 +548,13 @@ namespace CatFactory.NetCore.CodeFactory
                     foreach (var line in property.SetBody)
                     {
                         if (line.IsComment())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
+                            Lines.Add(new CommentLine("{0}{1}", Indent(start + 3 + line.Indent), GetComment(line.Content)));
                         else if (line.IsPreprocessorDirective())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
+                            Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 3 + line.Indent), GetPreprocessorDirective(line.Content)));
+                        else if (line.IsReturn())
+                            Lines.Add(new ReturnLine("{0}{1}", Indent(start + 3 + line.Indent), GetReturn(line.Content)));
                         else if (line.IsTodo())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
+                            Lines.Add(new TodoLine("{0}{1}", Indent(start + 3 + line.Indent), GetTodo(line.Content)));
                         else
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 3 + line.Indent), line.Content));
                     }
@@ -569,7 +571,6 @@ namespace CatFactory.NetCore.CodeFactory
             if (ObjectDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-
                 Lines.Add(new CodeLine());
             }
         }
@@ -599,9 +600,6 @@ namespace CatFactory.NetCore.CodeFactory
                     method.AccessModifier.ToString().ToLower()
                 };
 
-                if (method.IsAsync)
-                    methodSignature.Add("async");
-
                 if (method.IsStatic)
                     methodSignature.Add("static");
                 else if (method.IsOverride)
@@ -610,6 +608,9 @@ namespace CatFactory.NetCore.CodeFactory
                     methodSignature.Add("virtual");
                 else if (method.IsAbstract)
                     methodSignature.Add("abstract");
+
+                if (method.IsAsync)
+                    methodSignature.Add("async");
 
                 methodSignature.Add(string.IsNullOrEmpty(method.Type) ? "void" : method.Type);
 
@@ -654,27 +655,30 @@ namespace CatFactory.NetCore.CodeFactory
                 if (method.Lines.Count == 0)
                 {
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
-
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
                 }
                 else if (method.Lines.Count == 1)
                 {
                     var line = method.Lines[0];
 
-                    if (line.Content.StartsWith("return"))
+                    if (line.IsReturn())
                     {
-                        Lines.Add(new CodeLine("{0}=> {1}", Indent(start + 2), method.Lines[0].Content.Replace("return ", string.Empty)));
+                        var content = line.Content.StartsWith("return ") ? line.Content.Insert(0, "=> ") : line.Content.Insert(0, "=> ");
+
+                        Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2), content));
                     }
                     else
                     {
                         Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
 
                         if (line.IsComment())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                            Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
                         else if (line.IsPreprocessorDirective())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                            Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                        else if (line.IsReturn())
+                            Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
                         else if (line.IsTodo())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
+                            Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
                         else
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
 
@@ -688,11 +692,13 @@ namespace CatFactory.NetCore.CodeFactory
                     foreach (var line in method.Lines)
                     {
                         if (line.IsComment())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                            Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
                         else if (line.IsPreprocessorDirective())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                            Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                        else if (line.IsReturn())
+                            Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
                         else if (line.IsTodo())
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
+                            Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
                         else
                             Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
                     }

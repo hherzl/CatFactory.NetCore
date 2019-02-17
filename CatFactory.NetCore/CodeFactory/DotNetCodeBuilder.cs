@@ -39,6 +39,9 @@ namespace CatFactory.NetCore.CodeFactory
         protected virtual string GetPreprocessorDirective(string description)
             => description;
 
+        protected virtual string GetReturn(string content)
+            => content;
+
         protected virtual string GetTodo(string description)
             => description;
     }

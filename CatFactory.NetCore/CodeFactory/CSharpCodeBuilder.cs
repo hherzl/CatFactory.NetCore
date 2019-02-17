@@ -141,6 +141,9 @@ namespace CatFactory.NetCore.CodeFactory
         protected override string GetPreprocessorDirective(string name)
             => string.Format("#{0}", name);
 
+        protected override string GetReturn(string content)
+            => string.Format("return {0}", content);
+
         protected override string GetTodo(string description)
             => string.Format("// todo: {0}", description);
     }

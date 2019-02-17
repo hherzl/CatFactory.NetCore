@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using CatFactory.CodeFactory;
 using CatFactory.NetCore.CodeFactory;
 using CatFactory.ObjectOrientedProgramming;
@@ -17,6 +18,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ICodeNamingConvention m_namingConvention;
 
+        [Obsolete("Set instance for ICodeNamingConvention in CodeBuilder instance")]
         public ICodeNamingConvention NamingConvention
         {
             get

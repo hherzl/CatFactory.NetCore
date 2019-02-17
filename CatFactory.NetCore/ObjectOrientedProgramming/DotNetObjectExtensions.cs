@@ -9,6 +9,9 @@
                 case "Boolean":
                     return "bool";
 
+                case "Task<Boolean>":
+                    return "Task<bool>";
+
                 case "Boolean?":
                 case "Nullable<Boolean>":
                     return "bool?";
@@ -26,6 +29,9 @@
                 case "Char":
                     return "char";
 
+                case "Task<Char>":
+                    return "Task<char>";
+
                 case "Char?":
                 case "Nullable<Char>":
                     return "char?";
@@ -33,16 +39,25 @@
                 case "Decimal":
                     return "decimal";
 
+                case "Task<Decimal>":
+                    return "Task<decimal>";
+
                 case "Decimal?":
                 case "Nullable<Decimal>":
                     return "decimal?";
 
+                case "Double":
+                    return "double";
+
                 case "Double?":
-                case "Nullable<Double>":
+                case "Nullable<Double?>":
                     return "double?";
 
                 case "Int16":
                     return "short";
+
+                case "Task<Int16>":
+                    return "Task<short>";
 
                 case "Int16?":
                 case "Nullable<Int16>":
@@ -51,12 +66,18 @@
                 case "Int32":
                     return "int";
 
+                case "Task<Int32>":
+                    return "Task<int>";
+
                 case "Int32?":
                 case "Nullable<Int32>":
                     return "int?";
 
                 case "Int64":
                     return "long";
+
+                case "Task<Int64>":
+                    return "Task<long?";
 
                 case "Int64?":
                 case "Nullable<Int64>":
@@ -65,12 +86,18 @@
                 case "Single":
                     return "float";
 
+                case "Task<Single>":
+                    return "Task<float>";
+
                 case "Single?":
                 case "Nullable<Single>":
                     return "float?";
 
                 case "String":
                     return "string";
+
+                case "Task<String>":
+                    return "Task<string>";
 
                 default:
                     return source;
