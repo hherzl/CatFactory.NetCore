@@ -2,13 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>1.0.0-beta-sun-build21</Version>
+    <Version>1.0.0-beta-sun-build23</Version>
     <Description>CatFactory Package for .NET Core (C#)</Description>
     <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
     <PackageTags>C# NET Core OOP ORM Scaffolding</PackageTags>
-    <PackageReleaseNotes>1.0.0-beta-sun-build21 Version:
+    <PackageReleaseNotes>1.0.0-beta-sun-build23 Version:
 
+* Core package update
 * Fix in CSharpClassBuilder: add ClassDefinition property to represent DotNet class
+* Fix in CSharpInterfaceBuilder: add InterfaceDefinition property to represent DotNet interface
+* Fix in CSharpEnumBuilder: add EnumDefinition property to represent DotNet enum
+* Fix in CSharpClassBuilder: add value for fields
 
 Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
 </PackageReleaseNotes>
@@ -19,7 +23,7 @@ Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-wi
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build17" />
+    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build18" />
   </ItemGroup>
 
 </Project>

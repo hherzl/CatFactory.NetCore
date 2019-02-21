@@ -29,38 +29,29 @@ namespace CatFactory.NetCore.CodeFactory
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private IDotNetInterfaceDefinition m_objectDefinition;
+        private IDotNetInterfaceDefinition m_interfaceDefinition;
 
-        public new IDotNetInterfaceDefinition ObjectDefinition
-        {
-            get
-            {
-                return m_objectDefinition ?? (m_objectDefinition = new CSharpInterfaceDefinition());
-            }
-            set
-            {
-                m_objectDefinition = value;
-            }
-        }
+        public IDotNetInterfaceDefinition InterfaceDefinition
+            => m_interfaceDefinition ?? (m_interfaceDefinition = ObjectDefinition as IDotNetInterfaceDefinition);
 
         public override string FileName
-            => ObjectDefinition.Name;
+            => InterfaceDefinition.Name;
 
         protected virtual void AddEvents(int start)
         {
-            if (ObjectDefinition.Events == null || ObjectDefinition.Events.Count == 0)
+            if (InterfaceDefinition.Events == null || InterfaceDefinition.Events.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), EventsRegionDescription));
                 Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.Events.Count > 0)
+            if (InterfaceDefinition.Events.Count > 0)
             {
-                foreach (var @event in ObjectDefinition.Events)
+                foreach (var @event in InterfaceDefinition.Events)
                 {
                     Lines.Add(new CodeLine("{0}event {1} {2};", Indent(start + 1), @event.Type, @event.Name));
                 }
@@ -68,7 +59,7 @@ namespace CatFactory.NetCore.CodeFactory
                 Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
@@ -78,19 +69,19 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddProperties(int start)
         {
-            if (ObjectDefinition.Properties == null || ObjectDefinition.Properties.Count == 0)
+            if (InterfaceDefinition.Properties == null || InterfaceDefinition.Properties.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), PropertiesRegionDescription));
 
                 Lines.Add(new CodeLine());
             }
 
-            for (var i = 0; i < ObjectDefinition.Properties.Count; i++)
+            for (var i = 0; i < InterfaceDefinition.Properties.Count; i++)
             {
-                var property = ObjectDefinition.Properties[i];
+                var property = InterfaceDefinition.Properties[i];
 
                 if (property.Attributes.Count > 0)
                     this.AddAttributes(property, start);
@@ -100,13 +91,13 @@ namespace CatFactory.NetCore.CodeFactory
                 else
                     Lines.Add(new CodeLine("{0}{1} {2} {{ get; set; }}", Indent(start + 1), property.Type, property.Name));
 
-                if (i < ObjectDefinition.Properties.Count - 1)
+                if (i < InterfaceDefinition.Properties.Count - 1)
                 {
                     Lines.Add(new CodeLine());
                 }
             }
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
                 Lines.Add(new CodeLine());
@@ -115,21 +106,21 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddMethods(int start)
         {
-            if (ObjectDefinition.Methods == null || ObjectDefinition.Methods.Count == 0)
+            if (InterfaceDefinition.Methods == null || InterfaceDefinition.Methods.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(2), MethodsRegionDescription));
                 Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.Properties != null && ObjectDefinition.Properties.Count > 0)
+            if (InterfaceDefinition.Properties != null && InterfaceDefinition.Properties.Count > 0)
                 Lines.Add(new CodeLine());
 
-            for (var i = 0; i < ObjectDefinition.Methods.Count; i++)
+            for (var i = 0; i < InterfaceDefinition.Methods.Count; i++)
             {
-                var method = ObjectDefinition.Methods[i];
+                var method = InterfaceDefinition.Methods[i];
 
                 AddDocumentation(start + 1, method);
 
@@ -178,11 +169,11 @@ namespace CatFactory.NetCore.CodeFactory
 
                 Lines.Add(new CodeLine("{0}{1};", Indent(start + 1), string.Join(" ", methodSignature)));
 
-                if (i < ObjectDefinition.Methods.Count - 1)
+                if (i < InterfaceDefinition.Methods.Count - 1)
                     Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#endregion", Indent(2)));
                 Lines.Add(new CodeLine());
@@ -193,9 +184,9 @@ namespace CatFactory.NetCore.CodeFactory
         {
             Lines = new List<ILine>();
 
-            if (ObjectDefinition.Namespaces.Count > 0)
+            if (InterfaceDefinition.Namespaces.Count > 0)
             {
-                foreach (var item in ObjectDefinition.Namespaces)
+                foreach (var item in InterfaceDefinition.Namespaces)
                 {
                     Lines.Add(new CodeLine("using {0};", item));
                 }
@@ -205,48 +196,48 @@ namespace CatFactory.NetCore.CodeFactory
 
             var start = 0;
 
-            if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
+            if (!string.IsNullOrEmpty(InterfaceDefinition.Namespace))
             {
                 start = 1;
 
-                Lines.Add(new CodeLine("namespace {0}", ObjectDefinition.Namespace));
+                Lines.Add(new CodeLine("namespace {0}", InterfaceDefinition.Namespace));
 
                 Lines.Add(new CodeLine("{"));
             }
 
-            AddDocumentation(start, ObjectDefinition);
+            AddDocumentation(start, InterfaceDefinition);
 
             this.AddAttributes(start);
 
             var declaration = new List<string>
             {
-                ObjectDefinition.AccessModifier.ToString().ToLower()
+                InterfaceDefinition.AccessModifier.ToString().ToLower()
             };
 
-            if (ObjectDefinition.IsPartial)
+            if (InterfaceDefinition.IsPartial)
                 declaration.Add("partial");
 
             declaration.Add("interface");
 
-            if (ObjectDefinition.GenericTypes.Count == 0)
-                declaration.Add(ObjectDefinition.Name);
+            if (InterfaceDefinition.GenericTypes.Count == 0)
+                declaration.Add(InterfaceDefinition.Name);
             else
-                declaration.Add(string.Format("{0}<{1}>", ObjectDefinition.Name, string.Join(", ", ObjectDefinition.GenericTypes.Select(item => item.Name))));
+                declaration.Add(string.Format("{0}<{1}>", InterfaceDefinition.Name, string.Join(", ", InterfaceDefinition.GenericTypes.Select(item => item.Name))));
 
-            if (ObjectDefinition.HasInheritance)
+            if (InterfaceDefinition.HasInheritance)
             {
                 declaration.Add(":");
 
                 var parents = new List<string>();
 
-                if (ObjectDefinition.Implements.Count > 0)
-                    parents.AddRange(ObjectDefinition.Implements);
+                if (InterfaceDefinition.Implements.Count > 0)
+                    parents.AddRange(InterfaceDefinition.Implements);
 
                 declaration.Add(string.Join(", ", parents));
             }
 
-            if (ObjectDefinition.GenericTypes.Count > 0)
-                declaration.Add(string.Join(", ", ObjectDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
+            if (InterfaceDefinition.GenericTypes.Count > 0)
+                declaration.Add(string.Join(", ", InterfaceDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
 
@@ -260,7 +251,7 @@ namespace CatFactory.NetCore.CodeFactory
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
 
-            if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
+            if (!string.IsNullOrEmpty(InterfaceDefinition.Namespace))
                 Lines.Add(new CodeLine("}"));
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using CatFactory.CodeFactory;
 using CatFactory.NetCore.ObjectOrientedProgramming;
@@ -26,18 +27,22 @@ namespace CatFactory.NetCore.CodeFactory
         {
         }
 
-        public new CSharpEnumDefinition ObjectDefinition { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private CSharpEnumDefinition m_enumDefinition;
+
+        public CSharpEnumDefinition EnumDefinition
+            => m_enumDefinition ?? (m_enumDefinition = ObjectDefinition as CSharpEnumDefinition);
 
         public override string FileName
-            => ObjectDefinition.Name;
+            => EnumDefinition.Name;
 
         public override void Translating()
         {
             var output = new StringBuilder();
 
-            if (ObjectDefinition.Namespaces.Count > 0)
+            if (EnumDefinition.Namespaces.Count > 0)
             {
-                foreach (var item in ObjectDefinition.Namespaces)
+                foreach (var item in EnumDefinition.Namespaces)
                 {
                     Lines.Add(new CodeLine("using {0};", item));
                 }
@@ -47,50 +52,50 @@ namespace CatFactory.NetCore.CodeFactory
 
             var start = 0;
 
-            if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
+            if (!string.IsNullOrEmpty(EnumDefinition.Namespace))
             {
                 start = 1;
 
-                Lines.Add(new CodeLine("namespace {0}", ObjectDefinition.Namespace));
+                Lines.Add(new CodeLine("namespace {0}", EnumDefinition.Namespace));
 
                 Lines.Add(new CodeLine("{0}", "{"));
             }
 
-            AddDocumentation(start, ObjectDefinition);
+            AddDocumentation(start, EnumDefinition);
 
             this.AddAttributes(start);
 
             var declaration = new List<string>
             {
-                ObjectDefinition.AccessModifier.ToString().ToLower()
+                EnumDefinition.AccessModifier.ToString().ToLower()
             };
 
             declaration.Add("enum");
 
-            declaration.Add(ObjectDefinition.Name);
+            declaration.Add(EnumDefinition.Name);
 
-            if (!string.IsNullOrEmpty(ObjectDefinition.BaseType))
+            if (!string.IsNullOrEmpty(EnumDefinition.BaseType))
             {
                 declaration.Add(":");
-                declaration.Add(ObjectDefinition.BaseType);
+                declaration.Add(EnumDefinition.BaseType);
             }
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "{"));
 
-            for (var i = 0; i < ObjectDefinition.Sets.Count; i++)
+            for (var i = 0; i < EnumDefinition.Sets.Count; i++)
             {
-                var set = ObjectDefinition.Sets[i];
+                var set = EnumDefinition.Sets[i];
 
                 // todo: Add attributes for options
 
-                Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), string.Format("{0} = {1}{2}", set.Name, set.Value, i < ObjectDefinition.Sets.Count - 1 ? "," : "")));
+                Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), string.Format("{0} = {1}{2}", set.Name, set.Value, i < EnumDefinition.Sets.Count - 1 ? "," : "")));
             }
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
 
-            if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
+            if (!string.IsNullOrEmpty(EnumDefinition.Namespace))
                 Lines.Add(new CodeLine("}"));
         }
     }

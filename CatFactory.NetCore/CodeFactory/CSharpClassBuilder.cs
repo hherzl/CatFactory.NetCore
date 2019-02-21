@@ -8,15 +8,6 @@ namespace CatFactory.NetCore.CodeFactory
 {
     public class CSharpClassBuilder : CSharpCodeBuilder
     {
-        public static CSharpClassBuilder Create(string outputDirectory, bool forceOverwrite = false)
-        {
-            return new CSharpClassBuilder
-            {
-                OutputDirectory = outputDirectory,
-                ForceOverwrite = forceOverwrite
-            };
-        }
-
         public static void CreateFiles(string outputDirectory, string subdirectory, bool forceOverwrite, params CSharpClassDefinition[] definitions)
         {
             foreach (var definition in definitions)
@@ -44,7 +35,7 @@ namespace CatFactory.NetCore.CodeFactory
             => m_classDefinition ?? (m_classDefinition = ObjectDefinition as IDotNetClassDefinition);
 
         public override string FileName
-            => ObjectDefinition.Name;
+            => ClassDefinition.Name;
 
         public override void Translating()
         {
@@ -226,6 +217,12 @@ namespace CatFactory.NetCore.CodeFactory
                     fieldSignature.Add(field.Type);
 
                     fieldSignature.Add(field.Name);
+
+                    if (!string.IsNullOrEmpty(field.Value))
+                    {
+                        fieldSignature.Add("=");
+                        fieldSignature.Add(field.Value);
+                    }
 
                     Lines.Add(new CodeLine("{0}{1};", Indent(start + 1), string.Join(" ", fieldSignature)));
                 }

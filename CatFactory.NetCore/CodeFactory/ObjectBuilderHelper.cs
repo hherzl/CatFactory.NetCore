@@ -55,12 +55,12 @@ namespace CatFactory.NetCore.CodeFactory
 
         public static void AddAttributes(this CSharpInterfaceBuilder interfaceBuilder, int start)
         {
-            AddAttributes(interfaceBuilder, interfaceBuilder.ObjectDefinition.Attributes, start);
+            AddAttributes(interfaceBuilder, interfaceBuilder.InterfaceDefinition.Attributes, start);
         }
 
         public static void AddAttributes(this CSharpEnumBuilder enumBuilder, int start)
         {
-            AddAttributes(enumBuilder, enumBuilder.ObjectDefinition.Attributes, start);
+            AddAttributes(enumBuilder, enumBuilder.EnumDefinition.Attributes, start);
         }
 
         public static void AddAttributes(this DotNetCodeBuilder codeBuilder, PropertyDefinition propertyDefinition, int start)
