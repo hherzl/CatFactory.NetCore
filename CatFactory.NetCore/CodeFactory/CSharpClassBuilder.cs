@@ -8,6 +8,15 @@ namespace CatFactory.NetCore.CodeFactory
 {
     public class CSharpClassBuilder : CSharpCodeBuilder
     {
+        public static CSharpClassBuilder Create(string outputDirectory, bool forceOverwrite = false)
+        {
+            return new CSharpClassBuilder
+            {
+                OutputDirectory = outputDirectory,
+                ForceOverwrite = forceOverwrite
+            };
+        }
+
         public static void CreateFiles(string outputDirectory, string subdirectory, bool forceOverwrite, params CSharpClassDefinition[] definitions)
         {
             foreach (var definition in definitions)
@@ -29,19 +38,10 @@ namespace CatFactory.NetCore.CodeFactory
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private IDotNetClassDefinition m_objectDefinition;
+        private IDotNetClassDefinition m_classDefinition;
 
-        public new IDotNetClassDefinition ObjectDefinition
-        {
-            get
-            {
-                return m_objectDefinition ?? (m_objectDefinition = new CSharpClassDefinition());
-            }
-            set
-            {
-                m_objectDefinition = value;
-            }
-        }
+        public IDotNetClassDefinition ClassDefinition
+            => m_classDefinition ?? (m_classDefinition = ObjectDefinition as IDotNetClassDefinition);
 
         public override string FileName
             => ObjectDefinition.Name;
@@ -77,39 +77,39 @@ namespace CatFactory.NetCore.CodeFactory
                 ObjectDefinition.AccessModifier.ToString().ToLower()
             };
 
-            if (ObjectDefinition.IsStatic)
+            if (ClassDefinition.IsStatic)
                 declaration.Add("static");
 
-            if (ObjectDefinition.IsAbstract)
+            if (ClassDefinition.IsAbstract)
                 declaration.Add("abstract");
 
-            if (ObjectDefinition.IsPartial)
+            if (ClassDefinition.IsPartial)
                 declaration.Add("partial");
 
             declaration.Add("class");
 
-            if (ObjectDefinition.GenericTypes.Count == 0)
+            if (ClassDefinition.GenericTypes.Count == 0)
                 declaration.Add(ObjectDefinition.Name);
             else
-                declaration.Add(string.Format("{0}<{1}>", ObjectDefinition.Name, string.Join(", ", ObjectDefinition.GenericTypes.Select(item => item.Name))));
+                declaration.Add(string.Format("{0}<{1}>", ObjectDefinition.Name, string.Join(", ", ClassDefinition.GenericTypes.Select(item => item.Name))));
 
-            if (ObjectDefinition.HasInheritance)
+            if (ClassDefinition.HasInheritance)
             {
                 declaration.Add(":");
 
                 var parents = new List<string>();
 
-                if (!string.IsNullOrEmpty(ObjectDefinition.BaseClass))
-                    parents.Add(ObjectDefinition.BaseClass);
+                if (!string.IsNullOrEmpty(ClassDefinition.BaseClass))
+                    parents.Add(ClassDefinition.BaseClass);
 
-                if (ObjectDefinition.Implements.Count > 0)
-                    parents.AddRange(ObjectDefinition.Implements);
+                if (ClassDefinition.Implements.Count > 0)
+                    parents.AddRange(ClassDefinition.Implements);
 
                 declaration.Add(string.Join(", ", parents));
             }
 
-            if (ObjectDefinition.GenericTypes.Count > 0)
-                declaration.Add(string.Join(", ", ObjectDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
+            if (ClassDefinition.GenericTypes.Count > 0)
+                declaration.Add(string.Join(", ", ClassDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
 
@@ -141,24 +141,24 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddConstants(int start)
         {
-            if (ObjectDefinition.Constants == null || ObjectDefinition.Constants.Count == 0)
+            if (ClassDefinition.Constants == null || ClassDefinition.Constants.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), ConstantsRegionDescription));
                 Lines.Add(new CodeLine());
             }
 
-            foreach (var constant in ObjectDefinition.Constants)
+            foreach (var constant in ClassDefinition.Constants)
             {
                 Lines.Add(new CodeLine(start + 1, "{0}{1} const {2} {3} = {4};", constant.AccessModifier.ToString().ToLower(), constant.Type, constant.Name, constant.Value.ToString()));
             }
 
             Lines.Add(new CodeLine());
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
@@ -168,19 +168,19 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddEvents(int start)
         {
-            if (ObjectDefinition.Events == null || ObjectDefinition.Events.Count == 0)
+            if (ClassDefinition.Events == null || ClassDefinition.Events.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), EventsRegionDescription));
                 Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.Events.Count > 0)
+            if (ClassDefinition.Events.Count > 0)
             {
-                foreach (var @event in ObjectDefinition.Events)
+                foreach (var @event in ClassDefinition.Events)
                 {
                     Lines.Add(new CodeLine("{0}{1} event {2} {3};", Indent(start + 1), @event.AccessModifier.ToString().ToLower(), @event.Type, @event.Name));
                 }
@@ -188,7 +188,7 @@ namespace CatFactory.NetCore.CodeFactory
                 Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
@@ -198,19 +198,19 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddFields(int start)
         {
-            if (ObjectDefinition.Fields == null || ObjectDefinition.Fields.Count == 0)
+            if (ClassDefinition.Fields == null || ClassDefinition.Fields.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), FieldsRegionDescription));
                 Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.Fields.Count > 0)
+            if (ClassDefinition.Fields.Count > 0)
             {
-                foreach (var field in ObjectDefinition.Fields)
+                foreach (var field in ClassDefinition.Fields)
                 {
                     var fieldSignature = new List<string>
                     {
@@ -233,7 +233,7 @@ namespace CatFactory.NetCore.CodeFactory
                 Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
@@ -243,14 +243,14 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddStaticConstructor(int start)
         {
-            if (ObjectDefinition.StaticConstructor == null)
+            if (ClassDefinition.StaticConstructor == null)
                 return;
 
             Lines.Add(new CodeLine("{0}static {1}()", Indent(start + 1), ObjectDefinition.Name));
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
 
-            foreach (var line in ObjectDefinition.StaticConstructor.Lines)
+            foreach (var line in ClassDefinition.StaticConstructor.Lines)
             {
                 if (line.IsComment())
                     Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
@@ -269,15 +269,15 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddConstructors(int start)
         {
-            if (ObjectDefinition.Constructors == null || ObjectDefinition.Constructors.Count == 0)
+            if (ClassDefinition.Constructors == null || ClassDefinition.Constructors.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), ConstructorsRegionDescription));
 
-            for (var i = 0; i < ObjectDefinition.Constructors.Count; i++)
+            for (var i = 0; i < ClassDefinition.Constructors.Count; i++)
             {
-                var constructor = ObjectDefinition.Constructors[i];
+                var constructor = ClassDefinition.Constructors[i];
 
                 AddDocumentation(start + 1, constructor);
 
@@ -304,11 +304,11 @@ namespace CatFactory.NetCore.CodeFactory
 
                 Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
 
-                if (i < ObjectDefinition.Constructors.Count - 1)
+                if (i < ClassDefinition.Constructors.Count - 1)
                     Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
 
@@ -320,7 +320,7 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddFinalizer(int start)
         {
-            if (ObjectDefinition.Finalizer == null || ObjectDefinition.Finalizer.Lines == null || ObjectDefinition.Finalizer.Lines.Count == 0)
+            if (ClassDefinition.Finalizer == null || ClassDefinition.Finalizer.Lines == null || ClassDefinition.Finalizer.Lines.Count == 0)
                 return;
 
             Lines.Add(new CodeLine());
@@ -329,7 +329,7 @@ namespace CatFactory.NetCore.CodeFactory
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
 
-            foreach (var line in ObjectDefinition.Finalizer.Lines)
+            foreach (var line in ClassDefinition.Finalizer.Lines)
             {
                 if (line.IsComment())
                     Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
@@ -348,15 +348,15 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddIndexers(int start)
         {
-            if (ObjectDefinition.Indexers == null || ObjectDefinition.Indexers.Count == 0)
+            if (ClassDefinition.Indexers == null || ClassDefinition.Indexers.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), IndexersRegionDescription));
 
-            for (var i = 0; i < ObjectDefinition.Indexers.Count; i++)
+            for (var i = 0; i < ClassDefinition.Indexers.Count; i++)
             {
-                var indexer = ObjectDefinition.Indexers[i];
+                var indexer = ClassDefinition.Indexers[i];
 
                 var parameters = string.Join(", ", indexer.Parameters.Select(item => string.Format("{0} {1}", item.Type, item.Name)));
 
@@ -412,11 +412,11 @@ namespace CatFactory.NetCore.CodeFactory
 
                 Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
 
-                if (i < ObjectDefinition.Indexers.Count - 1)
+                if (i < ClassDefinition.Indexers.Count - 1)
                     Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine());
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
@@ -427,18 +427,18 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddProperties(int start)
         {
-            if (ObjectDefinition.Properties == null || ObjectDefinition.Properties.Count == 0)
+            if (ClassDefinition.Properties == null || ClassDefinition.Properties.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), PropertiesRegionDescription));
                 Lines.Add(new CodeLine());
             }
 
-            for (var i = 0; i < ObjectDefinition.Properties.Count; i++)
+            for (var i = 0; i < ClassDefinition.Properties.Count; i++)
             {
-                var property = ObjectDefinition.Properties[i];
+                var property = ClassDefinition.Properties[i];
 
                 if (property.Attributes.Count > 0)
                     this.AddAttributes(property, start);
@@ -564,11 +564,11 @@ namespace CatFactory.NetCore.CodeFactory
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
                 }
 
-                if (i < ObjectDefinition.Properties.Count - 1)
+                if (i < ClassDefinition.Properties.Count - 1)
                     Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
                 Lines.Add(new CodeLine());
@@ -577,21 +577,21 @@ namespace CatFactory.NetCore.CodeFactory
 
         protected virtual void AddMethods(int start)
         {
-            if (ObjectDefinition.Methods == null || ObjectDefinition.Methods.Count == 0)
+            if (ClassDefinition.Methods == null || ClassDefinition.Methods.Count == 0)
                 return;
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 2), MethodsRegionDescription));
                 Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.Properties != null && ObjectDefinition.Properties.Count > 0)
+            if (ClassDefinition.Properties != null && ClassDefinition.Properties.Count > 0)
                 Lines.Add(new CodeLine());
 
-            for (var i = 0; i < ObjectDefinition.Methods.Count; i++)
+            for (var i = 0; i < ClassDefinition.Methods.Count; i++)
             {
-                var method = ObjectDefinition.Methods[i];
+                var method = ClassDefinition.Methods[i];
 
                 this.AddAttributes(method, start);
 
@@ -706,11 +706,11 @@ namespace CatFactory.NetCore.CodeFactory
                     Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
                 }
 
-                if (i < ObjectDefinition.Methods.Count - 1)
+                if (i < ClassDefinition.Methods.Count - 1)
                     Lines.Add(new CodeLine());
             }
 
-            if (ObjectDefinition.UseRegionsToGroupClassMembers)
+            if (ClassDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 2)));
 
