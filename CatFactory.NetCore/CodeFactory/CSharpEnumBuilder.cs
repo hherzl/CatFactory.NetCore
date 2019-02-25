@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using CatFactory.CodeFactory;
 using CatFactory.NetCore.ObjectOrientedProgramming;
+using Microsoft.Extensions.Logging;
 
 namespace CatFactory.NetCore.CodeFactory
 {
@@ -24,6 +25,12 @@ namespace CatFactory.NetCore.CodeFactory
         }
 
         public CSharpEnumBuilder()
+            : base()
+        {
+        }
+
+        public CSharpEnumBuilder(ILogger<CSharpEnumBuilder> logger)
+            : base(logger)
         {
         }
 

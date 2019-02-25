@@ -1,6 +1,8 @@
-﻿using CatFactory.CodeFactory;
+﻿using System;
+using CatFactory.CodeFactory;
 using CatFactory.NetCore.ObjectOrientedProgramming;
 using CatFactory.ObjectOrientedProgramming;
+using Microsoft.Extensions.Logging;
 
 namespace CatFactory.NetCore.CodeFactory
 {
@@ -16,7 +18,7 @@ namespace CatFactory.NetCore.CodeFactory
                     {
                         OutputDirectory = outputDirectory,
                         ForceOverwrite = forceOverwrite,
-                        ObjectDefinition = (CSharpClassDefinition)definition
+                        ObjectDefinition = definition
                     };
 
                     codeBuilder.CreateFile(subdirectory);
@@ -27,15 +29,40 @@ namespace CatFactory.NetCore.CodeFactory
                     {
                         OutputDirectory = outputDirectory,
                         ForceOverwrite = forceOverwrite,
-                        ObjectDefinition = (CSharpInterfaceDefinition)definition
+                        ObjectDefinition = definition
                     };
 
                     codeBuilder.CreateFile(subdirectory);
                 }
+                else if (definition is CSharpEnumDefinition)
+                {
+                    var codeBuilder = new CSharpEnumBuilder
+                    {
+                        OutputDirectory = outputDirectory,
+                        ForceOverwrite = forceOverwrite,
+                        ObjectDefinition = definition
+                    };
+
+                    codeBuilder.CreateFile(subdirectory);
+                }
+                else
+                    throw new NotImplementedException();
             }
         }
 
         public CSharpCodeBuilder()
+            : base()
+        {
+            Init();
+        }
+
+        public CSharpCodeBuilder(ILogger<CSharpCodeBuilder> logger)
+            : base(logger)
+        {
+            Init();
+        }
+
+        protected virtual void Init()
         {
             ConstantsRegionDescription = "[ Constants ]";
             EventsRegionDescription = "[ Events ]";

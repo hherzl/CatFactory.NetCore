@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using CatFactory.CodeFactory;
 using CatFactory.NetCore.ObjectOrientedProgramming;
+using Microsoft.Extensions.Logging;
 
 namespace CatFactory.NetCore.CodeFactory
 {
@@ -25,6 +26,11 @@ namespace CatFactory.NetCore.CodeFactory
 
         public CSharpInterfaceBuilder()
             : base()
+        {
+        }
+
+        public CSharpInterfaceBuilder(ILogger<CSharpInterfaceBuilder> logger)
+            : base(logger)
         {
         }
 

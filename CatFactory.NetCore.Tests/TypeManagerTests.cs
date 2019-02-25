@@ -9,6 +9,7 @@ namespace CatFactory.NetCore.Tests
         [Fact]
         public void TestGetClass()
         {
+            // Act
             var interfaceDefinition = new CSharpInterfaceDefinition
             {
                 Namespace = "Entities",
@@ -27,9 +28,42 @@ namespace CatFactory.NetCore.Tests
                 }
             };
 
+            // Arrange
             var classDef = TypeManager.GetItemByFullName(classDefinition.FullName);
 
-            Assert.True(TypeManager.ObjectDefinitions.Count >0);
+            // Assert
+            Assert.True(TypeManager.ObjectDefinitions.Count > 0);
+            Assert.True(classDef != null);
+        }
+
+        [Fact]
+        public void TestGetInterface()
+        {
+            // Act
+            var interfaceDefinition = new CSharpInterfaceDefinition
+            {
+                Namespace = "Entities",
+                AccessModifier = AccessModifier.Public,
+                Name = "IEntity"
+            };
+
+            var classDefinition = new CSharpClassDefinition
+            {
+                Namespace = "Entities",
+                AccessModifier = AccessModifier.Public,
+                Name = "OrderHeader",
+                Implements =
+                {
+                    "Entities.IEntity"
+                }
+            };
+
+            // Arrange
+            var interfaceDef = TypeManager.GetItemByFullName(classDefinition.FullName);
+
+            // Assert
+            Assert.True(TypeManager.ObjectDefinitions.Count > 0);
+            Assert.True(interfaceDef != null);
         }
     }
 }

@@ -34,15 +34,27 @@ namespace CatFactory.NetCore.Tests
             });
 
             definition.Properties.Add(
-                CSharpClassDefinition.CreateAutomaticProperty("Int32?", "ShipperID", attributes: new[] { new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity") })
+                CSharpClassDefinition.CreateAutomaticProperty("Int32?", "ShipperID", attributes: new[]
+                {
+                    new MetadataAttribute("Key"),
+                    new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity")
+                })
             );
 
             definition.Properties.Add(
-                CSharpClassDefinition.CreateAutomaticProperty("String", "CompanyName", attributes: new[] { new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "80") })
+                CSharpClassDefinition.CreateAutomaticProperty("String", "CompanyName", attributes: new[]
+                {
+                    new MetadataAttribute("Required"),
+                    new MetadataAttribute("StringLength", "80")
+                })
             );
 
             definition.Properties.Add(
-                CSharpClassDefinition.CreateAutomaticProperty("String", "Phone", attributes: new[] { new MetadataAttribute("Required"), new MetadataAttribute("StringLength", "48") })
+                CSharpClassDefinition.CreateAutomaticProperty("String", "Phone", attributes: new[]
+                {
+                    new MetadataAttribute("Required"),
+                    new MetadataAttribute("StringLength", "48")
+                })
             );
 
             // Act
@@ -118,7 +130,11 @@ namespace CatFactory.NetCore.Tests
             });
 
             definition.Properties.Add(
-                CSharpClassDefinition.CreateAutomaticProperty("Int32?", "OrderID", attributes: new[] { new MetadataAttribute("Key"), new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity") })
+                CSharpClassDefinition.CreateAutomaticProperty("Int32?", "OrderID", attributes: new[]
+                {
+                    new MetadataAttribute("Key"),
+                    new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity")
+                })
             );
 
             definition.Properties.Add(
@@ -126,7 +142,11 @@ namespace CatFactory.NetCore.Tests
             );
 
             definition.Properties.Add(
-                CSharpClassDefinition.CreateAutomaticProperty("String", "CustomerID", attributes: new[] { new MetadataAttribute("Column"), new MetadataAttribute("StringLength", "5") })
+                CSharpClassDefinition.CreateAutomaticProperty("String", "CustomerID", attributes: new[]
+                {
+                    new MetadataAttribute("Column"),
+                    new MetadataAttribute("StringLength", "5")
+                })
             );
 
             definition.Properties.Add(
@@ -418,6 +438,37 @@ namespace CatFactory.NetCore.Tests
                     new ReturnLine("DbContext.Orders;")
                 }
             });
+
+            // Act
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+        }
+
+        [Fact]
+        public void TestScaffoldingClassWithOnlyFields()
+        {
+            // Arrange
+            var definition = new CSharpClassDefinition
+            {
+                Namespaces =
+                {
+                    "System"
+                },
+                Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
+                Name = "Foo",
+                Fields =
+                {
+                    new FieldDefinition(AccessModifier.Public, "string", "Bar")
+                    {
+                        IsReadOnly = true,
+                        Value = "\"ABC\""
+                    }
+                },
+                Constructors =
+                {
+                    new ClassConstructorDefinition()
+                }
+            };
 
             // Act
             CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
