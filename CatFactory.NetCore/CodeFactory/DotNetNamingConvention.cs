@@ -12,7 +12,7 @@ namespace CatFactory.NetCore.CodeFactory
         {
             invalidChars = new List<char>
             {
-                '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', ';', ':', '"', ',', '.', '/', '?'
+                ' ', '~', '!', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', ';', ':', '"', ',', '.', '/', '\\', '?'
             };
         }
 
@@ -20,13 +20,10 @@ namespace CatFactory.NetCore.CodeFactory
         {
         }
 
-        // todo: add logic to validate name
         public string ValidName(string value)
         {
             foreach (var item in invalidChars)
-            {
                 value = value.Replace(item, '_');
-            }
 
             return string.Join("", value.Split(' ').Select(item => NamingConvention.GetPascalCase(item)));
         }
@@ -35,7 +32,7 @@ namespace CatFactory.NetCore.CodeFactory
             => string.Join(".", values);
 
         public string GetInterfaceName(string value)
-            => NamingConvention.GetPascalCase(string.Format("I{0}", ValidName(value)));
+            => string.Format("I{0}", NamingConvention.GetPascalCase(ValidName(value)));
 
         public string GetClassName(string value)
             => NamingConvention.GetPascalCase(ValidName(value));
@@ -44,10 +41,10 @@ namespace CatFactory.NetCore.CodeFactory
             => string.Format("m_{0}", NamingConvention.GetCamelCase(ValidName(value)));
 
         public string GetConstantName(string value)
-            => string.Format("{0}", NamingConvention.GetCamelCase(ValidName(value)));
+            => NamingConvention.GetCamelCase(ValidName(value));
 
         public string GetPropertyName(string value)
-            => string.Format("{0}", NamingConvention.GetPascalCase(ValidName(value)));
+            => NamingConvention.GetPascalCase(ValidName(value));
 
         public string GetMethodName(string value)
             => NamingConvention.GetPascalCase(ValidName(value));

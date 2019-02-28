@@ -1,11 +1,18 @@
 ﻿using CatFactory.CodeFactory;
 using CatFactory.ObjectOrientedProgramming;
+using Microsoft.Extensions.Logging;
 
 namespace CatFactory.NetCore.CodeFactory
 {
     public abstract class DotNetCodeBuilder : CodeBuilder
     {
         public DotNetCodeBuilder()
+            : base()
+        {
+        }
+
+        public DotNetCodeBuilder(ILogger<DotNetCodeBuilder> logger)
+            : base(logger)
         {
         }
 
