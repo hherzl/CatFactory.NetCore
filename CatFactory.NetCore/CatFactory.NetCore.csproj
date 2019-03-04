@@ -2,19 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Version>1.0.0-beta-sun-build24</Version>
+    <Version>1.0.0-beta-sun-build25</Version>
     <Description>CatFactory Package for .NET Core (C#)</Description>
     <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
     <PackageTags>C# NET Core OOP ORM Scaffolding</PackageTags>
-    <PackageReleaseNotes>1.0.0-beta-sun-build24 Version:
+    <PackageReleaseNotes>1.0.0-beta-sun-build25 Version:
 
 * Core package update
-* Addition of constructor with ILogger&lt;CodeBuilder&gt; parameter for code builders
-* Addition of CSharpProject class to represent C# projects
-* Addition of interface to represent DotNet Enum
-* Addition of CSharpEnum support in CSharpCodeBuilder class
-* Addition of ProjectFeatureExtensions to get db objects by type from project feature
-* Whole refactor for naming conventions
 
 Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
 </PackageReleaseNotes>
@@ -22,10 +16,11 @@ Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-wi
     <Company>Herzl Corp.</Company>
     <PackageProjectUrl>https://github.com/hherzl/CatFactory.NetCore</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageLicenseUrl>https://github.com/hherzl/CatFactory.NetCore/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build18" />
+    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build20" />
   </ItemGroup>
 
 </Project>
