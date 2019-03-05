@@ -70,18 +70,27 @@ namespace CatFactory.NetCore.Tests
             Assert.True("Foo" == namingConvention.GetMethodName("Foo"));
         }
 
-        [Fact]
-        public void TestParameterNamingConvention()
+        [Theory]
+        [InlineData("OrderHeaderID","orderHeaderID",true)]
+        [InlineData("Order_Header_ID","orderHeaderID",true)]
+        [InlineData("FOO","foo",true)]
+        [InlineData("class","class",false)]
+        [InlineData("class","@class",true)]
+        public void TestParameterNamingConvention(string  value, string expected, bool equal)
         {
             // Arrange
             var namingConvention = new DotNetNamingConvention();
 
             // Act
             // Assert
-            Assert.True("orderHeaderID" == namingConvention.GetParameterName("OrderHeaderID"));
-            Assert.True("orderHeaderID" == namingConvention.GetParameterName("OrderHeaderID"));
-            Assert.True("orderHeaderId" == namingConvention.GetParameterName("Order_Header_ID"));
-            Assert.True("foo" == namingConvention.GetParameterName("FOO"));
+            if(equal)
+            {
+                Assert.Equal(expected,namingConvention.GetParameterName(value));
+            }
+            else
+            {
+                Assert.NotEqual(expected,namingConvention.GetParameterName(value));
+            }
         }
 
         [Fact]
