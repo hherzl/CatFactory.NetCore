@@ -4,17 +4,17 @@ using CatFactory.CodeFactory;
 
 namespace CatFactory.NetCore.CodeFactory
 {
+    // ReSharper disable once ClassCanBeSealed.Global
     public class DotNetNamingConvention : ICodeNamingConvention
     {
+        // ReSharper disable once FieldCanBeMadeReadOnly.Global
         public static List<char> invalidChars;
 
-        static DotNetNamingConvention()
-        {
-            invalidChars = new List<char>
+        static DotNetNamingConvention() =>
+            DotNetNamingConvention.invalidChars = new List<char>
             {
-                ' ', '~', '!', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', ';', ':', '"', ',', '.', '/', '\\', '?'
+                ' ', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', ';', ':', '"', ',', '.', '/', '\\', '?', '|', '{', '}'
             };
-        }
 
         public DotNetNamingConvention()
         {
@@ -22,34 +22,77 @@ namespace CatFactory.NetCore.CodeFactory
 
         public string ValidName(string value)
         {
-            foreach (var item in invalidChars)
-                value = value.Replace(item, '_');
 
-            return string.Join("", value.Split(' ').Select(item => NamingConvention.GetPascalCase(item)));
+            if ((value == null) || System.String.IsNullOrEmpty(value.Trim()))
+                throw new System.ArgumentNullException($"{nameof(value)} may not be null, empty, or white space");
+
+            foreach (var item in DotNetNamingConvention.invalidChars)
+            {
+                value = value?.Replace(item, '_');
+            }
+
+
+            var provider = new Microsoft.CSharp.CSharpCodeProvider();
+            if (provider.IsValidIdentifier(value))
+                return value;
+
+            var chars = string.Join("+|", DotNetNamingConvention.invalidChars.Select(c => System.Text.RegularExpressions.Regex.Escape(System.Convert.ToString(c))));
+
+            var pattern = $"{chars}+|\\s+/g";
+
+            if ((value == null) || System.String.IsNullOrEmpty(value.Trim()))
+                throw new System.ArgumentNullException($"{nameof(value)} may not be null, empty, or white space");
+            var validName = string.Join("",
+                System.Text.RegularExpressions.Regex.Replace(value, pattern, "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5))
+                    .Split(' ').Select(item => item));
+
+            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"__", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
+
+            if (provider.IsValidIdentifier(validName))
+                return validName;
+
+            // remove all whitespace, digit
+            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"\s+\d+\p{P}+/g", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase,
+                System.TimeSpan.FromSeconds(0.5));
+            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"__", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
+            if (provider.IsValidIdentifier(validName))
+                return validName;
+
+            // remove all non-alphanumeric
+            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"\W+/g", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
+            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"__", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
+            if (provider.IsValidIdentifier(validName))
+                return validName;
+
+            // remove all non-alphabetic
+            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"[^a-zA-Z_]+/g", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase,
+                System.TimeSpan.FromSeconds(0.5));
+            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"__", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
+            return provider.IsValidIdentifier(validName) ? validName : $"V{validName}";
         }
 
         public string GetNamespace(params string[] values)
             => string.Join(".", values);
 
         public string GetInterfaceName(string value)
-            => string.Format("I{0}", NamingConvention.GetPascalCase(ValidName(value)));
+            => ValidName($"I{NamingConvention.GetPascalCase(value)}");
 
         public string GetClassName(string value)
-            => NamingConvention.GetPascalCase(ValidName(value));
+            => ValidName(NamingConvention.GetPascalCase(value));
 
         public string GetFieldName(string value)
-            => string.Format("m_{0}", NamingConvention.GetCamelCase(ValidName(value)));
+            => ValidName($"m_{NamingConvention.GetCamelCase(value)}");
 
         public string GetConstantName(string value)
-            => NamingConvention.GetCamelCase(ValidName(value));
+            => ValidName(NamingConvention.GetCamelCase(value));
 
         public string GetPropertyName(string value)
-            => NamingConvention.GetPascalCase(ValidName(value));
+            => ValidName(NamingConvention.GetPascalCase(value));
 
         public string GetMethodName(string value)
-            => NamingConvention.GetPascalCase(ValidName(value));
+            => ValidName(NamingConvention.GetPascalCase(value));
 
         public string GetParameterName(string value)
-            => NamingConvention.GetCamelCase(ValidName(value));
+            => ValidName(NamingConvention.GetCamelCase(value));
     }
 }
