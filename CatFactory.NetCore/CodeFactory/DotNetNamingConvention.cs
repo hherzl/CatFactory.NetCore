@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using CatFactory.CodeFactory;
 
 namespace CatFactory.NetCore.CodeFactory
@@ -11,7 +13,7 @@ namespace CatFactory.NetCore.CodeFactory
         public static List<char> invalidChars;
 
         static DotNetNamingConvention() =>
-            DotNetNamingConvention.invalidChars = new List<char>
+            invalidChars = new List<char>
             {
                 ' ', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', ';', ':', '"', ',', '.', '/', '\\', '?', '|', '{', '}'
             };
@@ -22,52 +24,49 @@ namespace CatFactory.NetCore.CodeFactory
 
         public string ValidName(string value)
         {
+            if ((value == null) || string.IsNullOrEmpty(value.Trim()))
+                throw new ArgumentNullException($"{nameof(value)} may not be null, empty, or white space");
 
-            if ((value == null) || System.String.IsNullOrEmpty(value.Trim()))
-                throw new System.ArgumentNullException($"{nameof(value)} may not be null, empty, or white space");
-
-            foreach (var item in DotNetNamingConvention.invalidChars)
+            foreach (var item in invalidChars)
             {
                 value = value?.Replace(item, '_');
             }
-
 
             var provider = new Microsoft.CSharp.CSharpCodeProvider();
             if (provider.IsValidIdentifier(value))
                 return value;
 
-            var chars = string.Join("+|", DotNetNamingConvention.invalidChars.Select(c => System.Text.RegularExpressions.Regex.Escape(System.Convert.ToString(c))));
+            var chars = string.Join("+|", invalidChars.Select(item => Regex.Escape(Convert.ToString(item))));
 
             var pattern = $"{chars}+|\\s+/g";
 
-            if ((value == null) || System.String.IsNullOrEmpty(value.Trim()))
-                throw new System.ArgumentNullException($"{nameof(value)} may not be null, empty, or white space");
-            var validName = string.Join("",
-                System.Text.RegularExpressions.Regex.Replace(value, pattern, "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5))
-                    .Split(' ').Select(item => item));
+            if ((value == null) || string.IsNullOrEmpty(value.Trim()))
+                throw new ArgumentNullException($"{nameof(value)} may not be null, empty, or white space");
 
-            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"__", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
+            var validName = string.Join("", Regex.Replace(value, pattern, "_", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5)).Split(' ').Select(item => item));
+
+            validName = Regex.Replace(validName, @"__", "_", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
 
             if (provider.IsValidIdentifier(validName))
                 return validName;
 
             // remove all whitespace, digit
-            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"\s+\d+\p{P}+/g", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase,
-                System.TimeSpan.FromSeconds(0.5));
-            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"__", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
+            validName = Regex.Replace(validName, @"\s+\d+\p{P}+/g", "_", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
+
+            validName = Regex.Replace(validName, @"__", "_", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
             if (provider.IsValidIdentifier(validName))
                 return validName;
 
             // remove all non-alphanumeric
-            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"\W+/g", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
-            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"__", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
+            validName = Regex.Replace(validName, @"\W+/g", "_", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
+            validName = Regex.Replace(validName, @"__", "_", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
             if (provider.IsValidIdentifier(validName))
                 return validName;
 
             // remove all non-alphabetic
-            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"[^a-zA-Z_]+/g", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase,
-                System.TimeSpan.FromSeconds(0.5));
-            validName = System.Text.RegularExpressions.Regex.Replace(validName, @"__", "_", System.Text.RegularExpressions.RegexOptions.IgnoreCase, System.TimeSpan.FromSeconds(0.5));
+            validName = Regex.Replace(validName, @"[^a-zA-Z_]+/g", "_", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
+            validName = Regex.Replace(validName, @"__", "_", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(0.5));
+
             return provider.IsValidIdentifier(validName) ? validName : $"V{validName}";
         }
 
