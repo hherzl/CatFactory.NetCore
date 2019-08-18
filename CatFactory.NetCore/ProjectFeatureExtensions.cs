@@ -37,5 +37,11 @@ namespace CatFactory.NetCore
             foreach (var storedProcedure in projectFeature.Project.Database.StoredProcedures.Where(item => projectFeature.DbObjects.Select(dbo => dbo.FullName).Contains(item.FullName)))
                 yield return storedProcedure;
         }
+
+        public static IEnumerable<Sequence> GetSequences<TProjectSettings>(this ProjectFeature<TProjectSettings> projectFeature) where TProjectSettings : class, IProjectSettings, new()
+        {
+            foreach (var sequence in projectFeature.Project.Database.Sequences.Where(item => projectFeature.DbObjects.Select(dbo => dbo.FullName).Contains(item.FullName)))
+                yield return sequence;
+        }
     }
 }

@@ -50,9 +50,9 @@ namespace CatFactory.NetCore.CodeFactory
 
             if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), EventsRegionDescription));
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
             }
 
             if (InterfaceDefinition.Events.Count > 0)
@@ -62,14 +62,14 @@ namespace CatFactory.NetCore.CodeFactory
                     Lines.Add(new CodeLine("{0}event {1} {2};", Indent(start + 1), @event.Type, @event.Name));
                 }
 
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
             }
 
             if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
             }
         }
 
@@ -82,7 +82,7 @@ namespace CatFactory.NetCore.CodeFactory
             {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(start + 1), PropertiesRegionDescription));
 
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
             }
 
             for (var i = 0; i < InterfaceDefinition.Properties.Count; i++)
@@ -99,14 +99,14 @@ namespace CatFactory.NetCore.CodeFactory
 
                 if (i < InterfaceDefinition.Properties.Count - 1)
                 {
-                    Lines.Add(new CodeLine());
+                    Lines.Add(new EmptyLine());
                 }
             }
 
             if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#endregion", Indent(start + 1)));
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
             }
         }
 
@@ -118,11 +118,11 @@ namespace CatFactory.NetCore.CodeFactory
             if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#region {1}", Indent(2), MethodsRegionDescription));
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
             }
 
             if (InterfaceDefinition.Properties != null && InterfaceDefinition.Properties.Count > 0)
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
 
             for (var i = 0; i < InterfaceDefinition.Methods.Count; i++)
             {
@@ -182,7 +182,7 @@ namespace CatFactory.NetCore.CodeFactory
             if (InterfaceDefinition.UseRegionsToGroupClassMembers)
             {
                 Lines.Add(new CodeLine("{0}#endregion", Indent(2)));
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
             }
         }
 
@@ -190,14 +190,14 @@ namespace CatFactory.NetCore.CodeFactory
         {
             Lines = new List<ILine>();
 
-            if (InterfaceDefinition.Namespaces.Count > 0)
+            if (AddNamespacesAtStart && InterfaceDefinition.Namespaces.Count > 0)
             {
                 foreach (var item in InterfaceDefinition.Namespaces)
                 {
                     Lines.Add(new CodeLine("using {0};", item));
                 }
 
-                Lines.Add(new CodeLine());
+                Lines.Add(new EmptyLine());
             }
 
             var start = 0;
@@ -209,6 +209,16 @@ namespace CatFactory.NetCore.CodeFactory
                 Lines.Add(new CodeLine("namespace {0}", InterfaceDefinition.Namespace));
 
                 Lines.Add(new CodeLine("{"));
+
+                if (!AddNamespacesAtStart)
+                {
+                    foreach (var item in ObjectDefinition.Namespaces)
+                    {
+                        Lines.Add(new CodeLine("{0}using {1};", Indent(1), item));
+                    }
+
+                    Lines.Add(new EmptyLine());
+                }
             }
 
             AddDocumentation(start, InterfaceDefinition);

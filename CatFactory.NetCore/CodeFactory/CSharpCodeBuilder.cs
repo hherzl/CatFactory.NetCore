@@ -62,8 +62,11 @@ namespace CatFactory.NetCore.CodeFactory
             Init();
         }
 
+        public bool AddNamespacesAtStart { get; set; }
+
         protected virtual void Init()
         {
+            AddNamespacesAtStart = true;
             ConstantsRegionDescription = "[ Constants ]";
             EventsRegionDescription = "[ Events ]";
             FieldsRegionDescription = "[ Fields ]";

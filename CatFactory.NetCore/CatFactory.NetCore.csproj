@@ -3,13 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <Version>1.0.0-beta-sun-build28</Version>
+        <Version>1.0.0-beta-sun-build29</Version>
         <Description>CatFactory Package for .NET Core (C#)</Description>
         <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
         <PackageTags>C# NET Core OOP ORM Scaffolding</PackageTags>
-        <PackageReleaseNotes>1.0.0-beta-sun-build28 Version:
+        <PackageReleaseNotes>1.0.0-beta-sun-build29 Version:
 
-* Core package update
+* Addition of AddNamespacesAtStart flag
 
 Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
 </PackageReleaseNotes>

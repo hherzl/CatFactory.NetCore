@@ -64,6 +64,14 @@ namespace CatFactory.NetCore
                     Type = "StoredProcedure"
                 };
             }
+
+            foreach (var item in Database.Sequences.Where(sequence => sequence.Schema == schema))
+            {
+                yield return new DbObject(item.Schema, item.Name)
+                {
+                    Type = "Sequence"
+                };
+            }
         }
     }
 }

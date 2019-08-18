@@ -29,6 +29,8 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
                 IsReadOnly = true
             };
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private ICodeNamingConvention m_namingConvention;
+
         public CSharpClassDefinition()
             : base()
         {
@@ -36,20 +38,11 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 
         public bool UseRegionsToGroupClassMembers { get; set; }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ICodeNamingConvention m_namingConvention;
-
         [Obsolete("Set instance for ICodeNamingConvention in CodeBuilder instance")]
         public ICodeNamingConvention NamingConvention
         {
-            get
-            {
-                return m_namingConvention ?? (m_namingConvention = new DotNetNamingConvention());
-            }
-            set
-            {
-                m_namingConvention = value;
-            }
+            get => m_namingConvention ?? (m_namingConvention = new DotNetNamingConvention());
+            set => m_namingConvention = value;
         }
     }
 }

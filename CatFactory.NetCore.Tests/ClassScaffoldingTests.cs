@@ -326,7 +326,17 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+
+
+            var codeBuilder = new CSharpClassBuilder
+            {
+                OutputDirectory = @"C:\Temp\CatFactory.NetCore\DesignPatterns",
+                ForceOverwrite = true,
+                ObjectDefinition = definition,
+                AddNamespacesAtStart = false
+            };
+
+            codeBuilder.CreateFile();
         }
 
         [Fact]
@@ -440,7 +450,17 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            //CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+
+            var codeBuilder = new CSharpClassBuilder
+            {
+                OutputDirectory = @"C:\Temp\CatFactory.NetCore\DesignPatterns",
+                ForceOverwrite = true,
+                ObjectDefinition = definition,
+                AddNamespacesAtStart = false
+            };
+
+            codeBuilder.CreateFile();
         }
 
         [Fact]
