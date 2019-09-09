@@ -58,7 +58,20 @@ namespace CatFactory.NetCore
             var dbTypeMap = database.DatabaseTypeMaps.FirstOrDefault(item => item.DatabaseType == type);
 
             if (dbTypeMap == null || dbTypeMap.GetClrType() == null)
+            {
+                if (type == "Name")
+                {
+                    if (!string.IsNullOrEmpty(dbTypeMap.ParentDatabaseType))
+                    {
+                        var parentType = database.ResolveDatabaseType(dbTypeMap.ParentDatabaseType);
+
+                        if (parentType != null)
+                            return parentType;
+                    }
+                }
+
                 return "object";
+            }
 
             if (useNullableIfDefinitionAllows)
                 return dbTypeMap.AllowClrNullable ? string.Format("{0}?", dbTypeMap.GetClrType().Name) : dbTypeMap.GetClrType().Name;

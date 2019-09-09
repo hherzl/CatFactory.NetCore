@@ -38,5 +38,19 @@ namespace CatFactory.NetCore.Tests
             Assert.False(decimalMap == null);
             Assert.True(decimalMap == "Decimal?");
         }
+
+        [Fact]
+        public void TestResolveDatabaseTypeMapsFromComposedStringsForAdventureWorks2017Db()
+        {
+            // Arrange
+            var database = SqlServerDatabaseFactory.Import("server=(local);database=AdventureWorks2017;integrated security=yes;");
+
+            // Act
+            var nameTypeMap = database.ResolveDatabaseType("Name");
+
+            // Assert
+            Assert.False(nameTypeMap == null);
+            Assert.True(nameTypeMap == "String");
+        }
     }
 }
