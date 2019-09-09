@@ -59,15 +59,12 @@ namespace CatFactory.NetCore
 
             if (dbTypeMap == null || dbTypeMap.GetClrType() == null)
             {
-                if (type == "Name")
+                if (dbTypeMap != null && !string.IsNullOrEmpty(dbTypeMap.ParentDatabaseType))
                 {
-                    if (!string.IsNullOrEmpty(dbTypeMap.ParentDatabaseType))
-                    {
-                        var parentType = database.ResolveDatabaseType(dbTypeMap.ParentDatabaseType);
+                    var parentType = database.ResolveDatabaseType(dbTypeMap.ParentDatabaseType);
 
-                        if (parentType != null)
-                            return parentType;
-                    }
+                    if (parentType != null)
+                        return parentType;
                 }
 
                 return "object";

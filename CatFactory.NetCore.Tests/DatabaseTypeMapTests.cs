@@ -47,10 +47,12 @@ namespace CatFactory.NetCore.Tests
 
             // Act
             var nameTypeMap = database.ResolveDatabaseType("Name");
+            var fooTypeMap = database.ResolveDatabaseType("foo");
 
             // Assert
             Assert.False(nameTypeMap == null);
             Assert.True(nameTypeMap == "String");
+            Assert.True(fooTypeMap == "object");
         }
     }
 }

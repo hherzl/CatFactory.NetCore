@@ -3,11 +3,11 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <Version>1.0.0-beta-sun-build30</Version>
+        <Version>1.0.0-beta-sun-build31</Version>
         <Description>CatFactory Package for .NET Core (C#)</Description>
         <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
         <PackageTags>C# NET Core OOP ORM Scaffolding</PackageTags>
-        <PackageReleaseNotes>1.0.0-beta-sun-build30 Version:
+        <PackageReleaseNotes>1.0.0-beta-sun-build31 Version:
 
 * Fix resolve data type for types with parent type
 
