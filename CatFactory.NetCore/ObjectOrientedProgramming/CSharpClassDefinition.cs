@@ -29,7 +29,8 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
                 IsReadOnly = true
             };
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private ICodeNamingConvention m_namingConvention;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ICodeNamingConvention m_namingConvention;
 
         public CSharpClassDefinition()
             : base()

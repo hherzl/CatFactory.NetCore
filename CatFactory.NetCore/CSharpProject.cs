@@ -41,37 +41,37 @@ namespace CatFactory.NetCore
                 };
             }
 
-            foreach (var item in Database.ScalarFunctions.Where(scalarFunction => scalarFunction.Schema == schema))
-            {
-                yield return new DbObject(item.Schema, item.Name)
-                {
-                    Type = "ScalarFunction"
-                };
-            }
+            //foreach (var item in Database.ScalarFunctions.Where(scalarFunction => scalarFunction.Schema == schema))
+            //{
+            //    yield return new DbObject(item.Schema, item.Name)
+            //    {
+            //        Type = "ScalarFunction"
+            //    };
+            //}
 
-            foreach (var item in Database.TableFunctions.Where(tableFunction => tableFunction.Schema == schema))
-            {
-                yield return new DbObject(item.Schema, item.Name)
-                {
-                    Type = "TableFunction"
-                };
-            }
+            //foreach (var item in Database.TableFunctions.Where(tableFunction => tableFunction.Schema == schema))
+            //{
+            //    yield return new DbObject(item.Schema, item.Name)
+            //    {
+            //        Type = "TableFunction"
+            //    };
+            //}
 
-            foreach (var item in Database.StoredProcedures.Where(storedProcedure => storedProcedure.Schema == schema))
-            {
-                yield return new DbObject(item.Schema, item.Name)
-                {
-                    Type = "StoredProcedure"
-                };
-            }
+            //foreach (var item in Database.StoredProcedures.Where(storedProcedure => storedProcedure.Schema == schema))
+            //{
+            //    yield return new DbObject(item.Schema, item.Name)
+            //    {
+            //        Type = "StoredProcedure"
+            //    };
+            //}
 
-            foreach (var item in Database.Sequences.Where(sequence => sequence.Schema == schema))
-            {
-                yield return new DbObject(item.Schema, item.Name)
-                {
-                    Type = "Sequence"
-                };
-            }
+            //foreach (var item in Database.Sequences.Where(sequence => sequence.Schema == schema))
+            //{
+            //    yield return new DbObject(item.Schema, item.Name)
+            //    {
+            //        Type = "Sequence"
+            //    };
+            //}
         }
     }
 }

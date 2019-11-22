@@ -8,7 +8,8 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public class CSharpEnumDefinition : EnumDefinition, IDotNetEnumDefinition
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private ICodeNamingConvention m_namingConvention;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ICodeNamingConvention m_namingConvention;
 
         public CSharpEnumDefinition()
             : base()

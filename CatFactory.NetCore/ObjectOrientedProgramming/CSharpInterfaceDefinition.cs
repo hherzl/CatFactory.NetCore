@@ -8,7 +8,8 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public class CSharpInterfaceDefinition : InterfaceDefinition, IDotNetInterfaceDefinition
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)] private ICodeNamingConvention m_namingConvention;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ICodeNamingConvention m_namingConvention;
 
         public CSharpInterfaceDefinition()
             : base()
