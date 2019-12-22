@@ -1,4 +1,5 @@
-﻿using CatFactory.SqlServer;
+﻿using System.Threading.Tasks;
+using CatFactory.SqlServer;
 using Xunit;
 
 namespace CatFactory.NetCore.Tests
@@ -6,10 +7,11 @@ namespace CatFactory.NetCore.Tests
     public class DatabaseTypeMapTests
     {
         [Fact]
-        public void TestResolveDatabaseTypeMapsForOnlineStoreDb()
+        public async Task ResolveDatabaseTypeMapsForOnlineStoreDbAsync()
         {
             // Arrange
-            var database = SqlServerDatabaseFactory.Import("server=(local);database=OnlineStore;integrated security=yes;");
+            var database = await SqlServerDatabaseFactory
+                .ImportAsync("server=(local);database=OnlineStore;integrated security=yes;");
 
             // Act
             var varcharTypeMap = database.ResolveDatabaseType("varchar");
@@ -23,10 +25,11 @@ namespace CatFactory.NetCore.Tests
         }
 
         [Fact]
-        public void TestResolveDatabaseTypeMapsFromComposedStringsForOnlineStoreDb()
+        public async Task ResolveDatabaseTypeMapsFromComposedStringsForOnlineStoreDbAsync()
         {
             // Arrange
-            var database = SqlServerDatabaseFactory.Import("server=(local);database=OnlineStore;integrated security=yes;");
+            var database = await SqlServerDatabaseFactory
+                .ImportAsync("server=(local);database=OnlineStore;integrated security=yes;");
 
             // Act
             var varcharTypeMap = database.ResolveDatabaseType("varchar(25)");
@@ -40,10 +43,11 @@ namespace CatFactory.NetCore.Tests
         }
 
         [Fact]
-        public void TestResolveDatabaseTypeMapsFromComposedStringsForAdventureWorks2017Db()
+        public async Task ResolveDatabaseTypeMapsFromComposedStringsForAdventureWorks2017DbAsync()
         {
             // Arrange
-            var database = SqlServerDatabaseFactory.Import("server=(local);database=AdventureWorks2017;integrated security=yes;");
+            var database = await SqlServerDatabaseFactory
+                .ImportAsync("server=(local);database=AdventureWorks2017;integrated security=yes;");
 
             // Act
             var nameTypeMap = database.ResolveDatabaseType("Name");
