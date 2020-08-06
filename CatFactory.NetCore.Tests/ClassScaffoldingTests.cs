@@ -105,7 +105,7 @@ namespace CatFactory.NetCore.Tests
         }
 
         [Fact]
-        public void TestScaffoldingOrderClass()
+        public void ScaffoldingOrderClass()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -160,6 +160,45 @@ namespace CatFactory.NetCore.Tests
         }
 
         [Fact]
+        public void ScaffoldingEntityExtensionsClass()
+        {
+            // Arrange
+            var definition = new CSharpClassDefinition
+            {
+                Namespaces =
+                {
+                    "System"
+                },
+                Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
+                IsStatic = true,
+                Name = "EntityExtensions"
+            };
+
+            definition.Methods.Add(new MethodDefinition
+            {
+                AccessModifier = AccessModifier.Public,
+                IsStatic = true,
+                IsExtension = true,
+                Type = "string",
+                Name = "ToJson",
+                Parameters =
+                {
+                    new ParameterDefinition("Order", "entity")
+                },
+                Lines =
+                {
+                    new CodeLine("return string.Empty;")
+                }
+            });
+
+            definition.SimplifyDataTypes();
+
+            // Act
+            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+        }
+
+        [Fact]
         public void TestScaffoldingCustOrderHistResultClass()
         {
             // Arrange
@@ -177,7 +216,8 @@ namespace CatFactory.NetCore.Tests
 
             definition.Properties.Add(new PropertyDefinition(AccessModifier.Public, "int", "Total")
             {
-                IsAutomatic = true
+                IsAutomatic = true,
+                InitializationValue = "0"
             });
 
             // Act
