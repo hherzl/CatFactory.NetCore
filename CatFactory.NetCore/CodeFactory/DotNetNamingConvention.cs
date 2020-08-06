@@ -81,22 +81,22 @@ namespace CatFactory.NetCore.CodeFactory
             => string.Join(".", values);
 
         public string GetInterfaceName(string value)
-            => ValidName($"I{NamingConvention.GetPascalCase(value)}");
+            => $"I{NamingConvention.GetPascalCase(ValidName(value))}";
 
         public string GetClassName(string value)
-            => ValidName(NamingConvention.GetPascalCase(value));
-
-        public string GetFieldName(string value)
-            => ValidName($"m_{NamingConvention.GetCamelCase(value)}");
+            => NamingConvention.GetPascalCase(ValidName(value));
 
         public string GetConstantName(string value)
-            => ValidName(NamingConvention.GetCamelCase(value));
+            => NamingConvention.GetPascalCase(ValidName(value));
+
+        public string GetFieldName(string value)
+            => $"_{NamingConvention.GetCamelCase(ValidName(value))}";
 
         public string GetPropertyName(string value)
-            => ValidName(NamingConvention.GetPascalCase(value));
+            => NamingConvention.GetPascalCase(ValidName(value));
 
         public string GetMethodName(string value)
-            => ValidName(NamingConvention.GetPascalCase(value));
+            => NamingConvention.GetPascalCase(ValidName(value));
 
         public string GetParameterName(string value)
             => NamingConvention.GetCamelCase(ValidName(value));

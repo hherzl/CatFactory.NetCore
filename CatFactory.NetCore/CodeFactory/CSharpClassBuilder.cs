@@ -531,7 +531,10 @@ namespace CatFactory.NetCore.CodeFactory
 
                     propertySignature.Add(property.Name);
 
-                    Lines.Add(new CodeLine("{0}{1} {{ get; set; }}", Indent(start + 1), string.Join(" ", propertySignature)));
+                    if (string.IsNullOrEmpty(property.InitializationValue))
+                        Lines.Add(new CodeLine("{0}{1} {{ get; set; }}", Indent(start + 1), string.Join(" ", propertySignature)));
+                    else
+                        Lines.Add(new CodeLine("{0}{1} {{ get; set; }} = {2};", Indent(start + 1), string.Join(" ", propertySignature), property.InitializationValue));
                 }
                 else
                 {
