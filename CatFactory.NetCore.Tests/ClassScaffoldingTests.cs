@@ -9,7 +9,7 @@ namespace CatFactory.NetCore.Tests
     public class ClassScaffoldingTests
     {
         [Fact]
-        public void TestScaffoldingShipperClass()
+        public void ScaffoldingShipperClass()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -58,11 +58,11 @@ namespace CatFactory.NetCore.Tests
             );
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestScaffoldingProductViewModelClass()
+        public void ScaffoldingProductViewModelClass()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -101,7 +101,7 @@ namespace CatFactory.NetCore.Tests
             definition.AddViewModelProperty("bool?", "Discontinued");
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
@@ -156,7 +156,7 @@ namespace CatFactory.NetCore.Tests
             definition.SimplifyDataTypes();
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
@@ -195,11 +195,11 @@ namespace CatFactory.NetCore.Tests
             definition.SimplifyDataTypes();
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestScaffoldingCustOrderHistResultClass()
+        public void ScaffoldingCustOrderHistResultClass()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -221,11 +221,11 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestScaffoldingDbContextClass()
+        public void ScaffoldingDbContextClass()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -291,11 +291,11 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestScaffoldingDbContextExtensionClass()
+        public void ScaffoldingDbContextExtensionClass()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -367,7 +367,6 @@ namespace CatFactory.NetCore.Tests
 
             // Act
 
-
             var codeBuilder = new CSharpClassBuilder
             {
                 OutputDirectory = @"C:\Temp\CatFactory.NetCore\DesignPatterns",
@@ -380,7 +379,7 @@ namespace CatFactory.NetCore.Tests
         }
 
         [Fact]
-        public void TestScaffoldingBaseRepositoryClass()
+        public void ScaffoldingBaseRepositoryClass()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -424,11 +423,11 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestScaffoldingRepositoryClass()
+        public void ScaffoldingRepositoryClass()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -490,7 +489,6 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-            //CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
 
             var codeBuilder = new CSharpClassBuilder
             {
@@ -504,7 +502,7 @@ namespace CatFactory.NetCore.Tests
         }
 
         [Fact]
-        public void TestScaffoldingClassWithOnlyFields()
+        public void ScaffoldingClassWithOnlyFields()
         {
             // Arrange
             var definition = new CSharpClassDefinition
@@ -531,7 +529,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
     }
 }

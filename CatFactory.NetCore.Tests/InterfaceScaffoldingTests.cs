@@ -8,7 +8,7 @@ namespace CatFactory.NetCore.Tests
     public class InterfaceScaffoldingTests
     {
         [Fact]
-        public void TestScaffoldingBaseRepositoryInterface()
+        public void ScaffoldingBaseRepositoryInterface()
         {
             // Arrange
             var definition = new CSharpInterfaceDefinition
@@ -27,11 +27,11 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestScaffoldingRepositoryInterface()
+        public void ScaffoldingRepositoryInterface()
         {
             // Arrange
             var definition = new CSharpInterfaceDefinition
@@ -65,7 +65,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpCodeBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
     }
 }
