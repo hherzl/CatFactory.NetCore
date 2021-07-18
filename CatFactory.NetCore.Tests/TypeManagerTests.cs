@@ -7,7 +7,7 @@ namespace CatFactory.NetCore.Tests
     public class TypeManagerTests
     {
         [Fact]
-        public void TestGetClass()
+        public void GetClassFromTypeManager()
         {
             // Act
             var interfaceDefinition = new CSharpInterfaceDefinition
@@ -37,7 +37,7 @@ namespace CatFactory.NetCore.Tests
         }
 
         [Fact]
-        public void TestGetInterface()
+        public void GetInterfaceFromTypeManager()
         {
             // Act
             var interfaceDefinition = new CSharpInterfaceDefinition

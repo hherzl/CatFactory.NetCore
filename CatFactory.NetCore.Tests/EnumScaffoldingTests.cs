@@ -8,7 +8,7 @@ namespace CatFactory.NetCore.Tests
     public class EnumScaffoldingTests
     {
         [Fact]
-        public void TestSimpleEnumGeneration()
+        public void ScafflodSimpleEnum()
         {
             // Arrange
             var definition = new CSharpEnumDefinition
@@ -26,11 +26,11 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpEnumBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
 
         [Fact]
-        public void TestEnumWithFlagsGeneration()
+        public void ScaffoldEnumWithFlags()
         {
             // Arrange
             var definition = new CSharpEnumDefinition
@@ -55,7 +55,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpEnumBuilder.CreateFiles("C:\\Temp\\CatFactory.NetCore\\DesignPatterns", string.Empty, true, definition);
+            CSharpEnumBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
     }
 }
