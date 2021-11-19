@@ -531,5 +531,29 @@ namespace CatFactory.NetCore.Tests
             // Act
             CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
+
+        [Fact]
+        public void ScaffoldingClassWithConstants()
+        {
+            // Arrange
+            var definition = new CSharpClassDefinition
+            {
+                Namespaces =
+                {
+                    "System"
+                },
+                Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
+                IsStatic = true,
+                Name = "Tokens"
+            };
+
+            definition.Constants.Add(new ConstantDefinition(AccessModifier.Public, "int", "Foo", 1000));
+            definition.Constants.Add(new ConstantDefinition(AccessModifier.Public, "string", "Bar", "ABC"));
+            definition.Constants.Add(new ConstantDefinition(AccessModifier.Public, "bool", "Baz", true));
+
+            // Act
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
+        }
     }
 }

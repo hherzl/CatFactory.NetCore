@@ -162,7 +162,18 @@ namespace CatFactory.NetCore.CodeFactory
             {
                 var constant = ClassDefinition.Constants[i];
 
-                Lines.Add(new CodeLine(start + 1, "{0}{1} const {2} {3} = {4};", constant.AccessModifier.ToString().ToLower(), constant.Type, constant.Name, constant.Value.ToString()));
+                if (constant.Value is bool)
+                {
+                    Lines.Add(new CodeLine("{0}{1} const {2} {3} = {4};", Indent(start + 1), constant.AccessModifier.ToString().ToLower(), constant.Type, constant.Name, constant.Value.ToString().ToLower()));
+                }
+                else if (constant.Value is string)
+                {
+                    Lines.Add(new CodeLine("{0}{1} const {2} {3} = \"{4}\";", Indent(start + 1), constant.AccessModifier.ToString().ToLower(), constant.Type, constant.Name, constant.Value.ToString()));
+                }
+                else
+                {
+                    Lines.Add(new CodeLine("{0}{1} const {2} {3} = {4};", Indent(start + 1), constant.AccessModifier.ToString().ToLower(), constant.Type, constant.Name, constant.Value.ToString()));
+                }
 
                 if (i < ClassDefinition.Constants.Count - 1)
                     Lines.Add(new EmptyLine());

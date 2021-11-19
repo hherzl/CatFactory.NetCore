@@ -3,13 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <Version>1.0.0-beta-sun-build39</Version>
+        <Version>1.0.0-beta-sun-build40</Version>
         <Description>CatFactory Package for .NET Core (C#)</Description>
         <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
         <PackageTags>C# NET Core OOP ORM Scaffolding</PackageTags>
-        <PackageReleaseNotes>1.0.0-beta-sun-build39 Version:
+        <PackageReleaseNotes>1.0.0-beta-sun-build40 Version:
 
- Upgrade for .NET Core version
+ Fix scaffolding constants in class definition
 
 Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
 </PackageReleaseNotes>
