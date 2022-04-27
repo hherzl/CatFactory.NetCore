@@ -555,5 +555,33 @@ namespace CatFactory.NetCore.Tests
             // Act
             CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
         }
+
+        [Fact]
+        public void ScaffoldingClassWIthAbstractMethod()
+        {
+            // Arrange
+            var definition = new CSharpClassDefinition
+            {
+                Namespaces =
+                {
+                    "System"
+                },
+                Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
+                IsAbstract = true,
+                Name = "MangoDbFactory"
+            };
+
+            definition.Methods.Add(new MethodDefinition
+            {
+                AccessModifier = AccessModifier.Public,
+                IsAbstract = true,
+                Type = "int",
+                Name = "Create"
+            });
+
+            // Act
+            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
+        }
     }
 }

@@ -682,60 +682,67 @@ namespace CatFactory.NetCore.CodeFactory
                 if (method.GenericTypes.Count > 0)
                     methodSignature.Add(string.Join(", ", method.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
 
-                Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), string.Join(" ", methodSignature)));
-
-                if (method.Lines.Count == 0)
+                if (method.IsAbstract)
                 {
-                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
-                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
+                    Lines.Add(new CodeLine("{0}{1};", Indent(start + 1), string.Join(" ", methodSignature)));
                 }
-                else if (method.Lines.Count == 1)
+                else
                 {
-                    var line = method.Lines[0];
+                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), string.Join(" ", methodSignature)));
 
-                    if (line.IsReturn())
+                    if (method.Lines.Count == 0)
                     {
-                        var content = line.Content.StartsWith("return ") ? line.Content.Insert(0, "=> ") : line.Content.Insert(0, "=> ");
-
-                        Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2), content));
+                        Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
+                        Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
                     }
-                    else
+                    else if (method.Lines.Count == 1)
+                    {
+                        var line = method.Lines[0];
+
+                        if (line.IsReturn())
+                        {
+                            var content = line.Content.StartsWith("return ") ? line.Content.Insert(0, "=> ") : line.Content.Insert(0, "=> ");
+
+                            Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2), content));
+                        }
+                        else
+                        {
+                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
+
+                            if (line.IsComment())
+                                Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                            else if (line.IsPreprocessorDirective())
+                                Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                            else if (line.IsReturn())
+                                Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
+                            else if (line.IsTodo())
+                                Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
+                            else
+                                Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
+
+                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
+                        }
+                    }
+                    else if (method.Lines.Count > 1)
                     {
                         Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
 
-                        if (line.IsComment())
-                            Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
-                        else if (line.IsPreprocessorDirective())
-                            Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
-                        else if (line.IsReturn())
-                            Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
-                        else if (line.IsTodo())
-                            Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
-                        else
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
+                        foreach (var line in method.Lines)
+                        {
+                            if (line.IsComment())
+                                Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
+                            else if (line.IsPreprocessorDirective())
+                                Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
+                            else if (line.IsReturn())
+                                Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
+                            else if (line.IsTodo())
+                                Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
+                            else
+                                Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
+                        }
 
                         Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
                     }
-                }
-                else if (method.Lines.Count > 1)
-                {
-                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "{"));
-
-                    foreach (var line in method.Lines)
-                    {
-                        if (line.IsComment())
-                            Lines.Add(new CommentLine("{0}{1}", Indent(start + 2 + line.Indent), GetComment(line.Content)));
-                        else if (line.IsPreprocessorDirective())
-                            Lines.Add(new PreprocessorDirectiveLine("{0}{1}", Indent(start + 2 + line.Indent), GetPreprocessorDirective(line.Content)));
-                        else if (line.IsReturn())
-                            Lines.Add(new ReturnLine("{0}{1}", Indent(start + 2 + line.Indent), GetReturn(line.Content)));
-                        else if (line.IsTodo())
-                            Lines.Add(new TodoLine("{0}{1}", Indent(start + 2 + line.Indent), GetTodo(line.Content)));
-                        else
-                            Lines.Add(new CodeLine("{0}{1}", Indent(start + 2 + line.Indent), line.Content));
-                    }
-
-                    Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), "}"));
                 }
 
                 if (i < ClassDefinition.Methods.Count - 1)
