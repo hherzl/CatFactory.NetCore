@@ -10,7 +10,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
     public class CSharpClassDefinition : ClassDefinition, IDotNetClassDefinition
     {
         public static PropertyDefinition CreateAutomaticProperty(string type, string name, AccessModifier accessModifier = AccessModifier.Public, MetadataAttribute[] attributes = null)
-            => new PropertyDefinition
+            => new()
             {
                 AccessModifier = accessModifier,
                 Type = type,
@@ -20,7 +20,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             };
 
         public static PropertyDefinition CreateReadonlyProperty(string type, string name, AccessModifier accessModifier = AccessModifier.Public)
-            => new PropertyDefinition
+            => new()
             {
                 AccessModifier = accessModifier,
                 Type = type,
@@ -42,7 +42,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
         [Obsolete("Set instance for ICodeNamingConvention in CodeBuilder instance")]
         public ICodeNamingConvention NamingConvention
         {
-            get => m_namingConvention ?? (m_namingConvention = new DotNetNamingConvention());
+            get => m_namingConvention ??= new DotNetNamingConvention();
             set => m_namingConvention = value;
         }
     }

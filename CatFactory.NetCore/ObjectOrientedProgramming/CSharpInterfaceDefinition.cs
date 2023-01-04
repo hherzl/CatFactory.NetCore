@@ -21,7 +21,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
         [Obsolete("Set instance for ICodeNamingConvention in CodeBuilder instance")]
         public ICodeNamingConvention NamingConvention
         {
-            get => m_namingConvention ?? (m_namingConvention = new DotNetNamingConvention());
+            get => m_namingConvention ??= new DotNetNamingConvention();
             set => m_namingConvention = value;
         }
     }

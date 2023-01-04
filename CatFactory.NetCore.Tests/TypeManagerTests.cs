@@ -10,13 +10,6 @@ namespace CatFactory.NetCore.Tests
         public void GetClassFromTypeManager()
         {
             // Act
-            var interfaceDefinition = new CSharpInterfaceDefinition
-            {
-                Namespace = "Entities",
-                AccessModifier = AccessModifier.Public,
-                Name = "IEntity"
-            };
-
             var classDefinition = new CSharpClassDefinition
             {
                 Namespace = "Entities",
@@ -47,19 +40,8 @@ namespace CatFactory.NetCore.Tests
                 Name = "IEntity"
             };
 
-            var classDefinition = new CSharpClassDefinition
-            {
-                Namespace = "Entities",
-                AccessModifier = AccessModifier.Public,
-                Name = "OrderHeader",
-                Implements =
-                {
-                    "Entities.IEntity"
-                }
-            };
-
             // Arrange
-            var interfaceDef = TypeManager.GetItemByFullName(classDefinition.FullName);
+            var interfaceDef = TypeManager.GetItemByFullName(interfaceDefinition.FullName);
 
             // Assert
             Assert.True(TypeManager.ObjectDefinitions.Count > 0);

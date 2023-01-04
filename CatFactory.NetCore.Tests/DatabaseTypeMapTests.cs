@@ -11,7 +11,7 @@ namespace CatFactory.NetCore.Tests
         {
             // Arrange
             var database = await SqlServerDatabaseFactory
-                .ImportAsync("server=(local);database=OnlineStore;integrated security=yes;");
+                .ImportAsync("server=(local); database=OnlineStore; integrated security=yes; TrustServerCertificate=True;");
 
             // Act
             var varcharTypeMap = database.ResolveDatabaseType("varchar");
@@ -29,7 +29,7 @@ namespace CatFactory.NetCore.Tests
         {
             // Arrange
             var database = await SqlServerDatabaseFactory
-                .ImportAsync("server=(local);database=OnlineStore;integrated security=yes;");
+                .ImportAsync("server=(local); database=OnlineStore; integrated security=yes; TrustServerCertificate=True;");
 
             // Act
             var varcharTypeMap = database.ResolveDatabaseType("varchar(25)");
@@ -47,7 +47,7 @@ namespace CatFactory.NetCore.Tests
         {
             // Arrange
             var database = await SqlServerDatabaseFactory
-                .ImportAsync("server=(local);database=AdventureWorks2017;integrated security=yes;");
+                .ImportAsync("server=(local); database=AdventureWorks2017; integrated security=yes; TrustServerCertificate=True;");
 
             // Act
             var nameTypeMap = database.ResolveDatabaseType("Name");
