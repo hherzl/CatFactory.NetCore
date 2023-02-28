@@ -34,11 +34,13 @@ namespace CatFactory.NetCore.CodeFactory
         {
         }
 
+        public CSharpVersion Version { get; set; }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private IDotNetInterfaceDefinition m_interfaceDefinition;
 
         public IDotNetInterfaceDefinition InterfaceDefinition
-            => m_interfaceDefinition ?? (m_interfaceDefinition = ObjectDefinition as IDotNetInterfaceDefinition);
+            => m_interfaceDefinition ??= ObjectDefinition as IDotNetInterfaceDefinition;
 
         public override string FileName
             => InterfaceDefinition.Name;

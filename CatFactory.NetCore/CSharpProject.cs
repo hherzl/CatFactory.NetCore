@@ -9,15 +9,22 @@ namespace CatFactory.NetCore
 {
     public class CSharpProject<TProjectSettings> : Project<TProjectSettings> where TProjectSettings : class, IProjectSettings, new()
     {
+        public const string TABLE = "Table";
+        public const string VIEW = "View";
+
         public CSharpProject()
             : base()
         {
-            CodeNamingConvention = new DotNetNamingConvention();
-            NamingService = new NamingService();
+            Init();
         }
 
         public CSharpProject(ILogger<CSharpProject<TProjectSettings>> logger)
             : base(logger)
+        {
+            Init();
+        }
+
+        private void Init()
         {
             CodeNamingConvention = new DotNetNamingConvention();
             NamingService = new NamingService();
@@ -29,7 +36,7 @@ namespace CatFactory.NetCore
             {
                 yield return new DbObject(item.Schema, item.Name)
                 {
-                    Type = "Table"
+                    Type = TABLE
                 };
             }
 
@@ -37,7 +44,7 @@ namespace CatFactory.NetCore
             {
                 yield return new DbObject(item.Schema, item.Name)
                 {
-                    Type = "View"
+                    Type = VIEW
                 };
             }
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using CatFactory.CodeFactory;
 using CatFactory.NetCore.ObjectOrientedProgramming;
 using Microsoft.Extensions.Logging;
@@ -34,19 +33,19 @@ namespace CatFactory.NetCore.CodeFactory
         {
         }
 
+        public CSharpVersion Version { get; set; }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private CSharpEnumDefinition m_enumDefinition;
 
         public CSharpEnumDefinition EnumDefinition
-            => m_enumDefinition ?? (m_enumDefinition = ObjectDefinition as CSharpEnumDefinition);
+            => m_enumDefinition ??= ObjectDefinition as CSharpEnumDefinition;
 
         public override string FileName
             => EnumDefinition.Name;
 
         public override void Translating()
         {
-            var output = new StringBuilder();
-
             if (EnumDefinition.Namespaces.Count > 0)
             {
                 foreach (var item in EnumDefinition.Namespaces)
@@ -74,12 +73,10 @@ namespace CatFactory.NetCore.CodeFactory
 
             var declaration = new List<string>
             {
-                EnumDefinition.AccessModifier.ToString().ToLower()
+                EnumDefinition.AccessModifier.ToString().ToLower(),
+                "enum",
+                EnumDefinition.Name
             };
-
-            declaration.Add("enum");
-
-            declaration.Add(EnumDefinition.Name);
 
             if (!string.IsNullOrEmpty(EnumDefinition.BaseType))
             {

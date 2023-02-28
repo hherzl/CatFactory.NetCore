@@ -5,30 +5,30 @@ namespace CatFactory.NetCore.CodeFactory
     public static class LineHelper
     {
         public static PreprocessorDirectiveLine Define(string message, params string[] args)
-            => new PreprocessorDirectiveLine("define");
+            => new("define");
 
         public static PreprocessorDirectiveLine Elif(string message, params string[] args)
-            => new PreprocessorDirectiveLine("elif");
+            => new("elif");
 
         public static PreprocessorDirectiveLine Else(string message, params string[] args)
-            => new PreprocessorDirectiveLine("else");
+            => new("else");
 
         public static PreprocessorDirectiveLine EndIf()
-            => new PreprocessorDirectiveLine("endif");
+            => new("endif");
 
         public static PreprocessorDirectiveLine EndRegion()
-            => new PreprocessorDirectiveLine("endregion");
+            => new("endregion");
 
         public static PreprocessorDirectiveLine If(string message, params string[] args)
-            => new PreprocessorDirectiveLine("if");
+            => new("if");
 
         public static PreprocessorDirectiveLine Region(string description, params string[] args)
-            => new PreprocessorDirectiveLine(string.Concat("region ", description), args);
+            => new(string.Concat("region ", description), args);
 
         public static PreprocessorDirectiveLine Undef(string description, params string[] args)
-            => new PreprocessorDirectiveLine(string.Concat("undef ", description), args);
+            => new(string.Concat("undef ", description), args);
 
         public static PreprocessorDirectiveLine Warning(string message, params string[] args)
-            => new PreprocessorDirectiveLine(string.Concat("warning ", message), args);
+            => new(string.Concat("warning ", message), args);
     }
 }

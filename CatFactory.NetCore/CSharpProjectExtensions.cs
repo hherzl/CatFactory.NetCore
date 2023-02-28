@@ -8,7 +8,7 @@ namespace CatFactory.NetCore
 {
     public static class CSharpProjectExtensions
     {
-        public static string PropertyNamePattern;
+        private static readonly string PropertyNamePattern;
 
         static CSharpProjectExtensions()
         {
@@ -17,7 +17,7 @@ namespace CatFactory.NetCore
 
         public static string GetPropertyName<TProjectSettings>(this CSharpProject<TProjectSettings> project, string name) where TProjectSettings : class, IProjectSettings, new()
         {
-            foreach (var item in DotNetNamingConvention.invalidChars)
+            foreach (var item in DotNetNamingConvention.InvalidChars)
                 name = name.Replace(item, '_');
 
             var propertyName = project.CodeNamingConvention.GetPropertyName(name);
@@ -35,28 +35,3 @@ namespace CatFactory.NetCore
             => project.GetPropertyName(parameter.Name);
     }
 }
-
-//static CSharpProjectExtensions()
-//{
-//}
-
-//public static string
-//    GetPropertyName<TProjectSettings>(this CSharpProject<TProjectSettings> project, string name)
-//    where TProjectSettings : class, IProjectSettings, new() => project.CodeNamingConvention.GetPropertyName
-//    (name);
-
-//public static string GetPropertyName<TProjectSettings>(this CSharpProject<TProjectSettings> project,
-//    ITable table, Column column) where TProjectSettings : class, IProjectSettings, new()
-//    => table.Name == column.Name
-//        ? $"{project.GetPropertyName(column.Name)}1"
-//        : project.GetPropertyName(column.Name);
-
-//public static string GetPropertyName<TProjectSettings>(this CSharpProject<TProjectSettings> project, IView view,
-//    Column column) where TProjectSettings : class, IProjectSettings, new()
-//    => view.Name == column.Name
-//        ? $"{project.GetPropertyName(column.Name)}1"
-//        : project.GetPropertyName(column.Name);
-
-//public static string GetPropertyName<TProjectSettings>(this CSharpProject<TProjectSettings> project,
-//    Parameter parameter) where TProjectSettings : class, IProjectSettings, new()
-//    => project.GetPropertyName(parameter.Name);

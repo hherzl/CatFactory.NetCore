@@ -34,11 +34,13 @@ namespace CatFactory.NetCore.CodeFactory
         {
         }
 
+        public CSharpVersion Version { get; set; }
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private IDotNetClassDefinition m_classDefinition;
 
         public IDotNetClassDefinition ClassDefinition
-            => m_classDefinition ?? (m_classDefinition = ObjectDefinition as IDotNetClassDefinition);
+            => m_classDefinition ??= ObjectDefinition as IDotNetClassDefinition;
 
         public override string FileName
             => ClassDefinition.Name;

@@ -14,13 +14,13 @@ namespace CatFactory.NetCore.CodeFactory
             {
                 var attributeDefinition = new StringBuilder();
 
-                attributeDefinition.Append("[");
+                attributeDefinition.Append('[');
 
                 attributeDefinition.AppendFormat("{0}", attribute.Name);
 
                 if (attribute.HasMembers)
                 {
-                    attributeDefinition.Append("(");
+                    attributeDefinition.Append('(');
 
                     if (attribute.HasArguments)
                         attributeDefinition.Append(string.Join(", ", attribute.Arguments));
@@ -31,10 +31,10 @@ namespace CatFactory.NetCore.CodeFactory
                     if (attribute.HasSets)
                         attributeDefinition.AppendFormat("{0}", string.Join(", ", attribute.Sets.Select(item => string.Format("{0} = {1}", item.Name, item.Value))));
 
-                    attributeDefinition.Append(")");
+                    attributeDefinition.Append(')');
                 }
 
-                attributeDefinition.Append("]");
+                attributeDefinition.Append(']');
 
                 yield return attributeDefinition.ToString();
             }
