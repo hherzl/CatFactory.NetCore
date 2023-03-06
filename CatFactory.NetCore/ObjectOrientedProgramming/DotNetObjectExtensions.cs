@@ -129,6 +129,29 @@
                 }
             }
 
+            if (objDef is CSharpRecordDefinition recordDef)
+            {
+                foreach (var field in recordDef.Fields)
+                    field.Type = SetType(field.Type);
+
+                foreach (var property in recordDef.Properties)
+                    property.Type = SetType(property.Type);
+
+                foreach (var constructor in recordDef.Constructors)
+                {
+                    foreach (var parameter in constructor.Parameters)
+                        parameter.Type = SetType(parameter.Type);
+                }
+
+                foreach (var method in recordDef.Methods)
+                {
+                    method.Type = SetType(method.Type);
+
+                    foreach (var parameter in method.Parameters)
+                        parameter.Type = SetType(parameter.Type);
+                }
+            }
+
             if (objDef is CSharpInterfaceDefinition interfaceDef)
             {
                 foreach (var property in interfaceDef.Properties)

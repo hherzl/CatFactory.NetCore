@@ -1,4 +1,5 @@
-﻿using CatFactory.CodeFactory;
+﻿using System.Linq;
+using CatFactory.CodeFactory;
 using CatFactory.NetCore.CodeFactory;
 using CatFactory.NetCore.ObjectOrientedProgramming;
 using CatFactory.ObjectOrientedProgramming;
@@ -554,6 +555,42 @@ namespace CatFactory.NetCore.Tests
 
             // Act
             CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
+        }
+
+        [Fact]
+        public void RefactInterfaceFromClass()
+        {
+            // Arrange
+            var classDefinition = new CSharpClassDefinition
+            {
+                Namespaces =
+                {
+                    "System",
+                    "System.ComponentModel"
+                },
+                Namespace = "DesignPatterns",
+                AccessModifier = AccessModifier.Public,
+                Name = "UserViewModel"
+            };
+
+            classDefinition.AddViewModelProperty("Guid?", "Id");
+            classDefinition.AddViewModelProperty("string", "GivenName");
+            classDefinition.AddViewModelProperty("string", "MiddleName");
+            classDefinition.AddViewModelProperty("string", "FamilyName");
+            classDefinition.AddViewModelProperty("string", "Email");
+            classDefinition.AddViewModelProperty("string", "UserName");
+
+            classDefinition.AddPropertyWithField("DateTime?", "BirthDate");
+
+            classDefinition.Methods.Add(new MethodDefinition(AccessModifier.Public, "void", "Foo"));
+            classDefinition.Methods.Add(new MethodDefinition(AccessModifier.Private, "void", "Bar"));
+
+            // Act
+            var interfaceDefinition = classDefinition.RefactInterface();
+
+            // Assert
+            Assert.True(interfaceDefinition.Properties.Count == classDefinition.Properties.Count);
+            Assert.True(interfaceDefinition.Methods.Count == classDefinition.Methods.Where(item => item.AccessModifier == AccessModifier.Public).Count());
         }
     }
 }

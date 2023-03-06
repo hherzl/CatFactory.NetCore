@@ -8,7 +8,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public static class CSharpClassExtensions
     {
-        private static readonly ICodeNamingConvention NamingConvention;
+        public static ICodeNamingConvention NamingConvention;
 
         static CSharpClassExtensions()
         {

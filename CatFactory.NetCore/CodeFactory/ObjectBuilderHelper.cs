@@ -53,6 +53,11 @@ namespace CatFactory.NetCore.CodeFactory
             AddAttributes(classBuilder, classBuilder.ObjectDefinition.Attributes, start);
         }
 
+        public static void AddAttributes(this CSharpRecordBuilder recordBuilder, int start)
+        {
+            AddAttributes(recordBuilder, recordBuilder.ObjectDefinition.Attributes, start);
+        }
+
         public static void AddAttributes(this CSharpInterfaceBuilder interfaceBuilder, int start)
         {
             AddAttributes(interfaceBuilder, interfaceBuilder.InterfaceDefinition.Attributes, start);

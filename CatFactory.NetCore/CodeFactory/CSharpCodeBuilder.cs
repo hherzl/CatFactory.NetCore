@@ -23,6 +23,17 @@ namespace CatFactory.NetCore.CodeFactory
 
                     codeBuilder.CreateFile(subdirectory);
                 }
+                else if (definition is CSharpRecordDefinition)
+                {
+                    var codeBuilder = new CSharpRecordBuilder
+                    {
+                        OutputDirectory = outputDirectory,
+                        ForceOverwrite = forceOverwrite,
+                        ObjectDefinition = definition
+                    };
+
+                    codeBuilder.CreateFile(subdirectory);
+                }
                 else if (definition is CSharpInterfaceDefinition)
                 {
                     var codeBuilder = new CSharpInterfaceBuilder

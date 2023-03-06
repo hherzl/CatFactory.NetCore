@@ -11,6 +11,7 @@
       1.0.0-beta-sun-build42 Version:
 
       Fix issue 11: https://github.com/hherzl/CatFactory.NetCore/issues/11
+      Fix issue 12: https://github.com/hherzl/CatFactory.NetCore/issues/12
       Fix issue 11: https://github.com/hherzl/CatFactory.NetCore/issues/14
 
       Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
@@ -23,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build32" />
+    <PackageReference Include="CatFactory" Version="1.0.0-beta-sun-build33" />
     <PackageReference Include="System.CodeDom" Version="7.0.0" />
   </ItemGroup>
 
