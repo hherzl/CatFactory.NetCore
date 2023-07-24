@@ -5,10 +5,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public class CSharpClassDefinition : ClassDefinition, IDotNetClassDefinition
     {
-        public static CSharpClassDefinition Empty()
-            => new();
-
-        public static CSharpClassDefinition New(AccessModifier accessModifier, string name, string ns = null, string baseClass = null)
+        public static CSharpClassDefinition Create(AccessModifier accessModifier, string name, string ns = null, string baseClass = null)
         {
             var definition = new CSharpClassDefinition
             {
