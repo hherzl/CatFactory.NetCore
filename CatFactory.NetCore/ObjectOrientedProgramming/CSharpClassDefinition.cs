@@ -5,6 +5,26 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public class CSharpClassDefinition : ClassDefinition, IDotNetClassDefinition
     {
+        public static CSharpClassDefinition Empty()
+            => new();
+
+        public static CSharpClassDefinition New(AccessModifier accessModifier, string name, string ns = null, string baseClass = null)
+        {
+            var definition = new CSharpClassDefinition
+            {
+                AccessModifier = accessModifier,
+                Name = name
+            };
+
+            if (!string.IsNullOrEmpty(ns))
+                definition.Namespace = ns;
+
+            if (!string.IsNullOrEmpty(baseClass))
+                definition.BaseClass = baseClass;
+
+            return definition;
+        }
+
         public static PropertyDefinition CreateAutomaticProperty(string type, string name, AccessModifier accessModifier = AccessModifier.Public, MetadataAttribute[] attributes = null)
             => new()
             {

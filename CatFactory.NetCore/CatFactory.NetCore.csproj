@@ -3,14 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <Version>1.0.0-beta-sun-build44</Version>
+    <Version>1.0.0-beta-sun-build45</Version>
     <Description>CatFactory Package for .NET Core (C#)</Description>
     <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
     <PackageTags>C# NET Core OOP ORM Scaffolding</PackageTags>
     <PackageReleaseNotes>
-      1.0.0-beta-sun-build44 Version:
+      1.0.0-beta-sun-build45 Version:
 
-      Core package update
+      Fix issue 16 https://github.com/hherzl/CatFactory.NetCore/issues/16
 
       Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
     </PackageReleaseNotes>
