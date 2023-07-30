@@ -5,6 +5,13 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public static class CSharpClassDefinitionExtensions
     {
+        public static CSharpClassDefinition IsAbstract(this CSharpClassDefinition definition, bool isAbstract = true)
+        {
+            definition.IsAbstract = isAbstract;
+
+            return definition;
+        }
+
         public static CSharpClassDefinition IsPartial(this CSharpClassDefinition definition, bool isPartial = true)
         {
             definition.IsPartial = isPartial;
@@ -33,9 +40,16 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             return definition;
         }
 
-        public static CSharpClassDefinition SetSummary(this CSharpClassDefinition definition, string summary)
+        public static CSharpClassDefinition SetDocumentation(this CSharpClassDefinition definition, string summary = null, string remarks = null, string returns = null)
         {
-            definition.Documentation = new Documentation(summary);
+            if (!(string.IsNullOrEmpty(summary)))
+                definition.Documentation.Summary = summary;
+
+            if (!(string.IsNullOrEmpty(remarks)))
+                definition.Documentation.Remarks = remarks;
+
+            if (!(string.IsNullOrEmpty(returns)))
+                definition.Documentation.Returns = returns;
 
             return definition;
         }

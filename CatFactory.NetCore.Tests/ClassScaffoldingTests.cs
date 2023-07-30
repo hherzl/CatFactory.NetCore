@@ -3,6 +3,7 @@ using CatFactory.NetCore.CodeFactory;
 using CatFactory.NetCore.ObjectOrientedProgramming;
 using CatFactory.ObjectOrientedProgramming;
 using Xunit;
+using Xunit.Sdk;
 
 namespace CatFactory.NetCore.Tests
 {
@@ -21,9 +22,17 @@ namespace CatFactory.NetCore.Tests
 
             definition.AddTableAnnotation("Shippers", schema: "dbo");
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "ShipperID").AddKeyAnnotation().AddDatabaseGeneratedAnnotation());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "CompanyName").AddStringLengthAnnotation(80).AddRequiredAnnotation());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("String", "Phone").AddStringLengthAnnotation(48).AddRequiredAnnotation());
+            definition.Properties.Add(
+                CSharpClassDefinition.CreateAutomaticProperty("int?", "ShipperID").AddKeyAnnotation().AddDatabaseGeneratedAnnotation()
+            );
+            
+            definition.Properties.Add(
+                CSharpClassDefinition.CreateAutomaticProperty("string", "CompanyName").AddStringLengthAnnotation(80).AddRequiredAnnotation()
+            );
+            
+            definition.Properties.Add(
+                CSharpClassDefinition.CreateAutomaticProperty("String", "Phone").AddStringLengthAnnotation(48).AddRequiredAnnotation()
+            );
 
             // Act
             CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
@@ -144,7 +153,7 @@ namespace CatFactory.NetCore.Tests
             // Arrange
             var definition = CSharpClassDefinition
                 .Create(AccessModifier.Public, "NorthwindDbContext", ns: "DesignPatterns", baseClass: "DbContext")
-                .SetSummary("Represents Northwind database in EF Core Model")
+                .SetDocumentation(summary: "Represents Northwind database in EF Core Model")
                 .IsPartial()
                 .ImportNs("System")
                 .ImportNs("Microsoft.EntityFrameworkCore")

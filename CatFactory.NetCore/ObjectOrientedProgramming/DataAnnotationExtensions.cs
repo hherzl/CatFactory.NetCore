@@ -1,4 +1,5 @@
-﻿using CatFactory.Collections;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using CatFactory.Collections;
 using CatFactory.ObjectOrientedProgramming;
 
 namespace CatFactory.NetCore.ObjectOrientedProgramming
@@ -27,9 +28,16 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             return definition;
         }
 
-        public static PropertyDefinition AddDatabaseGeneratedAnnotation(this PropertyDefinition definition)
+        public static PropertyDefinition AddDatabaseGeneratedAnnotation(this PropertyDefinition definition, DatabaseGeneratedOption databaseGeneratedOption = DatabaseGeneratedOption.Identity)
         {
-            var metadataAttrib = new MetadataAttribute("DatabaseGenerated", "DatabaseGeneratedOption.Identity");
+            var arg = "DatabaseGeneratedOption.None";
+
+            if (databaseGeneratedOption == DatabaseGeneratedOption.Identity)
+                arg = "DatabaseGeneratedOption.Identity";
+            else if (databaseGeneratedOption == DatabaseGeneratedOption.Computed)
+                arg = "DatabaseGeneratedOption.Computed";
+
+            var metadataAttrib = new MetadataAttribute("DatabaseGenerated", arg);
 
             definition.Attributes.Add(metadataAttrib);
 
@@ -45,9 +53,18 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             return definition;
         }
 
-        public static PropertyDefinition AddRequiredAnnotation(this PropertyDefinition definition)
+        public static PropertyDefinition AddRequiredAnnotation(this PropertyDefinition definition, string errorMessage = null, string errorMessageResourceName = null, string errorMessageResourceType = null)
         {
             var metadataAttrib = new MetadataAttribute("Required");
+
+            if (!string.IsNullOrEmpty(errorMessage))
+                metadataAttrib.Sets.Add(new MetadataAttributeSet("ErrorMessage", $"\"{errorMessage}\""));
+
+            if (!string.IsNullOrEmpty(errorMessageResourceName))
+                metadataAttrib.Sets.Add(new MetadataAttributeSet("ErrorMessageResourceName", $"\"{errorMessageResourceName}\""));
+
+            if (!string.IsNullOrEmpty(errorMessageResourceType))
+                metadataAttrib.Sets.Add(new MetadataAttributeSet("ErrorMessageResourceType", $"typeof = {errorMessageResourceType}"));
 
             definition.Attributes.Add(metadataAttrib);
 
