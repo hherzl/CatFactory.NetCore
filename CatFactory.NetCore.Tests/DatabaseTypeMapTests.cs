@@ -2,61 +2,60 @@
 using CatFactory.SqlServer;
 using Xunit;
 
-namespace CatFactory.NetCore.Tests
+namespace CatFactory.NetCore.Tests;
+
+public class DatabaseTypeMapTests
 {
-    public class DatabaseTypeMapTests
+    [Fact]
+    public async Task ResolveDatabaseTypeMapsForOnlineStoreDbAsync()
     {
-        [Fact]
-        public async Task ResolveDatabaseTypeMapsForOnlineStoreDbAsync()
-        {
-            // Arrange
-            var database = await SqlServerDatabaseFactory
-                .ImportAsync("server=(local); database=OnlineStore; integrated security=yes; TrustServerCertificate=True;");
+        // Arrange
+        var database = await SqlServerDatabaseFactory
+            .ImportAsync("server=(local); database=OnlineStore; integrated security=yes; TrustServerCertificate=True;");
 
-            // Act
-            var varcharTypeMap = database.ResolveDatabaseType("varchar");
-            var intTypeMap = database.ResolveDatabaseType("int");
-            var datetimeMap = database.ResolveDatabaseType("datetime");
+        // Act
+        var varcharTypeMap = database.ResolveDatabaseType("varchar");
+        var intTypeMap = database.ResolveDatabaseType("int");
+        var datetimeMap = database.ResolveDatabaseType("datetime");
 
-            // Assert
-            Assert.False(varcharTypeMap == null);
-            Assert.False(intTypeMap == null);
-            Assert.False(datetimeMap == null);
-        }
+        // Assert
+        Assert.False(varcharTypeMap == null);
+        Assert.False(intTypeMap == null);
+        Assert.False(datetimeMap == null);
+    }
 
-        [Fact]
-        public async Task ResolveDatabaseTypeMapsFromComposedStringsForOnlineStoreDbAsync()
-        {
-            // Arrange
-            var database = await SqlServerDatabaseFactory
-                .ImportAsync("server=(local); database=OnlineStore; integrated security=yes; TrustServerCertificate=True;");
+    [Fact]
+    public async Task ResolveDatabaseTypeMapsFromComposedStringsForOnlineStoreDbAsync()
+    {
+        // Arrange
+        var database = await SqlServerDatabaseFactory
+            .ImportAsync("server=(local); database=OnlineStore; integrated security=yes; TrustServerCertificate=True;");
 
-            // Act
-            var varcharTypeMap = database.ResolveDatabaseType("varchar(25)");
-            var decimalMap = database.ResolveDatabaseType("decimal(8, 4)");
+        // Act
+        var varcharTypeMap = database.ResolveDatabaseType("varchar(25)");
+        var decimalMap = database.ResolveDatabaseType("decimal(8, 4)");
 
-            // Assert
-            Assert.False(varcharTypeMap == null);
-            Assert.True(varcharTypeMap == "String");
-            Assert.False(decimalMap == null);
-            Assert.True(decimalMap == "Decimal?");
-        }
+        // Assert
+        Assert.False(varcharTypeMap == null);
+        Assert.True(varcharTypeMap == "String");
+        Assert.False(decimalMap == null);
+        Assert.True(decimalMap == "Decimal?");
+    }
 
-        [Fact]
-        public async Task ResolveDatabaseTypeMapsFromComposedStringsForAdventureWorks2017DbAsync()
-        {
-            // Arrange
-            var database = await SqlServerDatabaseFactory
-                .ImportAsync("server=(local); database=AdventureWorks2017; integrated security=yes; TrustServerCertificate=True;");
+    [Fact]
+    public async Task ResolveDatabaseTypeMapsFromComposedStringsForAdventureWorks2017DbAsync()
+    {
+        // Arrange
+        var database = await SqlServerDatabaseFactory
+            .ImportAsync("server=(local); database=AdventureWorks2017; integrated security=yes; TrustServerCertificate=True;");
 
-            // Act
-            var nameTypeMap = database.ResolveDatabaseType("Name");
-            var fooTypeMap = database.ResolveDatabaseType("foo");
+        // Act
+        var nameTypeMap = database.ResolveDatabaseType("Name");
+        var fooTypeMap = database.ResolveDatabaseType("foo");
 
-            // Assert
-            Assert.False(nameTypeMap == null);
-            Assert.True(nameTypeMap == "String");
-            Assert.True(fooTypeMap == "object");
-        }
+        // Assert
+        Assert.False(nameTypeMap == null);
+        Assert.True(nameTypeMap == "String");
+        Assert.True(fooTypeMap == "object");
     }
 }

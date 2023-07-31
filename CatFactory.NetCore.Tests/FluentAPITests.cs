@@ -4,10 +4,10 @@ using Xunit;
 
 namespace CatFactory.NetCore.Tests;
 
-public class ClassFluentAPITests
+public class FluentAPITests
 {
     [Fact]
-    public void Test_CreateControllerClass()
+    public void Create_Controller_ReturnsClassDefinition()
     {
         // Arrange and Act
         var definition = CSharpClassDefinition
@@ -24,7 +24,7 @@ public class ClassFluentAPITests
     }
 
     [Fact]
-    public void Test_CreateStaticClass()
+    public void Create_DbHelper_ReturnsClassDefinition()
     {
         // Arrange and Act
         var definition = CSharpClassDefinition

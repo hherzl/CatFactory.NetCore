@@ -3,75 +3,74 @@ using CatFactory.NetCore.ObjectOrientedProgramming;
 using CatFactory.ObjectOrientedProgramming;
 using Xunit;
 
-namespace CatFactory.NetCore.Tests
+namespace CatFactory.NetCore.Tests;
+
+public class InterfaceScaffoldingTests : ScaffoldingTest
 {
-    public class InterfaceScaffoldingTests : ScaffoldingTest
+    public InterfaceScaffoldingTests()
+        : base()
     {
-        public InterfaceScaffoldingTests()
-            : base()
-        {
-        }
+    }
 
-        [Fact]
-        public void ScaffoldingBaseRepositoryInterface()
+    [Fact]
+    public void ScaffoldingBaseRepositoryInterface()
+    {
+        // Arrange
+        var definition = new CSharpInterfaceDefinition
         {
-            // Arrange
-            var definition = new CSharpInterfaceDefinition
+            Namespaces =
             {
-                Namespaces =
-                {
-                    "System"
-                },
-                Namespace = "Infrastructure.Persistence",
-                AccessModifier = AccessModifier.Public,
-                Name = "IRepository",
-                Implements =
-                {
-                    "IDisposable"
-                }
-            };
-
-            // Act
-            CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
-        }
-
-        [Fact]
-        public void ScaffoldingRepositoryInterface()
-        {
-            // Arrange
-            var definition = new CSharpInterfaceDefinition
+                "System"
+            },
+            Namespace = "Infrastructure.Persistence",
+            AccessModifier = AccessModifier.Public,
+            Name = "IRepository",
+            Implements =
             {
-                Namespaces =
+                "IDisposable"
+            }
+        };
+
+        // Act
+        CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
+    }
+
+    [Fact]
+    public void ScaffoldingRepositoryInterface()
+    {
+        // Arrange
+        var definition = new CSharpInterfaceDefinition
+        {
+            Namespaces =
+            {
+                "System",
+                "System.Linq",
+                "Domain.Entities"
+            },
+            Namespace = "Infrastructure.Persistence",
+            Documentation = new Documentation("Contains all operations related to Northwind database access"),
+            AccessModifier = AccessModifier.Public,
+            Name = "INorthwindRepository",
+            Implements =
+            {
+                "IRepository"
+            },
+            Methods =
+            {
+                new MethodDefinition("IQueryable<Product>", "GetProducts")
                 {
-                    "System",
-                    "System.Linq",
-                    "Domain.Entities"
-                },
-                Namespace = "Infrastructure.Persistence",
-                Documentation = new Documentation("Contains all operations related to Northwind database access"),
-                AccessModifier = AccessModifier.Public,
-                Name = "INorthwindRepository",
-                Implements =
-                {
-                    "IRepository"
-                },
-                Methods =
-                {
-                    new MethodDefinition("IQueryable<Product>", "GetProducts")
+                    Documentation = new Documentation("Retrieves all products"),
+                    Parameters =
                     {
-                        Documentation = new Documentation("Retrieves all products"),
-                        Parameters =
-                        {
-                            new ParameterDefinition("int?", "supplierID")
-                        },
+                        new ParameterDefinition("int?", "supplierID")
                     },
-                    new MethodDefinition("IQueryable<Shipper>", "GetShippers"),
-                    new MethodDefinition("IQueryable<Order>", "GetOrders")
-                }
-            };
+                },
+                new MethodDefinition("IQueryable<Shipper>", "GetShippers"),
+                new MethodDefinition("IQueryable<Order>", "GetOrders")
+            }
+        };
 
-            // Act
-            CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
-        }
+        // Act
+        CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
     }
 }

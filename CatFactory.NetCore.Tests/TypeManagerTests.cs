@@ -2,50 +2,49 @@
 using CatFactory.ObjectOrientedProgramming;
 using Xunit;
 
-namespace CatFactory.NetCore.Tests
+namespace CatFactory.NetCore.Tests;
+
+public class TypeManagerTests
 {
-    public class TypeManagerTests
+    [Fact]
+    public void GetClassFromTypeManager()
     {
-        [Fact]
-        public void GetClassFromTypeManager()
+        // Act
+        var classDefinition = new CSharpClassDefinition
         {
-            // Act
-            var classDefinition = new CSharpClassDefinition
+            Namespace = "Entities",
+            AccessModifier = AccessModifier.Public,
+            Name = "OrderHeader",
+            Implements =
             {
-                Namespace = "Entities",
-                AccessModifier = AccessModifier.Public,
-                Name = "OrderHeader",
-                Implements =
-                {
-                    "Entities.IEntity"
-                }
-            };
+                "Entities.IEntity"
+            }
+        };
 
-            // Arrange
-            var classDef = TypeManager.GetItemByFullName(classDefinition.FullName);
+        // Arrange
+        var classDef = TypeManager.GetItemByFullName(classDefinition.FullName);
 
-            // Assert
-            Assert.True(TypeManager.ObjectDefinitions.Count > 0);
-            Assert.True(classDef != null);
-        }
+        // Assert
+        Assert.True(TypeManager.ObjectDefinitions.Count > 0);
+        Assert.True(classDef != null);
+    }
 
-        [Fact]
-        public void GetInterfaceFromTypeManager()
+    [Fact]
+    public void GetInterfaceFromTypeManager()
+    {
+        // Act
+        var interfaceDefinition = new CSharpInterfaceDefinition
         {
-            // Act
-            var interfaceDefinition = new CSharpInterfaceDefinition
-            {
-                Namespace = "Entities",
-                AccessModifier = AccessModifier.Public,
-                Name = "IEntity"
-            };
+            Namespace = "Entities",
+            AccessModifier = AccessModifier.Public,
+            Name = "IEntity"
+        };
 
-            // Arrange
-            var interfaceDef = TypeManager.GetItemByFullName(interfaceDefinition.FullName);
+        // Arrange
+        var interfaceDef = TypeManager.GetItemByFullName(interfaceDefinition.FullName);
 
-            // Assert
-            Assert.True(TypeManager.ObjectDefinitions.Count > 0);
-            Assert.True(interfaceDef != null);
-        }
+        // Assert
+        Assert.True(TypeManager.ObjectDefinitions.Count > 0);
+        Assert.True(interfaceDef != null);
     }
 }

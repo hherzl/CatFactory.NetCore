@@ -20,6 +20,8 @@ namespace CatFactory.NetCore.CodeFactory
                         ForceOverwrite = forceOverwrite,
                         ObjectDefinition = definition
                     };
+
+                    codeBuilder.CreateFile();
                 }
                 else if (definition is CSharpRecordDefinition)
                 {
@@ -29,6 +31,8 @@ namespace CatFactory.NetCore.CodeFactory
                         ForceOverwrite = forceOverwrite,
                         ObjectDefinition = definition
                     };
+
+                    codeBuilder.CreateFile();
                 }
                 else if (definition is CSharpInterfaceDefinition)
                 {
@@ -38,6 +42,8 @@ namespace CatFactory.NetCore.CodeFactory
                         ForceOverwrite = forceOverwrite,
                         ObjectDefinition = definition
                     };
+
+                    codeBuilder.CreateFile();
                 }
                 else if (definition is CSharpEnumDefinition)
                 {
@@ -47,6 +53,8 @@ namespace CatFactory.NetCore.CodeFactory
                         ForceOverwrite = forceOverwrite,
                         ObjectDefinition = definition
                     };
+
+                    codeBuilder.CreateFile();
                 }
                 else
                     throw new NotImplementedException();

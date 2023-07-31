@@ -1,14 +1,12 @@
-﻿using System;
-using CatFactory.CodeFactory.Scaffolding;
+﻿using CatFactory.CodeFactory.Scaffolding;
 using CatFactory.Diagnostics;
 
-namespace CatFactory.NetCore.Tests.Models
+namespace CatFactory.NetCore.Tests.Models;
+
+public class CSharpProjectSettings : IProjectSettings
 {
-    public class CSharpProjectSettings : IProjectSettings
+    public ValidationResult Validate()
     {
-        public ValidationResult Validate()
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
     }
 }

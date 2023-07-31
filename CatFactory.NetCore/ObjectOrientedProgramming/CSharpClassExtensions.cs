@@ -15,18 +15,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             NamingConvention = new DotNetNamingConvention();
         }
 
-        public static void AddReadOnlyProperty(this CSharpClassDefinition classDefinition, string type, string name, params CodeLine[] codeLines)
-        {
-            var property = new PropertyDefinition(type, name)
-            {
-                IsReadOnly = true,
-                GetBody = new List<ILine>(codeLines)
-            };
-
-            classDefinition.Properties.Add(property);
-        }
-
-        public static void AddPropertyWithField(this CSharpClassDefinition classDefinition, string type, string name)
+        public static void AddPropWithField(this CSharpClassDefinition classDefinition, string type, string name)
         {
             var fieldName = NamingConvention.GetFieldName(name);
 
@@ -48,7 +37,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             classDefinition.Properties.Add(property);
         }
 
-        public static void AddViewModelProperty(this CSharpClassDefinition classDefinition, string type, string name, bool useNullConditionalOperator = true)
+        public static void AddViewModelProp(this CSharpClassDefinition classDefinition, string type, string name, bool useNullConditionalOperator = true)
         {
             var fieldName = NamingConvention.GetFieldName(name);
 
