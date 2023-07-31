@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CatFactory.CodeFactory;
+using CatFactory.Collections;
 using CatFactory.NetCore.CodeFactory;
 using CatFactory.ObjectOrientedProgramming;
 
@@ -15,7 +16,38 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             NamingConvention = new DotNetNamingConvention();
         }
 
-        public static void AddViewModelProperty(this CSharpRecordDefinition recordDefinition, string type, string name, bool useNullConditionalOperator = true)
+        public static CSharpRecordDefinition ImportNs(this CSharpRecordDefinition definition, string ns)
+        {
+            definition.Namespaces.AddUnique(ns);
+
+            return definition;
+        }
+
+        public static CSharpRecordDefinition ImportNs(this CSharpRecordDefinition definition, params string[] ns)
+        {
+            foreach (var item in ns)
+            {
+                definition.Namespaces.AddUnique(item);
+            }
+
+            return definition;
+        }
+
+        public static CSharpRecordDefinition Implement(this CSharpRecordDefinition definition, string contract)
+        {
+            definition.Implements.AddUnique(contract);
+
+            return definition;
+        }
+
+        public static CSharpRecordDefinition IsPartial(this CSharpRecordDefinition definition, bool isPartial = true)
+        {
+            definition.IsPartial = isPartial;
+
+            return definition;
+        }
+
+        public static void AddViewModelProp(this CSharpRecordDefinition recordDefinition, string type, string name, bool useNullConditionalOperator = true)
         {
             var fieldName = NamingConvention.GetFieldName(name);
 
