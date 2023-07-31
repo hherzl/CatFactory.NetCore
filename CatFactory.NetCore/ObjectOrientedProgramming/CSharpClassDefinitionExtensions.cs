@@ -40,6 +40,13 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             return definition;
         }
 
+        public static CSharpClassDefinition AddCtor(this CSharpClassDefinition definition, ClassConstructorDefinition ctor)
+        {
+            definition.Constructors.Add(ctor);
+
+            return definition;
+        }
+
         public static CSharpClassDefinition SetDocumentation(this CSharpClassDefinition definition, string summary = null, string remarks = null, string returns = null)
         {
             if (!(string.IsNullOrEmpty(summary)))

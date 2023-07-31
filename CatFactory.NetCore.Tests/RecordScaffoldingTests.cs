@@ -27,13 +27,13 @@ namespace CatFactory.NetCore.Tests
                 Name = "ProductQueryModel"
             };
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "Id"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "Name"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "SupplierID"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "Supplier"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "CategoryID"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "Category"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("decimal?", "UnitPrice"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "Id"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "Name"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "SupplierID"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "Supplier"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "CategoryID"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "Category"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("decimal?", "UnitPrice"));
 
             // Act
             CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory, _persistenceDirectory), _queryModelsDirectory, true, definition);

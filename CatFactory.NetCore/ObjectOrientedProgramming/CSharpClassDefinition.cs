@@ -22,7 +22,17 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             return definition;
         }
 
-        public static PropertyDefinition CreateAutomaticProperty(string type, string name, AccessModifier accessModifier = AccessModifier.Public, MetadataAttribute[] attributes = null)
+        public static ClassConstructorDefinition CreateCtor(AccessModifier accessModifier = AccessModifier.Public, string invocation = null)
+        {
+            var definition = new ClassConstructorDefinition(accessModifier);
+
+            if (!string.IsNullOrEmpty(invocation))
+                definition.Invocation = invocation;
+
+            return definition;
+        }
+
+        public static PropertyDefinition CreateAutomaticProp(string type, string name, AccessModifier accessModifier = AccessModifier.Public, MetadataAttribute[] attributes = null)
             => new()
             {
                 AccessModifier = accessModifier,
@@ -32,7 +42,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
                 Attributes = attributes == null ? new List<MetadataAttribute>() : new List<MetadataAttribute>(attributes)
             };
 
-        public static PropertyDefinition CreateReadonlyProperty(string type, string name, AccessModifier accessModifier = AccessModifier.Public)
+        public static PropertyDefinition CreateReadonlyProp(string type, string name, AccessModifier accessModifier = AccessModifier.Public)
             => new()
             {
                 AccessModifier = accessModifier,

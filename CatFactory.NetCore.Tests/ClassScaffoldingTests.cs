@@ -26,9 +26,9 @@ namespace CatFactory.NetCore.Tests
 
             definition.AddTableAttrib("Shippers", schema: "dbo");
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "ShipperID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "CompanyName").AddStringLengthAttrib(80).AddRequiredAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "Phone").AddStringLengthAttrib(48).AddRequiredAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "ShipperID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "CompanyName").AddStringLengthAttrib(80).AddRequiredAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "Phone").AddStringLengthAttrib(48).AddRequiredAttrib());
 
             // Act
             CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _domainDirectory), _entitiesDirectory, true, definition);
@@ -79,8 +79,8 @@ namespace CatFactory.NetCore.Tests
 
             definition.AddTableAttrib("Suppliers", schema: "dbo");
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "SupplierID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "CompanyName").AddColumnAttrib().AddRequiredAttrib().AddStringLengthAttrib(40));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "SupplierID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "CompanyName").AddColumnAttrib().AddRequiredAttrib().AddStringLengthAttrib(40));
 
             definition.SimplifyDataTypes();
 
@@ -101,9 +101,9 @@ namespace CatFactory.NetCore.Tests
 
             definition.AddTableAttrib("Categories", schema: "dbo");
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "CategoryID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "CategoryName").AddColumnAttrib().AddRequiredAttrib().AddStringLengthAttrib(15));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "Description").AddColumnAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "CategoryID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "CategoryName").AddColumnAttrib().AddRequiredAttrib().AddStringLengthAttrib(15));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "Description").AddColumnAttrib());
 
             definition.SimplifyDataTypes();
 
@@ -124,14 +124,14 @@ namespace CatFactory.NetCore.Tests
 
             definition.AddTableAttrib("Orders", schema: "dbo");
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "OrderID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "CustomerID").AddColumnAttrib().AddStringLengthAttrib(5));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "EmployeeID").AddColumnAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("DateTime?", "OrderDate").AddColumnAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("DateTime?", "RequiredDate").AddColumnAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("DateTime?", "ShippedDate").AddColumnAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "ShipVia").AddColumnAttrib());
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("decimal?", "Freight").AddColumnAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "OrderID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "CustomerID").AddColumnAttrib().AddStringLengthAttrib(5));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "EmployeeID").AddColumnAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DateTime?", "OrderDate").AddColumnAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DateTime?", "RequiredDate").AddColumnAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DateTime?", "ShippedDate").AddColumnAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "ShipVia").AddColumnAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("decimal?", "Freight").AddColumnAttrib());
 
             definition.SimplifyDataTypes();
 
@@ -146,22 +146,10 @@ namespace CatFactory.NetCore.Tests
             var definition = CSharpClassDefinition
                 .Create(AccessModifier.Public, "NorthwindException", ns: "Domain.Exceptions", baseClass: "Exception")
                 .ImportNs("System")
+                .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base()"))
+                .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base(message)").AddParam("string", "message"))
+                .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base(message, innerException)").AddParam("string", "message").AddParam("Exception", "innerException"))
                 ;
-
-            definition.Constructors.Add(new ClassConstructorDefinition(AccessModifier.Public)
-            {
-                Invocation = "base()"
-            });
-
-            definition.Constructors.Add(new ClassConstructorDefinition(AccessModifier.Public, new ParameterDefinition("string", "message"))
-            {
-                Invocation = "base(message)"
-            });
-
-            definition.Constructors.Add(new ClassConstructorDefinition(AccessModifier.Public, new ParameterDefinition("string", "message"), new ParameterDefinition("Exception", "innerException"))
-            {
-                Invocation = "base(message, innerException)"
-            });
 
             // Act
             CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _domainDirectory), _exceptionsDirectory, true, definition);
@@ -209,7 +197,7 @@ namespace CatFactory.NetCore.Tests
                 .Create(AccessModifier.Public, "CustOrderHist", ns: "Infrastructure.Persistence.QueryModels")
                 ;
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "ProductName"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "ProductName"));
 
             definition.Properties.Add(new(AccessModifier.Public, "int", "Total")
             {
@@ -244,11 +232,11 @@ namespace CatFactory.NetCore.Tests
                 Documentation = new("Initializes a new instance of NorthwindDbContext class")
             });
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("DbSet<Product>", "Products"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("DbSet<Supplier>", "Suppliers"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("DbSet<Category>", "Categories"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("DbSet<Shipper>", "Shippers"));
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("DbSet<Order>", "Orders"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DbSet<Product>", "Products"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DbSet<Supplier>", "Suppliers"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DbSet<Category>", "Categories"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DbSet<Shipper>", "Shippers"));
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DbSet<Order>", "Orders"));
 
             definition.Methods.Add(new(AccessModifier.Protected, "void", "OnModelCreating", new ParameterDefinition("ModelBuilder", "modelBuilder"))
             {
@@ -351,7 +339,6 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-
             var codeBuilder = new CSharpClassBuilder
             {
                 OutputDirectory = Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory, _persistenceDirectory),
@@ -372,15 +359,8 @@ namespace CatFactory.NetCore.Tests
                 .IsPartial()
                 .Implement("IRepository")
                 .ImportNs("System")
+                .AddCtor(CSharpClassDefinition.CreateCtor().AddParam("NorthwindDbContext", "dbContext").AddLine("_dbContext = dbContext;"))
                 ;
-
-            definition.Constructors.Add(new(AccessModifier.Public, new ParameterDefinition("NorthwindDbContext", "dbContext"))
-            {
-                Lines =
-                {
-                    new CodeLine("_dbContext = dbContext;")
-                }
-            });
 
             definition.Fields.Add(new FieldDefinition(AccessModifier.Protected, "NorthwindDbContext", "_dbContext")
             {
@@ -412,10 +392,7 @@ namespace CatFactory.NetCore.Tests
                 .ImportNs("Domain.Entities")
                 ;
 
-            definition.Constructors.Add(new(AccessModifier.Public, new ParameterDefinition("NorthwindDbContext", "dbContext"))
-            {
-                Invocation = "base(dbContext)"
-            });
+            definition.Constructors.Add(CSharpClassDefinition.CreateCtor(invocation: "base(dbContext)").AddParam("NorthwindDbContext", "dbContext"));
 
             definition.Methods.Add(new MethodDefinition(AccessModifier.Public, "IQueryable<Product>", "GetProducts")
             {
@@ -451,7 +428,6 @@ namespace CatFactory.NetCore.Tests
             });
 
             // Act
-
             var codeBuilder = new CSharpClassBuilder
             {
                 OutputDirectory = Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory, _persistenceDirectory),
