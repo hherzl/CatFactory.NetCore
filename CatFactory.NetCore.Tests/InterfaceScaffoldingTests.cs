@@ -5,23 +5,11 @@ using Xunit;
 
 namespace CatFactory.NetCore.Tests
 {
-    public class InterfaceScaffoldingTests
+    public class InterfaceScaffoldingTests : ScaffoldingTest
     {
-        private readonly string _baseDirectory;
-        private readonly string _solutionDirectory;
-        private readonly string _domainDirectory;
-        private readonly string _entitiesDirectory;
-        private readonly string _infrastructureDirectory;
-        private readonly string _persistenceDirectory;
-
         public InterfaceScaffoldingTests()
+            : base()
         {
-            _baseDirectory = @"C:\Temp\CatFactory.NetCore";
-            _solutionDirectory = "CleanArchitecture";
-            _domainDirectory = "Domain";
-            _entitiesDirectory = "Entities";
-            _infrastructureDirectory = "Infrastructure";
-            _persistenceDirectory = "Persistence";
         }
 
         [Fact]

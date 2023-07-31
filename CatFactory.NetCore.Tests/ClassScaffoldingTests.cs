@@ -6,25 +6,11 @@ using Xunit;
 
 namespace CatFactory.NetCore.Tests
 {
-    public class ClassScaffoldingTests
+    public class ClassScaffoldingTests : ScaffoldingTest
     {
-        private readonly string _baseDirectory;
-        private readonly string _solutionDirectory;
-        private readonly string _domainDirectory;
-        private readonly string _entitiesDirectory;
-        private readonly string _exceptionsDirectory;
-        private readonly string _infrastructureDirectory;
-        private readonly string _persistenceDirectory;
-
         public ClassScaffoldingTests()
+            : base()
         {
-            _baseDirectory = @"C:\Temp\CatFactory.NetCore";
-            _solutionDirectory = "CleanArchitecture";
-            _domainDirectory = "Domain";
-            _entitiesDirectory = "Entities";
-            _exceptionsDirectory = "Exceptions";
-            _infrastructureDirectory = "Infrastructure";
-            _persistenceDirectory = "Persistence";
         }
 
         [Fact]
@@ -40,17 +26,9 @@ namespace CatFactory.NetCore.Tests
 
             definition.AddTableAttrib("Shippers", schema: "dbo");
 
-            definition.Properties.Add(
-                CSharpClassDefinition.CreateAutomaticProperty("int?", "ShipperID").AddKeyAnnotation().AddDatabaseGeneratedAttrib()
-            );
-
-            definition.Properties.Add(
-                CSharpClassDefinition.CreateAutomaticProperty("string", "CompanyName").AddStringLengthAttrib(80).AddRequiredAttrib()
-            );
-
-            definition.Properties.Add(
-                CSharpClassDefinition.CreateAutomaticProperty("string", "Phone").AddStringLengthAttrib(48).AddRequiredAttrib()
-            );
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "ShipperID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "CompanyName").AddStringLengthAttrib(80).AddRequiredAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "Phone").AddStringLengthAttrib(48).AddRequiredAttrib());
 
             // Act
             CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _domainDirectory), _entitiesDirectory, true, definition);
@@ -101,7 +79,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.AddTableAttrib("Suppliers", schema: "dbo");
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "SupplierID").AddKeyAnnotation().AddDatabaseGeneratedAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "SupplierID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
             definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "CompanyName").AddColumnAttrib().AddRequiredAttrib().AddStringLengthAttrib(40));
 
             definition.SimplifyDataTypes();
@@ -123,7 +101,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.AddTableAttrib("Categories", schema: "dbo");
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "CategoryID").AddKeyAnnotation().AddDatabaseGeneratedAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "CategoryID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
             definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "CategoryName").AddColumnAttrib().AddRequiredAttrib().AddStringLengthAttrib(15));
             definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "Description").AddColumnAttrib());
 
@@ -146,7 +124,7 @@ namespace CatFactory.NetCore.Tests
 
             definition.AddTableAttrib("Orders", schema: "dbo");
 
-            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "OrderID").AddKeyAnnotation().AddDatabaseGeneratedAttrib());
+            definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "OrderID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
             definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("string", "CustomerID").AddColumnAttrib().AddStringLengthAttrib(5));
             definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("int?", "EmployeeID").AddColumnAttrib());
             definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProperty("DateTime?", "OrderDate").AddColumnAttrib());

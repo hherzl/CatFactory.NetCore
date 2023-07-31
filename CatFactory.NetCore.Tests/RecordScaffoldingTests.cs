@@ -5,27 +5,11 @@ using Xunit;
 
 namespace CatFactory.NetCore.Tests
 {
-    public class RecordScaffoldingTests
+    public class RecordScaffoldingTests : ScaffoldingTest
     {
-        private readonly string _baseDirectory;
-        private readonly string _solutionDirectory;
-        private readonly string _domainDirectory;
-        private readonly string _entitiesDirectory;
-        private readonly string _exceptionsDirectory;
-        private readonly string _infrastructureDirectory;
-        private readonly string _persistenceDirectory;
-        private readonly string _queryModelsDirectory;
-
         public RecordScaffoldingTests()
+            : base()
         {
-            _baseDirectory = @"C:\Temp\CatFactory.NetCore";
-            _solutionDirectory = "CleanArchitecture";
-            _domainDirectory = "Domain";
-            _entitiesDirectory = "Entities";
-            _exceptionsDirectory = "Exceptions";
-            _infrastructureDirectory = "Infrastructure";
-            _persistenceDirectory = "Persistence";
-            _queryModelsDirectory = "QueryModels";
         }
 
         [Fact]

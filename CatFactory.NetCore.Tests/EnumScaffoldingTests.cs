@@ -5,19 +5,11 @@ using Xunit;
 
 namespace CatFactory.NetCore.Tests
 {
-    public class EnumScaffoldingTests
+    public class EnumScaffoldingTests : ScaffoldingTest
     {
-        private readonly string _baseDirectory;
-        private readonly string _solutionDirectory;
-        private readonly string _domainDirectory;
-        private readonly string _enumsDirectory;
-
         public EnumScaffoldingTests()
+            : base()
         {
-            _baseDirectory = @"C:\Temp\CatFactory.NetCore";
-            _solutionDirectory = "CleanArchitecture";
-            _domainDirectory = "Domain";
-            _enumsDirectory = "Enums";
         }
 
         [Fact]

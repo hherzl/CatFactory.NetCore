@@ -30,7 +30,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             return definition;
         }
 
-        public static PropertyDefinition AddKeyAnnotation(this PropertyDefinition definition)
+        public static PropertyDefinition AddKeyAttrib(this PropertyDefinition definition)
         {
             var metadataAttrib = new MetadataAttribute(KEY);
 
@@ -79,4 +79,9 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
         {
             var metadataAttrib = new MetadataAttribute(STRING_LENGTH, length.ToString());
 
-            definition.Attributes.Add(metadataAt
+            definition.Attributes.Add(metadataAttrib);
+
+            return definition;
+        }
+    }
+}

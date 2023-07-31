@@ -7,7 +7,7 @@ cd %srcPath%
 dotnet build
 cd %testPath%
 dotnet test
-cd %outputBasePath%\DesignPatterns.UnitTests
+cd %outputBasePath%\CleanArchitecture\Infrastructure.Tests
 dotnet test
 cd %srcPath%
 dotnet pack
