@@ -7,6 +7,23 @@ namespace CatFactory.NetCore.Tests
 {
     public class InterfaceScaffoldingTests
     {
+        private readonly string _baseDirectory;
+        private readonly string _solutionDirectory;
+        private readonly string _domainDirectory;
+        private readonly string _entitiesDirectory;
+        private readonly string _infrastructureDirectory;
+        private readonly string _persistenceDirectory;
+
+        public InterfaceScaffoldingTests()
+        {
+            _baseDirectory = @"C:\Temp\CatFactory.NetCore";
+            _solutionDirectory = "CleanArchitecture";
+            _domainDirectory = "Domain";
+            _entitiesDirectory = "Entities";
+            _infrastructureDirectory = "Infrastructure";
+            _persistenceDirectory = "Persistence";
+        }
+
         [Fact]
         public void ScaffoldingBaseRepositoryInterface()
         {
@@ -17,7 +34,7 @@ namespace CatFactory.NetCore.Tests
                 {
                     "System"
                 },
-                Namespace = "DesignPatterns",
+                Namespace = "Infrastructure.Persistence",
                 AccessModifier = AccessModifier.Public,
                 Name = "IRepository",
                 Implements =
@@ -27,7 +44,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
         }
 
         [Fact]
@@ -39,9 +56,10 @@ namespace CatFactory.NetCore.Tests
                 Namespaces =
                 {
                     "System",
-                    "System.Linq"
+                    "System.Linq",
+                    "Domain.Entities"
                 },
-                Namespace = "DesignPatterns",
+                Namespace = "Infrastructure.Persistence",
                 Documentation = new Documentation("Contains all operations related to Northwind database access"),
                 AccessModifier = AccessModifier.Public,
                 Name = "INorthwindRepository",
@@ -65,7 +83,7 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpCodeBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
         }
     }
 }

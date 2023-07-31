@@ -33,9 +33,9 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             return definition;
         }
 
-        public static CSharpClassDefinition AddDefaultCtor(this CSharpClassDefinition definition)
+        public static CSharpClassDefinition AddDefaultCtor(this CSharpClassDefinition definition, AccessModifier accessModifier =  AccessModifier.Public)
         {
-            definition.Constructors.Add(new ClassConstructorDefinition());
+            definition.Constructors.Add(new ClassConstructorDefinition(accessModifier));
 
             return definition;
         }

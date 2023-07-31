@@ -8,6 +8,51 @@ namespace CatFactory.NetCore.CodeFactory
 {
     public class CSharpCodeBuilder : DotNetCodeBuilder
     {
+        public static void CreateFiles(string outputDirectory, bool forceOverwrite, params IDotNetObjectDefinition[] definitions)
+        {
+            foreach (var definition in definitions)
+            {
+                if (definition is CSharpClassDefinition)
+                {
+                    var codeBuilder = new CSharpClassBuilder
+                    {
+                        OutputDirectory = outputDirectory,
+                        ForceOverwrite = forceOverwrite,
+                        ObjectDefinition = definition
+                    };
+                }
+                else if (definition is CSharpRecordDefinition)
+                {
+                    var codeBuilder = new CSharpRecordBuilder
+                    {
+                        OutputDirectory = outputDirectory,
+                        ForceOverwrite = forceOverwrite,
+                        ObjectDefinition = definition
+                    };
+                }
+                else if (definition is CSharpInterfaceDefinition)
+                {
+                    var codeBuilder = new CSharpInterfaceBuilder
+                    {
+                        OutputDirectory = outputDirectory,
+                        ForceOverwrite = forceOverwrite,
+                        ObjectDefinition = definition
+                    };
+                }
+                else if (definition is CSharpEnumDefinition)
+                {
+                    var codeBuilder = new CSharpEnumBuilder
+                    {
+                        OutputDirectory = outputDirectory,
+                        ForceOverwrite = forceOverwrite,
+                        ObjectDefinition = definition
+                    };
+                }
+                else
+                    throw new NotImplementedException();
+            }
+        }
+
         public static void CreateFiles(string outputDirectory, string subdirectory, bool forceOverwrite, params IDotNetObjectDefinition[] definitions)
         {
             foreach (var definition in definitions)

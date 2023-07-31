@@ -7,26 +7,41 @@ namespace CatFactory.NetCore.Tests
 {
     public class EnumScaffoldingTests
     {
+        private readonly string _baseDirectory;
+        private readonly string _solutionDirectory;
+        private readonly string _domainDirectory;
+        private readonly string _enumsDirectory;
+
+        public EnumScaffoldingTests()
+        {
+            _baseDirectory = @"C:\Temp\CatFactory.NetCore";
+            _solutionDirectory = "CleanArchitecture";
+            _domainDirectory = "Domain";
+            _enumsDirectory = "Enums";
+        }
+
         [Fact]
-        public void ScafflodSimpleEnum()
+        public void ScafflodOrderStatusEnum()
         {
             // Arrange
             var definition = new CSharpEnumDefinition
             {
-                Namespace = "DesignPatterns",
+                Namespace = "Domain.Enums",
                 AccessModifier = AccessModifier.Public,
-                Name = "OperationMode",
-                Documentation = new Documentation("Represents operation mode for persistance"),
+                Name = "OrderStatus",
+                BaseType = "short",
+                Documentation = new("Represents status for Orders"),
                 Sets =
                 {
-                    new NameValue("First", "0"),
-                    new NameValue("Second", "1"),
-                    new NameValue("Third", "2")
+                    new NameValue("Created", "0"),
+                    new NameValue("Processed", "100"),
+                    new NameValue("Delivered", "200"),
+                    new NameValue("Cancelled", "300")
                 }
             };
 
             // Act
-            CSharpEnumBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
+            CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _domainDirectory), _enumsDirectory, true, definition);
         }
 
         [Fact]
@@ -55,7 +70,8 @@ namespace CatFactory.NetCore.Tests
             };
 
             // Act
-            CSharpEnumBuilder.CreateFiles(@"C:\Temp\CatFactory.NetCore\DesignPatterns", string.Empty, true, definition);
+            // Act
+            CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, "DesignPatterns"), string.Empty, true, definition);
         }
     }
 }

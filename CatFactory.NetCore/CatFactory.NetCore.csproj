@@ -11,7 +11,7 @@
       1.0.0-beta-sun-build45 Version:
 
       Fix issue 16 https://github.com/hherzl/CatFactory.NetCore/issues/16
-      Fix issue 18 https://github.com/hherzl/CatFactory.NetCore/issues/18 *
+      Fix issue 18 https://github.com/hherzl/CatFactory.NetCore/issues/18
 
       Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
     </PackageReleaseNotes>
