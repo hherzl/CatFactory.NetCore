@@ -58,6 +58,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
                 AccessModifier = accessModifier,
                 Type = type,
                 Name = name,
+                IsAutomatic = false,
                 IsPositional = true,
                 Attributes = attributes == null ? new List<MetadataAttribute>() : new List<MetadataAttribute>(attributes)
             };

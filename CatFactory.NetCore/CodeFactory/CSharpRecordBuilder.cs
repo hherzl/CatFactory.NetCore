@@ -102,32 +102,74 @@ namespace CatFactory.NetCore.CodeFactory
             if (RecordDefinition.GenericTypes.Count > 0)
                 declaration.Add(string.Join(", ", RecordDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
 
-            Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
+            var positionalProperties = RecordDefinition.Properties.Where(item => item.IsPositional).ToList();
+            var hasMembers = HasMembers;
 
-            Lines.Add(new CodeLine("{0}{{", Indent(start)));
+            if (positionalProperties.Count == 0)
+            {
+                Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
+            }
+            else
+            {
+                var positionalDeclaration = new List<string>();
 
-            AddConstants(start);
+                for (var i = 0; i < positionalProperties.Count; i++)
+                {
+                    var property = positionalProperties[i];
 
-            AddEvents(start);
+                    positionalDeclaration.Add(string.Format("{0} {1}", property.Type, property.Name));
 
-            AddFields(start);
+                    if (i < positionalProperties.Count - 1)
+                        positionalDeclaration.Add(", ");
+                }
 
-            AddStaticConstructor(start);
+                Lines.Add(new CodeLine("{0}{1}({2}){3}", Indent(start), string.Join(" ", declaration), string.Join("", positionalDeclaration), hasMembers ? "" : ";"));
+            }
 
-            AddConstructors(start);
+            if (hasMembers)
+            {
+                Lines.Add(new CodeLine("{0}{{", Indent(start)));
 
-            AddFinalizer(start);
+                AddConstants(start);
 
-            AddIndexers(start);
+                AddEvents(start);
 
-            AddProperties(start);
+                AddFields(start);
 
-            AddMethods(start);
+                AddStaticConstructor(start);
 
-            Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
+                AddConstructors(start);
+
+                AddFinalizer(start);
+
+                AddIndexers(start);
+
+                AddProperties(start);
+
+                AddMethods(start);
+
+                Lines.Add(new CodeLine("{0}{1}", Indent(start), "}"));
+            }
 
             if (!string.IsNullOrEmpty(ObjectDefinition.Namespace))
                 Lines.Add(new CodeLine("}"));
+        }
+
+        bool HasMembers
+        {
+            get
+            {
+                var count = 0;
+
+                count += RecordDefinition.Constants.Count;
+                count += RecordDefinition.Events.Count;
+                count += RecordDefinition.Fields.Count;
+                count += RecordDefinition.Constructors.Count;
+                count += RecordDefinition.Properties.Where(item => !item.IsPositional).Count();
+                count += RecordDefinition.Methods.Count;
+
+                return count > 0;
+            }
         }
 
         protected virtual void AddConstants(int start)
@@ -449,9 +491,11 @@ namespace CatFactory.NetCore.CodeFactory
                 Lines.Add(new EmptyLine());
             }
 
-            for (var i = 0; i < RecordDefinition.Properties.Count; i++)
+            var properties = RecordDefinition.Properties.Where(item => !item.IsPositional).ToList();
+
+            for (var i = 0; i < properties.Count; i++)
             {
-                var property = RecordDefinition.Properties[i];
+                var property = properties[i];
 
                 if (property.Attributes.Count > 0)
                     this.AddAttributes(property, start);

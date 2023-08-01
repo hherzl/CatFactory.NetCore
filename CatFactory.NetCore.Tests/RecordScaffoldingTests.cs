@@ -34,6 +34,23 @@ public class RecordScaffoldingTests : ScaffoldingTest
     }
 
     [Fact]
+    public void Scaffolding_CategoryItemModel_CreatesFile()
+    {
+        // Arrange
+        var definition = CSharpRecordDefinition
+            .Create(AccessModifier.Public, "CategoryQueryModel", ns: "Infrastructure.Persistence.QueryModels")
+            .ImportNs("System")
+            ;
+
+        definition.Properties.Add(CSharpRecordDefinition.CreatePositionalProp("int?", "Id"));
+        definition.Properties.Add(CSharpRecordDefinition.CreatePositionalProp("string", "Name"));
+        definition.Properties.Add(CSharpRecordDefinition.CreatePositionalProp("string", "Description"));
+
+        // Act
+        CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory, _persistenceDirectory), _queryModelsDirectory, true, definition);
+    }
+
+    [Fact]
     public void ScaffoldingInvoiceViewModelRecord()
     {
         // Arrange
