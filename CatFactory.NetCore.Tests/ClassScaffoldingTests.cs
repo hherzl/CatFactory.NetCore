@@ -1,5 +1,4 @@
-﻿using CatFactory.CodeFactory;
-using CatFactory.NetCore.CodeFactory;
+﻿using CatFactory.NetCore.CodeFactory;
 using CatFactory.NetCore.ObjectOrientedProgramming;
 using CatFactory.ObjectOrientedProgramming;
 using Xunit;
@@ -161,7 +160,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "string", "ToJson", isExtension: true, target: definition)
             .AddParam("Order", "entity")
-            .Set(body => body.Line("return string.Empty;"));
+            .Set(body => body.Return("string.Empty;"));
 
         definition.SimplifyDataTypes();
 
@@ -227,31 +226,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
                 .Empty()
                 .Comment(" 'dbo.CustOrderHist'")
                 .Line("modelBuilder.Entity<CustOrderHist>().HasNoKey();");
-            })
-            ;
-        //definition.Methods.Add(new(AccessModifier.Protected, "void", "OnModelCreating", new ParameterDefinition())
-        //{
-        //    IsOverride = true,
-        //    Lines =
-        //    {
-        //        new CodeLine("modelBuilder.Entity<Product>(builder =>"),
-        //        new CodeLine("{"),
-        //        new CommentLine(1, " Add configuration for 'dbo.Products' table"),
-        //        new CodeLine(),
-        //        new CodeLine(1, "builder.ToTable(\"Products\", \"dbo\");"),
-        //        new CodeLine(),
-        //        new CodeLine(1, "builder.HasKey(p => p.ProductID);"),
-        //        new CodeLine(),
-        //        new CodeLine(1, "builder.Property(p => p.ProductID).UseIdentityColumn();"),
-        //        new CodeLine(1, "builder.Property(p => p.ProductName).HasMaxLength(40).IsRequired();"),
-        //        new CodeLine("});"),
-        //        new CodeLine(),
-        //        new CommentLine(" Register results for stored procedures"),
-        //        new CodeLine(),
-        //        new CommentLine(" 'dbo.CustOrderHist'"),
-        //        new CodeLine("modelBuilder.Entity<CustOrderHist>().HasNoKey();")
-        //    }
-        //});
+            });
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
@@ -341,10 +316,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .AddCtor(CSharpClassDefinition.CreateCtor().AddParam("NorthwindDbContext", "dbContext").AddLine("_dbContext = dbContext;"))
             ;
 
-        definition.Fields.Add(new FieldDefinition(AccessModifier.Protected, "NorthwindDbContext", "_dbContext")
-        {
-            IsReadOnly = true
-        });
+        definition.Fields.Add(CSharpFieldDefinition.Create("NorthwindDbContext", "_dbContext", AccessModifier.Protected, isReadOnly: true));
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "", "Dispose", target: definition)
             .Set(body => body.Todo("Implement dispose for DbContext"))
@@ -410,11 +382,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .ImportNs("System")
             ;
 
-        definition.Fields.Add(new(AccessModifier.Public, "string", "Bar")
-        {
-            IsReadOnly = true,
-            Value = "\"ABC\""
-        });
+        definition.Fields.Add(CSharpFieldDefinition.Create("string", "Bar", AccessModifier.Public, isReadOnly: true, value: "\"ABC\""));
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, "DesignPatterns"), string.Empty, true, definition);
