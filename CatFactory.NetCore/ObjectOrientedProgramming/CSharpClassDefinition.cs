@@ -22,9 +22,12 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             return definition;
         }
 
-        public static ClassConstructorDefinition CreateCtor(AccessModifier accessModifier = AccessModifier.Public, string invocation = null)
+        public static ClassConstructorDefinition CreateCtor(AccessModifier accessModifier = AccessModifier.Public, string invocation = null, string summary = null)
         {
             var definition = new ClassConstructorDefinition(accessModifier);
+
+            if (definition.Documentation.HasSummary)
+                definition.Documentation.Summary = summary;
 
             if (!string.IsNullOrEmpty(invocation))
                 definition.Invocation = invocation;
@@ -32,13 +35,14 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             return definition;
         }
 
-        public static PropertyDefinition CreateAutomaticProp(string type, string name, AccessModifier accessModifier = AccessModifier.Public, MetadataAttribute[] attributes = null)
+        public static PropertyDefinition CreateAutomaticProp(string type, string name, AccessModifier accessModifier = AccessModifier.Public, string initializationValue = null, MetadataAttribute[] attributes = null)
             => new()
             {
                 AccessModifier = accessModifier,
                 Type = type,
                 Name = name,
                 IsAutomatic = true,
+                InitializationValue = initializationValue,
                 Attributes = attributes == null ? new List<MetadataAttribute>() : new List<MetadataAttribute>(attributes)
             };
 

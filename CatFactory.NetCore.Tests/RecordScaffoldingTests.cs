@@ -51,7 +51,7 @@ public class RecordScaffoldingTests : ScaffoldingTest
     }
 
     [Fact]
-    public void ScaffoldingInvoiceViewModelRecord()
+    public void Scaffolding_InvoiceViewModel_CreatesFile()
     {
         // Arrange
         var definition = CSharpRecordDefinition
@@ -71,7 +71,7 @@ public class RecordScaffoldingTests : ScaffoldingTest
     }
 
     [Fact]
-    public void RefactInterfaceFromRecord()
+    public void Refact_Record_ReturnsInterface()
     {
         // Arrange
         var recordDefinition = CSharpRecordDefinition
@@ -96,6 +96,6 @@ public class RecordScaffoldingTests : ScaffoldingTest
 
         // Assert
         Assert.True(interfaceDefinition.Properties.Count == recordDefinition.Properties.Count);
-        Assert.True(interfaceDefinition.Methods.Count == recordDefinition.Methods.Where(item => item.AccessModifier == AccessModifier.Public).Count());
+        Assert.True(interfaceDefinition.Methods.Count == recordDefinition.Methods.Count(item => item.AccessModifier == AccessModifier.Public));
     }
 }

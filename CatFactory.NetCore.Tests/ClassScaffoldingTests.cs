@@ -17,8 +17,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingShipperClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "Shipper", ns: "Domain.Entities")
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Shipper", ns: "Domain.Entities")
             .ImportNs("System")
             .ImportNs("System.ComponentModel.DataAnnotations")
             .ImportNs("System.ComponentModel.DataAnnotations.Schema")
@@ -38,8 +37,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingProductViewModelClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "Product", ns: "Domain.Entities")
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Product", ns: "Domain.Entities")
             .IsPartial()
             .Implement("INotifyPropertyChanged")
             .ImportNs("System")
@@ -70,8 +68,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingSupplierClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "Supplier", ns: "Domain.Entities")
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Supplier", ns: "Domain.Entities")
             .ImportNs("System")
             .ImportNs("System.ComponentModel.DataAnnotations")
             .ImportNs("System.ComponentModel.DataAnnotations.Schema")
@@ -92,8 +89,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingCategoryClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "Category", ns: "Domain.Entities")
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Category", ns: "Domain.Entities")
             .ImportNs("System")
             .ImportNs("System.ComponentModel.DataAnnotations")
             .ImportNs("System.ComponentModel.DataAnnotations.Schema")
@@ -115,8 +111,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingOrderClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "Order", ns: "Domain.Entities")
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Order", ns: "Domain.Entities")
             .ImportNs("System")
             .ImportNs("System.ComponentModel.DataAnnotations")
             .ImportNs("System.ComponentModel.DataAnnotations.Schema")
@@ -143,8 +138,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingNorthwindExceptionClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "NorthwindException", ns: "Domain.Exceptions", baseClass: "Exception")
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "NorthwindException", ns: "Domain.Exceptions", baseClass: "Exception")
             .ImportNs("System")
             .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base()"))
             .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base(message)").AddParam("string", "message"))
@@ -159,29 +153,15 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingEntityExtensionsClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "EntityExtensions", ns: "Domain.Entities")
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "EntityExtensions", ns: "Domain.Entities")
             .IsStatic()
             .ImportNs("System")
             .ImportNs("Domain.Entities")
             ;
 
-        definition.Methods.Add(new MethodDefinition
-        {
-            AccessModifier = AccessModifier.Public,
-            IsStatic = true,
-            IsExtension = true,
-            Type = "string",
-            Name = "ToJson",
-            Parameters =
-            {
-                new ParameterDefinition("Order", "entity")
-            },
-            Lines =
-            {
-                new CodeLine("return string.Empty;")
-            }
-        });
+        CSharpMethodDefinition.Create(AccessModifier.Public, "string", "ToJson", isExtension: true, target: definition)
+            .AddParam("Order", "entity")
+            .Set(body => body.Line("return string.Empty;"));
 
         definition.SimplifyDataTypes();
 
@@ -193,17 +173,10 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingCustOrderHistResultClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "CustOrderHist", ns: "Infrastructure.Persistence.QueryModels")
-            ;
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "CustOrderHist", ns: "Infrastructure.Persistence.QueryModels");
 
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "ProductName"));
-
-        definition.Properties.Add(new(AccessModifier.Public, "int", "Total")
-        {
-            IsAutomatic = true,
-            InitializationValue = "0"
-        });
+        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int", "Total", initializationValue: "0"));
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory, _persistenceDirectory), "QueryModels", true, definition);
@@ -213,8 +186,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingDbContextClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "NorthwindDbContext", ns: "Infrastructure.Persistence", baseClass: "DbContext")
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "NorthwindDbContext", ns: "Infrastructure.Persistence", baseClass: "DbContext")
             .SetDocumentation(summary: "Represents Northwind database in EF Core Model")
             .IsPartial()
             .ImportNs("System")
@@ -223,14 +195,10 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .ImportNs("Infrastructure.Persistence.QueryModels")
             ;
 
-        definition.Constructors.Add(new(AccessModifier.Public, new ParameterDefinition("DbContextOptions<NorthwindDbContext>", "options")
-        {
-            Documentation = new("Instance of DbContext options")
-        })
-        {
-            Invocation = "base(options)",
-            Documentation = new("Initializes a new instance of NorthwindDbContext class")
-        });
+        definition.Constructors.Add(
+            CSharpClassDefinition.CreateCtor(AccessModifier.Public, invocation: "base(options)", summary: "Initializes a new instance of NorthwindDbContext class")
+                .AddParam("DbContextOptions<NorthwindDbContext>", "options", summary: "Instance of DbContext options")
+        );
 
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DbSet<Product>", "Products"));
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DbSet<Supplier>", "Suppliers"));
@@ -238,29 +206,52 @@ public class ClassScaffoldingTests : ScaffoldingTest
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DbSet<Shipper>", "Shippers"));
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DbSet<Order>", "Orders"));
 
-        definition.Methods.Add(new(AccessModifier.Protected, "void", "OnModelCreating", new ParameterDefinition("ModelBuilder", "modelBuilder"))
-        {
-            IsOverride = true,
-            Lines =
+        CSharpMethodDefinition.Create(AccessModifier.Protected, "", "OnModelCreating", isOverride: true, target: definition)
+            .AddParam("ModelBuilder", "modelBuilder")
+            .Set(body =>
             {
-                new CodeLine("modelBuilder.Entity<Product>(builder =>"),
-                new CodeLine("{"),
-                new CommentLine(1, " Add configuration for 'dbo.Products' table"),
-                new CodeLine(),
-                new CodeLine(1, "builder.ToTable(\"Products\", \"dbo\");"),
-                new CodeLine(),
-                new CodeLine(1, "builder.HasKey(p => p.ProductID);"),
-                new CodeLine(),
-                new CodeLine(1, "builder.Property(p => p.ProductID).UseIdentityColumn();"),
-                new CodeLine(1, "builder.Property(p => p.ProductName).HasMaxLength(40).IsRequired();"),
-                new CodeLine("});"),
-                new CodeLine(),
-                new CommentLine(" Register results for stored procedures"),
-                new CodeLine(),
-                new CommentLine(" 'dbo.CustOrderHist'"),
-                new CodeLine("modelBuilder.Entity<CustOrderHist>().HasNoKey();")
-            }
-        });
+                body
+                .Line("modelBuilder.Entity<Product>(builder =>")
+                .Line("{")
+                .Comment(1, " Add configuration for 'dbo.Products' table")
+                .Empty()
+                .Line(1, "builder.ToTable(\"Products\", \"dbo\");")
+                .Empty()
+                .Line(1, "builder.HasKey(p => p.ProductID);")
+                .Empty()
+                .Line(1, "builder.Property(p => p.ProductID).UseIdentityColumn();")
+                .Line(1, "builder.Property(p => p.ProductName).HasMaxLength(40).IsRequired();")
+                .Line("});")
+                .Empty()
+                .Comment(" Register results for stored procedures")
+                .Empty()
+                .Comment(" 'dbo.CustOrderHist'")
+                .Line("modelBuilder.Entity<CustOrderHist>().HasNoKey();");
+            })
+            ;
+        //definition.Methods.Add(new(AccessModifier.Protected, "void", "OnModelCreating", new ParameterDefinition())
+        //{
+        //    IsOverride = true,
+        //    Lines =
+        //    {
+        //        new CodeLine("modelBuilder.Entity<Product>(builder =>"),
+        //        new CodeLine("{"),
+        //        new CommentLine(1, " Add configuration for 'dbo.Products' table"),
+        //        new CodeLine(),
+        //        new CodeLine(1, "builder.ToTable(\"Products\", \"dbo\");"),
+        //        new CodeLine(),
+        //        new CodeLine(1, "builder.HasKey(p => p.ProductID);"),
+        //        new CodeLine(),
+        //        new CodeLine(1, "builder.Property(p => p.ProductID).UseIdentityColumn();"),
+        //        new CodeLine(1, "builder.Property(p => p.ProductName).HasMaxLength(40).IsRequired();"),
+        //        new CodeLine("});"),
+        //        new CodeLine(),
+        //        new CommentLine(" Register results for stored procedures"),
+        //        new CodeLine(),
+        //        new CommentLine(" 'dbo.CustOrderHist'"),
+        //        new CodeLine("modelBuilder.Entity<CustOrderHist>().HasNoKey();")
+        //    }
+        //});
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
@@ -284,59 +275,47 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .ImportNs("Infrastructure.Persistence.QueryModels")
             ;
 
-        definition.Methods.Add(new(AccessModifier.Public, "IQueryable<Order>", "GetOrders")
-        {
-            IsStatic = true,
-            IsExtension = true,
-            Parameters =
+        CSharpMethodDefinition.Create(AccessModifier.Public, "IQueryable<Order>", "GetOrders", isExtension: true, target: definition)
+            .AddParam("NorthwindDbContext", "dbContext")
+            .AddParam("string", "customerID", "null")
+            .AddParam("int?", "employeeID", "null")
+            .Set(body =>
             {
-                new ParameterDefinition("NorthwindDbContext", "dbContext"),
-                new ParameterDefinition("string", "customerID", "null"),
-                new ParameterDefinition("int?", "employeeID", "null")
-            },
-            Lines =
-            {
-                new CodeLine("var query = dbContext.Orders.AsQueryable();"),
-                new CodeLine(),
-                new CodeLine("if (!string.IsNullOrEmpty(customerID))"),
-                new CodeLine(1, "query = query.Where(item => item.CustomerID == customerID);"),
-                new CodeLine(),
-                new CodeLine(),
-                new CodeLine("if (employeeID.HasValue)"),
-                new CodeLine(1, "query = query.Where(item => item.EmployeeID == employeeID);"),
-                new CodeLine(),
-                new ReturnLine("query;")
-            }
-        });
+                body
+                    .Line("var query = dbContext.Orders.AsQueryable();")
+                    .Empty()
+                    .Line("if (!string.IsNullOrEmpty(customerID))")
+                    .Line(1, "query = query.Where(item => item.CustomerID == customerID);")
+                    .Empty()
+                    .Empty()
+                    .Line("if (employeeID.HasValue)")
+                    .Line(1, "query = query.Where(item => item.EmployeeID == employeeID);")
+                    .Empty()
+                    .Return("query;")
+                    ;
+            });
 
-        definition.Methods.Add(new(AccessModifier.Public, "Task<List<CustOrderHist>>", "GetCustOrderHistAsync")
-        {
-            IsStatic = true,
-            IsAsync = true,
-            IsExtension = true,
-            Parameters =
+        CSharpMethodDefinition.Create(AccessModifier.Public, "Task<List<CustOrderHist>>", "GetCustOrderHistAsync", isExtension: true, isAsync: true, target: definition)
+            .AddParam("NorthwindDbContext", "dbContext")
+            .AddParam("string", "customerID")
+            .Set(body =>
             {
-                new ParameterDefinition("NorthwindDbContext", "dbContext"),
-                new ParameterDefinition("string", "customerID")
-            },
-            Lines =
-            {
-                new CodeLine("var query = new"),
-                new CodeLine("{"),
-                new CodeLine(1, "Text = \" EXEC [dbo].[CustOrderHist] @CustomerID \","),
-                new CodeLine(1, "Parameters = new[]"),
-                new CodeLine(1, "{"),
-                new CodeLine(2, "new SqlParameter(\"@CustomerID\", customerID)"),
-                new CodeLine(1, "}"),
-                new CodeLine("};"),
-                new CodeLine(),
-                new ReturnLine("await dbContext"),
-                new CodeLine(1, ".Set<CustOrderHist>()"),
-                new CodeLine(1, ".FromSqlRaw(query.Text, query.Parameters)"),
-                new CodeLine(1, ".ToListAsync()"),
-                new CodeLine(1, ";")
-            }
-        });
+                body
+                    .Line("var query = new")
+                    .Line("{")
+                    .Line(1, "Text = \" EXEC [dbo].[CustOrderHist] @CustomerID \",")
+                    .Line(1, "Parameters = new[]")
+                    .Line(1, "{")
+                    .Line(2, "new SqlParameter(\"@CustomerID\", customerID)")
+                    .Line(1, "}")
+                    .Line("};")
+                    .Empty()
+                    .Return("await dbContext")
+                    .Line(1, ".Set<CustOrderHist>()")
+                    .Line(1, ".FromSqlRaw(query.Text, query.Parameters)")
+                    .Line(1, ".ToListAsync()")
+                    .Line(1, ";");
+            });
 
         // Act
         var codeBuilder = new CSharpClassBuilder
@@ -367,13 +346,9 @@ public class ClassScaffoldingTests : ScaffoldingTest
             IsReadOnly = true
         });
 
-        definition.Methods.Add(new(AccessModifier.Public, "", "Dispose")
-        {
-            Lines =
-            {
-                new TodoLine("Implement dispose for DbContext")
-            }
-        });
+        CSharpMethodDefinition.Create(AccessModifier.Public, "", "Dispose", target: definition)
+            .Set(body => body.Todo("Implement dispose for DbContext"))
+            ;
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
@@ -394,38 +369,24 @@ public class ClassScaffoldingTests : ScaffoldingTest
 
         definition.Constructors.Add(CSharpClassDefinition.CreateCtor(invocation: "base(dbContext)").AddParam("NorthwindDbContext", "dbContext"));
 
-        definition.Methods.Add(new MethodDefinition(AccessModifier.Public, "IQueryable<Product>", "GetProducts")
-        {
-            Parameters =
+        CSharpMethodDefinition.Create(AccessModifier.Public, "IQueryable<Product>", "GetProducts", target: definition)
+            .AddParam("int?", "supplierID")
+            .Set(body =>
             {
-                new ParameterDefinition("int?", "supplierID")
-            },
-            Lines =
-            {
-                new CodeLine("var query = _dbContext.Products.AsQueryable();"),
-                new CodeLine(),
-                new CodeLine("if (supplierID.HasValue)"),
-                new CodeLine(1, "query = query.Where(item => item.SupplierID == supplierID);"),
-                new CodeLine(),
-                new ReturnLine("query;")
-            }
-        });
+                body
+                    .Line("var query = _dbContext.Products.AsQueryable();")
+                    .Empty()
+                    .Line("if (supplierID.HasValue)")
+                    .Line(1, "query = query.Where(item => item.SupplierID == supplierID);")
+                    .Empty()
+                    .Return("query;");
+            });
 
-        definition.Methods.Add(new MethodDefinition(AccessModifier.Public, "IQueryable<Shipper>", "GetShippers")
-        {
-            Lines =
-            {
-                new ReturnLine("_dbContext.Shippers;")
-            }
-        });
+        CSharpMethodDefinition.Create(AccessModifier.Public, "IQueryable<Shipper>", "GetShippers", target: definition)
+            .Set(body =>body.Return("_dbContext.Shippers;"));
 
-        definition.Methods.Add(new MethodDefinition(AccessModifier.Public, "IQueryable<Order>", "GetOrders")
-        {
-            Lines =
-            {
-                new ReturnLine("_dbContext.Orders;")
-            }
-        });
+        CSharpMethodDefinition.Create(AccessModifier.Public, "IQueryable<Order>", "GetOrders", target: definition)
+            .Set(body => body.Return("_dbContext.Orders;"));
 
         // Act
         var codeBuilder = new CSharpClassBuilder
