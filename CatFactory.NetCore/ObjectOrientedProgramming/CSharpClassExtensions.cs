@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CatFactory.CodeFactory;
 using CatFactory.NetCore.CodeFactory;
 using CatFactory.ObjectOrientedProgramming;
@@ -8,23 +7,19 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public static class CSharpClassExtensions
     {
-        public static ICodeNamingConvention NamingConvention;
-
-        static CSharpClassExtensions()
+        public static void AddPropWithField(this CSharpClassDefinition classDefinition, string type, string name, string fieldName = null, ICodeNamingConvention namingConvention = null)
         {
-            NamingConvention = new DotNetNamingConvention();
-        }
+            namingConvention ??= new DotNetNamingConvention();
 
-        public static void AddPropWithField(this CSharpClassDefinition classDefinition, string type, string name)
-        {
-            var fieldName = NamingConvention.GetFieldName(name);
+            if (string.IsNullOrEmpty(fieldName))
+                fieldName = namingConvention.GetFieldName(name);
 
             var property = new PropertyDefinition(AccessModifier.Public, type, name)
             {
                 IsAutomatic = false,
                 GetBody =
                 {
-                    new CodeLine("return {0};", fieldName)
+                    new ReturnLine("{0};", fieldName)
                 },
                 SetBody =
                 {
@@ -32,21 +27,24 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
                 }
             };
 
-            classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, property.Type, fieldName));
+            classDefinition.Fields.Add(new(AccessModifier.Private, property.Type, fieldName));
 
             classDefinition.Properties.Add(property);
         }
 
-        public static void AddViewModelProp(this CSharpClassDefinition classDefinition, string type, string name, bool useNullConditionalOperator = true)
+        public static void AddViewModelProp(this CSharpClassDefinition classDefinition, string type, string name, string fieldName = null, ICodeNamingConvention namingConvention = null, bool useNullConditionalOperator = true)
         {
-            var fieldName = NamingConvention.GetFieldName(name);
+            namingConvention ??= new DotNetNamingConvention();
+
+            if (string.IsNullOrEmpty(fieldName))
+                fieldName = namingConvention.GetFieldName(name);
 
             var property = new PropertyDefinition(AccessModifier.Public, type, name)
             {
                 IsAutomatic = false,
                 GetBody =
                 {
-                    new CodeLine("return {0};", fieldName)
+                    new ReturnLine("{0};", fieldName)
                 }
             };
 
@@ -69,28 +67,30 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 
             property.SetBody.Add(new CodeLine("}"));
 
-            classDefinition.Fields.Add(new FieldDefinition(AccessModifier.Private, property.Type, fieldName));
+            classDefinition.Fields.Add(new(AccessModifier.Private, property.Type, fieldName));
 
             classDefinition.Properties.Add(property);
         }
 
-        public static CSharpInterfaceDefinition RefactInterface(this CSharpClassDefinition classDefinition, params string[] exclusions)
+        public static CSharpInterfaceDefinition RefactInterface(this CSharpClassDefinition classDefinition, ICodeNamingConvention namingConvention = null, params string[] exclusions)
         {
+            namingConvention ??= new DotNetNamingConvention();
+
             var interfaceDefinition = new CSharpInterfaceDefinition
             {
                 AccessModifier = classDefinition.AccessModifier,
                 Namespaces = classDefinition.Namespaces,
-                Name = NamingConvention.GetInterfaceName(classDefinition.Name)
+                Name = namingConvention.GetInterfaceName(classDefinition.Name)
             };
 
             foreach (var @event in classDefinition.Events.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {
-                interfaceDefinition.Events.Add(new EventDefinition(@event.AccessModifier, @event.Type, @event.Name));
+                interfaceDefinition.Events.Add(new(@event.AccessModifier, @event.Type, @event.Name));
             }
 
             foreach (var property in classDefinition.Properties.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {
-                interfaceDefinition.Properties.Add(new PropertyDefinition(property.AccessModifier, property.Type, property.Name)
+                interfaceDefinition.Properties.Add(new(property.AccessModifier, property.Type, property.Name)
                 {
                     IsAutomatic = property.IsAutomatic,
                     IsReadOnly = property.IsReadOnly
@@ -99,7 +99,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 
             foreach (var method in classDefinition.Methods.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))
             {
-                interfaceDefinition.Methods.Add(new MethodDefinition(method.AccessModifier, method.Type, method.Name, method.Parameters.ToArray()));
+                interfaceDefinition.Methods.Add(new(method.AccessModifier, method.Type, method.Name, method.Parameters.ToArray()));
             }
 
             return interfaceDefinition;

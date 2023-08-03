@@ -9,17 +9,9 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public static  class CSharpRecordExtensions
     {
-        public static ICodeNamingConvention NamingConvention;
-
-        static CSharpRecordExtensions()
-        {
-            NamingConvention = new DotNetNamingConvention();
-        }
-
         public static CSharpRecordDefinition ImportNs(this CSharpRecordDefinition definition, string ns)
         {
             definition.Namespaces.AddUnique(ns);
-
             return definition;
         }
 
@@ -36,27 +28,22 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
         public static CSharpRecordDefinition Implement(this CSharpRecordDefinition definition, string contract)
         {
             definition.Implements.AddUnique(contract);
-
             return definition;
         }
 
-        public static CSharpRecordDefinition IsPartial(this CSharpRecordDefinition definition, bool isPartial = true)
+        public static void AddViewModelProp(this CSharpRecordDefinition recordDefinition, string type, string name, string fieldName = null, ICodeNamingConvention namingConvention = null, bool useNullConditionalOperator = true)
         {
-            definition.IsPartial = isPartial;
+            namingConvention ??= new DotNetNamingConvention();
 
-            return definition;
-        }
-
-        public static void AddViewModelProp(this CSharpRecordDefinition recordDefinition, string type, string name, bool useNullConditionalOperator = true)
-        {
-            var fieldName = NamingConvention.GetFieldName(name);
+            if (string.IsNullOrEmpty(fieldName))
+                fieldName = namingConvention.GetFieldName(name);
 
             var property = new PropertyDefinition(AccessModifier.Public, type, name)
             {
                 IsAutomatic = false,
                 GetBody =
                 {
-                    new CodeLine("return {0};", fieldName)
+                    new ReturnLine("{0};", fieldName)
                 }
             };
 
@@ -84,13 +71,15 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             recordDefinition.Properties.Add(property);
         }
 
-        public static CSharpInterfaceDefinition RefactInterface(this CSharpRecordDefinition recordDefinition, params string[] exclusions)
+        public static CSharpInterfaceDefinition RefactInterface(this CSharpRecordDefinition recordDefinition, ICodeNamingConvention namingConvention = null, params string[] exclusions)
         {
+            namingConvention ??= new DotNetNamingConvention();
+
             var interfaceDefinition = new CSharpInterfaceDefinition
             {
                 AccessModifier = recordDefinition.AccessModifier,
                 Namespaces = recordDefinition.Namespaces,
-                Name = NamingConvention.GetInterfaceName(recordDefinition.Name)
+                Name = namingConvention.GetInterfaceName(recordDefinition.Name)
             };
 
             foreach (var @event in recordDefinition.Events.Where(item => item.AccessModifier == AccessModifier.Public && !exclusions.Contains(item.Name)))

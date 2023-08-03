@@ -22,7 +22,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             var metadataAttrib = new MetadataAttribute(TABLE, $"\"{name}\"");
 
             if (!string.IsNullOrEmpty(schema))
-                metadataAttrib.Sets.Add(new MetadataAttributeSet("Schema", $"\"{schema}\""));
+                metadataAttrib.Sets.Add(new("Schema", $"\"{schema}\""));
 
             definition.Attributes.Add(metadataAttrib);
             definition.Namespaces.AddUnique("System.ComponentModel.DataAnnotations.Schema");
@@ -62,13 +62,13 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
             var metadataAttrib = new MetadataAttribute(REQUIRED);
 
             if (!string.IsNullOrEmpty(errorMessage))
-                metadataAttrib.Sets.Add(new MetadataAttributeSet(ERROR_MESSAGE, $"\"{errorMessage}\""));
+                metadataAttrib.Sets.Add(new(ERROR_MESSAGE, $"\"{errorMessage}\""));
 
             if (!string.IsNullOrEmpty(errorMessageResourceName))
-                metadataAttrib.Sets.Add(new MetadataAttributeSet(ERROR_MESSAGE_RESOURCE_NAME, $"\"{errorMessageResourceName}\""));
+                metadataAttrib.Sets.Add(new(ERROR_MESSAGE_RESOURCE_NAME, $"\"{errorMessageResourceName}\""));
 
             if (!string.IsNullOrEmpty(errorMessageResourceType))
-                metadataAttrib.Sets.Add(new MetadataAttributeSet(ERROR_MESSAGE_RESOURCE_TYPE, $"typeof = {errorMessageResourceType}"));
+                metadataAttrib.Sets.Add(new(ERROR_MESSAGE_RESOURCE_TYPE, $"typeof = {errorMessageResourceType}"));
 
             definition.Attributes.Add(metadataAttrib);
 

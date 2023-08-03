@@ -9,13 +9,13 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
     {
         public static MethodDefinition AddParam(this MethodDefinition definition, string type, string name)
         {
-            definition.Parameters.Add(new ParameterDefinition(type, name));
+            definition.Parameters.Add(new(type, name));
             return definition;
         }
 
         public static MethodDefinition AddParam(this MethodDefinition definition, string type, string name, string defaultValue)
         {
-            definition.Parameters.Add(new ParameterDefinition(type, name, defaultValue));
+            definition.Parameters.Add(new(type, name, defaultValue));
             return definition;
         }
 

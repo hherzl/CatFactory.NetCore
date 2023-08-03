@@ -36,8 +36,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingProductViewModelClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Product", ns: "Domain.Entities")
-            .IsPartial()
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Product", ns: "Domain.Entities", isPartial: true)
             .Implement("INotifyPropertyChanged")
             .ImportNs("System")
             .ImportNs("System.ComponentModel")
@@ -152,8 +151,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingEntityExtensionsClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "EntityExtensions", ns: "Domain.Entities")
-            .IsStatic()
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "EntityExtensions", ns: "Domain.Entities", isStatic: true)
             .ImportNs("System")
             .ImportNs("Domain.Entities")
             ;
@@ -185,9 +183,8 @@ public class ClassScaffoldingTests : ScaffoldingTest
     public void ScaffoldingDbContextClass()
     {
         // Arrange
-        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "NorthwindDbContext", ns: "Infrastructure.Persistence", baseClass: "DbContext")
+        var definition = CSharpClassDefinition.Create(AccessModifier.Public, "NorthwindDbContext", ns: "Infrastructure.Persistence", baseClass: "DbContext", isPartial: true)
             .SetDocumentation(summary: "Represents Northwind database in EF Core Model")
-            .IsPartial()
             .ImportNs("System")
             .ImportNs("Microsoft.EntityFrameworkCore")
             .ImportNs("Domain.Entities")
@@ -237,9 +234,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "NorthwindDbContextExtensions", ns: "Infrastructure.Persistence")
-            .IsPartial()
-            .IsStatic()
+            .Create(AccessModifier.Public, "NorthwindDbContextExtensions", ns: "Infrastructure.Persistence", isPartial: true, isStatic: true)
             .ImportNs("System")
             .ImportNs("System.Collections.Generic")
             .ImportNs("System.Linq")
@@ -309,8 +304,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "Repository", ns: "Infrastructure.Persistence")
-            .IsPartial()
+            .Create(AccessModifier.Public, "Repository", ns: "Infrastructure.Persistence", isPartial: true)
             .Implement("IRepository")
             .ImportNs("System")
             .AddCtor(CSharpClassDefinition.CreateCtor().AddParam("NorthwindDbContext", "dbContext").AddLine("_dbContext = dbContext;"))
@@ -393,8 +387,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "Tokens", ns: "DesignPatterns")
-            .IsStatic()
+            .Create(AccessModifier.Public, "Tokens", ns: "DesignPatterns", isStatic: true)
             .ImportNs("System")
             ;
 

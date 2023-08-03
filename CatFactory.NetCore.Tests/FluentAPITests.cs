@@ -28,8 +28,7 @@ public class FluentAPITests
     {
         // Arrange and Act
         var definition = CSharpClassDefinition
-            .Create(AccessModifier.Public, "DbHelper", "Helpers")
-            .IsStatic()
+            .Create(AccessModifier.Public, "DbHelper", "Helpers", isStatic: true)
             .ImportNs("Microsoft.Data.SqlClient")
             ;
 

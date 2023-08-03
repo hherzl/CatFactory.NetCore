@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CatFactory.ObjectOrientedProgramming;
+﻿using CatFactory.ObjectOrientedProgramming;
 
 namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
@@ -39,7 +38,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
                 Type = type,
                 Name = name,
                 IsAutomatic = true,
-                Attributes = attributes == null ? new List<MetadataAttribute>() : new List<MetadataAttribute>(attributes)
+                Attributes = attributes == null ? new() : new(attributes)
             };
 
         public static PropertyDefinition CreateReadonlyProp(string type, string name, AccessModifier accessModifier = AccessModifier.Public)
@@ -60,7 +59,7 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
                 Name = name,
                 IsAutomatic = false,
                 IsPositional = true,
-                Attributes = attributes == null ? new List<MetadataAttribute>() : new List<MetadataAttribute>(attributes)
+                Attributes = attributes == null ? new() : new(attributes)
             };
 
         public CSharpRecordDefinition()

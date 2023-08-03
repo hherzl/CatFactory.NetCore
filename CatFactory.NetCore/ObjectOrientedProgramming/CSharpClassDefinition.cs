@@ -5,12 +5,14 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public class CSharpClassDefinition : ClassDefinition, IDotNetClassDefinition
     {
-        public static CSharpClassDefinition Create(AccessModifier accessModifier, string name, string ns = null, string baseClass = null)
+        public static CSharpClassDefinition Create(AccessModifier accessModifier, string name, string ns = null, string baseClass = null, bool isPartial = false, bool isStatic = false)
         {
             var definition = new CSharpClassDefinition
             {
                 AccessModifier = accessModifier,
-                Name = name
+                Name = name,
+                IsPartial = isPartial,
+                IsStatic = isStatic
             };
 
             if (!string.IsNullOrEmpty(ns))
