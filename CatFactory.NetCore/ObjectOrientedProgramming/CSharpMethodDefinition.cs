@@ -23,5 +23,8 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 
             return definition;
         }
+
+        public static MethodDefinition Create(string type, string name, bool isAsync = false, bool isExtension = false, bool isOverride = false, CSharpClassDefinition target = null)
+            => Create(AccessModifier.Private, type, name, isAsync, isExtension, isOverride, target);
     }
 }

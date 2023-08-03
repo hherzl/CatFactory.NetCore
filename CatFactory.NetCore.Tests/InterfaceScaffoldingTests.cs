@@ -16,20 +16,10 @@ public class InterfaceScaffoldingTests : ScaffoldingTest
     public void ScaffoldingBaseRepositoryInterface()
     {
         // Arrange
-        var definition = new CSharpInterfaceDefinition
-        {
-            Namespaces =
-            {
-                "System"
-            },
-            Namespace = "Infrastructure.Persistence",
-            AccessModifier = AccessModifier.Public,
-            Name = "IRepository",
-            Implements =
-            {
-                "IDisposable"
-            }
-        };
+        var definition = CSharpInterfaceDefinition.Create(AccessModifier.Public, "IRepository", ns: "Infrastructure.Persistence")
+            .Implement("IDisposable")
+            .ImportNs("System")
+            ;
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
@@ -39,36 +29,17 @@ public class InterfaceScaffoldingTests : ScaffoldingTest
     public void ScaffoldingRepositoryInterface()
     {
         // Arrange
-        var definition = new CSharpInterfaceDefinition
-        {
-            Namespaces =
-            {
-                "System",
-                "System.Linq",
-                "Domain.Entities"
-            },
-            Namespace = "Infrastructure.Persistence",
-            Documentation = new Documentation("Contains all operations related to Northwind database access"),
-            AccessModifier = AccessModifier.Public,
-            Name = "INorthwindRepository",
-            Implements =
-            {
-                "IRepository"
-            },
-            Methods =
-            {
-                new MethodDefinition("IQueryable<Product>", "GetProducts")
-                {
-                    Documentation = new Documentation("Retrieves all products"),
-                    Parameters =
-                    {
-                        new ParameterDefinition("int?", "supplierID")
-                    },
-                },
-                new MethodDefinition("IQueryable<Shipper>", "GetShippers"),
-                new MethodDefinition("IQueryable<Order>", "GetOrders")
-            }
-        };
+        var definition = CSharpInterfaceDefinition.Create(AccessModifier.Public, "INorthwindRepository", ns: "Infrastructure.Persistence")
+            .ImportNs("System")
+            .ImportNs("System.Linq")
+            .ImportNs("Domain.Entities")
+            .Implement("IRepository")
+            .SetDocumentation(summary: "Contains all operations related to Northwind database access")
+            ;
+
+        definition.Methods.Add(CSharpMethodDefinition.Create("IQueryable<Product>", "GetProducts").SetDocumentation(summary: "Retrieves all products").AddParam("int?", "supplierID"));
+        definition.Methods.Add(CSharpMethodDefinition.Create("IQueryable<Shipper>", "GetShippers"));
+        definition.Methods.Add(CSharpMethodDefinition.Create("IQueryable<Order>", "GetOrders"));
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);

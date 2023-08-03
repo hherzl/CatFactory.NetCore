@@ -7,6 +7,20 @@ namespace CatFactory.NetCore.ObjectOrientedProgramming
 {
     public static class CSharpMethodDefinitionExtensions
     {
+        public static MethodDefinition SetDocumentation(this MethodDefinition definition, string summary = null, string remarks = null, string returns = null)
+        {
+            if (!string.IsNullOrEmpty(summary))
+                definition.Documentation.Summary = summary;
+
+            if (!string.IsNullOrEmpty(remarks))
+                definition.Documentation.Remarks = remarks;
+
+            if (!string.IsNullOrEmpty(returns))
+                definition.Documentation.Returns = returns;
+
+            return definition;
+        }
+
         public static MethodDefinition AddParam(this MethodDefinition definition, string type, string name)
         {
             definition.Parameters.Add(new(type, name));
