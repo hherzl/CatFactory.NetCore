@@ -10,7 +10,7 @@
     <PackageReleaseNotes>
       1.0.0-beta-aurora-build00 Version:
 
-      Fix issue 26 https://github.com/hherzl/CatFactory.NetCore/issues/26
+      Fix issue 28 https://github.com/hherzl/CatFactory.NetCore/issues/28
 
       Quick start: https://www.codeproject.com/Tips/1164636/Scaffolding-View-Models-with-CatFactory
     </PackageReleaseNotes>
@@ -18,7 +18,7 @@
     <Company>Herzl Corp.</Company>
     <PackageProjectUrl>https://github.com/hherzl/CatFactory.NetCore</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageLicenseUrl>https://github.com/hherzl/CatFactory.NetCore/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
