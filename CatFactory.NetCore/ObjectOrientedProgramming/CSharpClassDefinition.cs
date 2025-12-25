@@ -24,6 +24,26 @@ public class CSharpClassDefinition : ClassDefinition, IDotNetClassDefinition
         return definition;
     }
 
+    public static TClassDef Create<TClassDef>(AccessModifier accessModifier, string name, string ns = null, string baseClass = null, bool isStatic = false, bool isSealed = false, bool isPartial = false) where TClassDef : CSharpClassDefinition, new()
+    {
+        var definition = new TClassDef
+        {
+            AccessModifier = accessModifier,
+            Name = name,
+            IsStatic = isStatic,
+            IsSealed = isSealed,
+            IsPartial = isPartial
+        };
+
+        if (!string.IsNullOrEmpty(ns))
+            definition.Namespace = ns;
+
+        if (!string.IsNullOrEmpty(baseClass))
+            definition.BaseClass = baseClass;
+
+        return definition;
+    }
+
     public static ClassConstructorDefinition CreateCtor(AccessModifier accessModifier = AccessModifier.Public, string invocation = null, string summary = null)
     {
         var definition = new ClassConstructorDefinition(accessModifier);

@@ -1,4 +1,5 @@
 ﻿using CatFactory.NetCore.ObjectOrientedProgramming;
+using CatFactory.NetCore.Tests.Models;
 using CatFactory.ObjectOrientedProgramming;
 using Xunit;
 
@@ -36,5 +37,41 @@ public class FluentAPITests
         Assert.Single(definition.Namespaces);
         Assert.Equal("Helpers", definition.Namespace);
         Assert.Equal("DbHelper", definition.Name);
+    }
+
+    [Fact]
+    public void CreateWithGeneric_QueryModel_ReturnsClassDefinition()
+    {
+        // Arrange and Act
+        var definition = CSharpClassDefinition
+            .Create<FooClassDefinition>(AccessModifier.Public, "PersonQueryModel", "QueryModels")
+            ;
+
+        definition.AddAutomaticProperty("int?", "Id");
+        definition.AddAutomaticProperty("string", "GivenName");
+        definition.AddAutomaticProperty("string", "MiddleName");
+        definition.AddAutomaticProperty("string", "FamilyName");
+
+        // Assert
+        Assert.Equal("PersonQueryModel", definition.Name);
+        Assert.Equal("QueryModels", definition.Namespace);
+    }
+
+    [Fact]
+    public void CreateWithGeneric_CommandModel_ReturnsClassDefinition()
+    {
+        // Arrange and Act
+        var definition = CSharpClassDefinition
+            .Create<FooClassDefinition>(AccessModifier.Public, "CreateOrderCommand", "Commands")
+            ;
+
+        definition.AddAutomaticProperty("string", "CustomerId");
+        definition.AddAutomaticProperty("string", "OrderNumber");
+        definition.AddAutomaticProperty("DateTime?", "OrderDate");
+        definition.AddAutomaticProperty("decimal?", "OrderTotal");
+
+        // Assert
+        Assert.Equal("CreateOrderCommand", definition.Name);
+        Assert.Equal("Commands", definition.Namespace);
     }
 }
