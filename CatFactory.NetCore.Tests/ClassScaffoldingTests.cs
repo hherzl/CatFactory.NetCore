@@ -17,14 +17,14 @@ public class ClassScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Shipper", ns: "Domain.Entities")
-            .ImportNs("System")
-            .ImportNs("System.ComponentModel.DataAnnotations")
-            .ImportNs("System.ComponentModel.DataAnnotations.Schema")
+            .UsingNs("System")
+            .UsingNs("System.ComponentModel.DataAnnotations")
+            .UsingNs("System.ComponentModel.DataAnnotations.Schema")
             ;
 
         definition.AddTableAttrib("Shippers", schema: "dbo");
 
-        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "ShipperID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
+        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "ShipperId").AddKeyAttrib().AddDatabaseGeneratedAttrib());
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "CompanyName").AddStringLengthAttrib(80).AddRequiredAttrib());
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "Phone").AddStringLengthAttrib(48).AddRequiredAttrib());
 
@@ -38,8 +38,8 @@ public class ClassScaffoldingTests : ScaffoldingTest
         // Arrange
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Product", ns: "Domain.Entities", isPartial: true)
             .Implement("INotifyPropertyChanged")
-            .ImportNs("System")
-            .ImportNs("System.ComponentModel")
+            .UsingNs("System")
+            .UsingNs("System.ComponentModel")
             ;
 
         definition.Events = new()
@@ -47,10 +47,10 @@ public class ClassScaffoldingTests : ScaffoldingTest
             new(AccessModifier.Public, "PropertyChangedEventHandler", "PropertyChanged")
         };
 
-        definition.AddViewModelProp("int?", "ProductID");
+        definition.AddViewModelProp("int?", "ProductId");
         definition.AddViewModelProp("string", "ProductName");
-        definition.AddViewModelProp("int?", "SupplierID");
-        definition.AddViewModelProp("int?", "CategoryID");
+        definition.AddViewModelProp("int?", "SupplierId");
+        definition.AddViewModelProp("int?", "CategoryId");
         definition.AddViewModelProp("string", "QuantityPerUnit");
         definition.AddViewModelProp("decimal?", "UnitPrice");
         definition.AddViewModelProp("short?", "UnitsInStock");
@@ -67,14 +67,14 @@ public class ClassScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Supplier", ns: "Domain.Entities")
-            .ImportNs("System")
-            .ImportNs("System.ComponentModel.DataAnnotations")
-            .ImportNs("System.ComponentModel.DataAnnotations.Schema")
+            .UsingNs("System")
+            .UsingNs("System.ComponentModel.DataAnnotations")
+            .UsingNs("System.ComponentModel.DataAnnotations.Schema")
             ;
 
         definition.AddTableAttrib("Suppliers", schema: "dbo");
 
-        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "SupplierID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
+        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "SupplierId").AddKeyAttrib().AddDatabaseGeneratedAttrib());
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "CompanyName").AddColumnAttrib().AddRequiredAttrib().AddStringLengthAttrib(40));
 
         definition.SimplifyDataTypes();
@@ -88,14 +88,14 @@ public class ClassScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Category", ns: "Domain.Entities")
-            .ImportNs("System")
-            .ImportNs("System.ComponentModel.DataAnnotations")
-            .ImportNs("System.ComponentModel.DataAnnotations.Schema")
+            .UsingNs("System")
+            .UsingNs("System.ComponentModel.DataAnnotations")
+            .UsingNs("System.ComponentModel.DataAnnotations.Schema")
             ;
 
         definition.AddTableAttrib("Categories", schema: "dbo");
 
-        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "CategoryID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
+        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "CategoryId").AddKeyAttrib().AddDatabaseGeneratedAttrib());
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "CategoryName").AddColumnAttrib().AddRequiredAttrib().AddStringLengthAttrib(15));
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "Description").AddColumnAttrib());
 
@@ -110,16 +110,16 @@ public class ClassScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Order", ns: "Domain.Entities")
-            .ImportNs("System")
-            .ImportNs("System.ComponentModel.DataAnnotations")
-            .ImportNs("System.ComponentModel.DataAnnotations.Schema")
+            .UsingNs("System")
+            .UsingNs("System.ComponentModel.DataAnnotations")
+            .UsingNs("System.ComponentModel.DataAnnotations.Schema")
             ;
 
         definition.AddTableAttrib("Orders", schema: "dbo");
 
-        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "OrderID").AddKeyAttrib().AddDatabaseGeneratedAttrib());
-        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "CustomerID").AddColumnAttrib().AddStringLengthAttrib(5));
-        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "EmployeeID").AddColumnAttrib());
+        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "OrderId").AddKeyAttrib().AddDatabaseGeneratedAttrib());
+        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "CustomerId").AddColumnAttrib().AddStringLengthAttrib(5));
+        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int?", "EmployeeId").AddColumnAttrib());
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DateTime?", "OrderDate").AddColumnAttrib());
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DateTime?", "RequiredDate").AddColumnAttrib());
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("DateTime?", "ShippedDate").AddColumnAttrib());
@@ -137,7 +137,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "NorthwindException", ns: "Domain.Exceptions", baseClass: "Exception")
-            .ImportNs("System")
+            .UsingNs("System")
             .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base()"))
             .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base(message)").AddParam("string", "message"))
             .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base(message, innerException)").AddParam("string", "message").AddParam("Exception", "innerException"))
@@ -152,8 +152,8 @@ public class ClassScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "EntityExtensions", ns: "Domain.Entities", isStatic: true)
-            .ImportNs("System")
-            .ImportNs("Domain.Entities")
+            .UsingNs("System")
+            .UsingNs("Domain.Entities")
             ;
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "string", "ToJson", isExtension: true, target: definition)
@@ -173,7 +173,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "CustOrderHist", ns: "Infrastructure.Persistence.QueryModels");
 
         definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("string", "ProductName"));
-        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int", "Total", initializationValue: "0"));
+        definition.Properties.Add(CSharpClassDefinition.CreateAutomaticProp("int", "Total", initValue: "0"));
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory, _persistenceDirectory), "QueryModels", true, definition);
@@ -185,10 +185,10 @@ public class ClassScaffoldingTests : ScaffoldingTest
         // Arrange
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "NorthwindDbContext", ns: "Infrastructure.Persistence", baseClass: "DbContext", isPartial: true)
             .SetDocumentation(summary: "Represents Northwind database in EF Core Model")
-            .ImportNs("System")
-            .ImportNs("Microsoft.EntityFrameworkCore")
-            .ImportNs("Domain.Entities")
-            .ImportNs("Infrastructure.Persistence.QueryModels")
+            .UsingNs("System")
+            .UsingNs("Microsoft.EntityFrameworkCore")
+            .UsingNs("Domain.Entities")
+            .UsingNs("Infrastructure.Persistence.QueryModels")
             ;
 
         definition.Constructors.Add(
@@ -213,9 +213,9 @@ public class ClassScaffoldingTests : ScaffoldingTest
                 .Empty()
                 .Line(1, "builder.ToTable(\"Products\", \"dbo\");")
                 .Empty()
-                .Line(1, "builder.HasKey(p => p.ProductID);")
+                .Line(1, "builder.HasKey(p => p.ProductId);")
                 .Empty()
-                .Line(1, "builder.Property(p => p.ProductID).UseIdentityColumn();")
+                .Line(1, "builder.Property(p => p.ProductId).UseIdentityColumn();")
                 .Line(1, "builder.Property(p => p.ProductName).HasMaxLength(40).IsRequired();")
                 .Line("});")
                 .Empty()
@@ -235,31 +235,31 @@ public class ClassScaffoldingTests : ScaffoldingTest
         // Arrange
         var definition = CSharpClassDefinition
             .Create(AccessModifier.Public, "NorthwindDbContextExtensions", ns: "Infrastructure.Persistence", isPartial: true, isStatic: true)
-            .ImportNs("System")
-            .ImportNs("System.Collections.Generic")
-            .ImportNs("System.Linq")
-            .ImportNs("System.Threading.Tasks")
-            .ImportNs("Microsoft.EntityFrameworkCore")
-            .ImportNs("Microsoft.Data.SqlClient")
-            .ImportNs("Domain.Entities")
-            .ImportNs("Infrastructure.Persistence.QueryModels")
+            .UsingNs("System")
+            .UsingNs("System.Collections.Generic")
+            .UsingNs("System.Linq")
+            .UsingNs("System.Threading.Tasks")
+            .UsingNs("Microsoft.EntityFrameworkCore")
+            .UsingNs("Microsoft.Data.SqlClient")
+            .UsingNs("Domain.Entities")
+            .UsingNs("Infrastructure.Persistence.QueryModels")
             ;
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "IQueryable<Order>", "GetOrders", isExtension: true, target: definition)
             .AddParam("NorthwindDbContext", "dbContext")
-            .AddParam("string", "customerID", "null")
-            .AddParam("int?", "employeeID", "null")
+            .AddParam("string", "customerId", "null")
+            .AddParam("int?", "employeeId", "null")
             .Set(body =>
             {
                 body
                     .Line("var query = dbContext.Orders.AsQueryable();")
                     .Empty()
-                    .Line("if (!string.IsNullOrEmpty(customerID))")
-                    .Line(1, "query = query.Where(item => item.CustomerID == customerID);")
+                    .Line("if (!string.IsNullOrEmpty(customerId))")
+                    .Line(1, "query = query.Where(item => item.CustomerId == customerId);")
                     .Empty()
                     .Empty()
-                    .Line("if (employeeID.HasValue)")
-                    .Line(1, "query = query.Where(item => item.EmployeeID == employeeID);")
+                    .Line("if (employeeId.HasValue)")
+                    .Line(1, "query = query.Where(item => item.EmployeeId == employeeId);")
                     .Empty()
                     .Return("query;")
                     ;
@@ -306,7 +306,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         var definition = CSharpClassDefinition
             .Create(AccessModifier.Public, "Repository", ns: "Infrastructure.Persistence", isPartial: true)
             .Implement("IRepository")
-            .ImportNs("System")
+            .UsingNs("System")
             .AddCtor(CSharpClassDefinition.CreateCtor().AddParam("NorthwindDbContext", "dbContext").AddLine("_dbContext = dbContext;"))
             ;
 
@@ -327,29 +327,29 @@ public class ClassScaffoldingTests : ScaffoldingTest
         var definition = CSharpClassDefinition
             .Create(AccessModifier.Public, "NorthwindRepository", ns: "Infrastructure.Persistence", baseClass: "Repository")
             .Implement("INorthwindRepository")
-            .ImportNs("System")
-            .ImportNs("System.Linq")
-            .ImportNs("Microsoft.EntityFrameworkCore")
-            .ImportNs("Domain.Entities")
+            .UsingNs("System")
+            .UsingNs("System.Linq")
+            .UsingNs("Microsoft.EntityFrameworkCore")
+            .UsingNs("Domain.Entities")
             ;
 
         definition.Constructors.Add(CSharpClassDefinition.CreateCtor(invocation: "base(dbContext)").AddParam("NorthwindDbContext", "dbContext"));
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "IQueryable<Product>", "GetProducts", target: definition)
-            .AddParam("int?", "supplierID")
+            .AddParam("int?", "supplierId")
             .Set(body =>
             {
                 body
                     .Line("var query = _dbContext.Products.AsQueryable();")
                     .Empty()
-                    .Line("if (supplierID.HasValue)")
-                    .Line(1, "query = query.Where(item => item.SupplierID == supplierID);")
+                    .Line("if (supplierId.HasValue)")
+                    .Line(1, "query = query.Where(item => item.SupplierId == supplierId);")
                     .Empty()
                     .Return("query;");
             });
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "IQueryable<Shipper>", "GetShippers", target: definition)
-            .Set(body =>body.Return("_dbContext.Shippers;"));
+            .Set(body => body.Return("_dbContext.Shippers;"));
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "IQueryable<Order>", "GetOrders", target: definition)
             .Set(body => body.Return("_dbContext.Orders;"));
@@ -373,7 +373,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         var definition = CSharpClassDefinition
             .Create(AccessModifier.Public, "Foo", ns: "DesignPatterns")
             .AddDefaultCtor()
-            .ImportNs("System")
+            .UsingNs("System")
             ;
 
         definition.Fields.Add(CSharpFieldDefinition.Create("string", "Bar", AccessModifier.Public, isReadOnly: true, value: "\"ABC\""));
@@ -388,7 +388,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         // Arrange
         var definition = CSharpClassDefinition
             .Create(AccessModifier.Public, "Tokens", ns: "DesignPatterns", isStatic: true)
-            .ImportNs("System")
+            .UsingNs("System")
             ;
 
         definition.Constants.Add(new ConstantDefinition(AccessModifier.Public, "int", "Foo", 1000));

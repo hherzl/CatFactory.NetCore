@@ -1,9 +1,8 @@
 ﻿using CatFactory.ObjectOrientedProgramming;
 
-namespace CatFactory.NetCore.ObjectOrientedProgramming
+namespace CatFactory.NetCore.ObjectOrientedProgramming;
+
+public interface IDotNetObjectDefinition : IObjectDefinition
 {
-    public interface IDotNetObjectDefinition : IObjectDefinition
-    {
-        bool UseRegionsToGroupClassMembers { get; set; }
-    }
+    bool UseRegionsToGroupClassMembers { get; set; }
 }

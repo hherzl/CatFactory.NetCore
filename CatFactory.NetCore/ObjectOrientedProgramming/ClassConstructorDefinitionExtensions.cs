@@ -1,44 +1,44 @@
 ﻿using CatFactory.CodeFactory;
 using CatFactory.ObjectOrientedProgramming;
 
-namespace CatFactory.NetCore.ObjectOrientedProgramming
+namespace CatFactory.NetCore.ObjectOrientedProgramming;
+
+public static class ClassConstructorDefinitionExtensions
 {
-    public static class ClassConstructorDefinitionExtensions
+    public static ClassConstructorDefinition AddParam(this ClassConstructorDefinition definition, string type, string name, string defaultValue = null, string summary = null)
     {
-        public static ClassConstructorDefinition AddParam(this ClassConstructorDefinition definition, string type, string name, string defaultValue = null, string summary = null)
+        definition.Parameters.Add(new ParameterDefinition(type, name, defaultValue)
         {
-            definition.Parameters.Add(new ParameterDefinition(type, name, defaultValue)
+            Documentation =
             {
-                Documentation =
-                {
-                    Summary = summary
-                }
-            });
-            return definition;
-        }
+                Summary = summary
+            }
+        });
 
-        public static ClassConstructorDefinition AddLine(this ClassConstructorDefinition definition, string line)
-        {
-            definition.Lines.Add(new CodeLine(line));
-            return definition;
-        }
+        return definition;
+    }
 
-        public static ClassConstructorDefinition AddEmpty(this ClassConstructorDefinition definition)
-        {
-            definition.Lines.Add(new EmptyLine());
-            return definition;
-        }
+    public static ClassConstructorDefinition AddLine(this ClassConstructorDefinition definition, string line)
+    {
+        definition.Lines.Add(new CodeLine(line));
+        return definition;
+    }
 
-        public static ClassConstructorDefinition AddComment(this ClassConstructorDefinition definition, string comment)
-        {
-            definition.Lines.Add(new CommentLine(comment));
-            return definition;
-        }
+    public static ClassConstructorDefinition AddEmpty(this ClassConstructorDefinition definition)
+    {
+        definition.Lines.Add(new EmptyLine());
+        return definition;
+    }
 
-        public static ClassConstructorDefinition AddTodo(this ClassConstructorDefinition definition, string todo)
-        {
-            definition.Lines.Add(new TodoLine(todo));
-            return definition;
-        }
+    public static ClassConstructorDefinition AddComment(this ClassConstructorDefinition definition, string comment)
+    {
+        definition.Lines.Add(new CommentLine(comment));
+        return definition;
+    }
+
+    public static ClassConstructorDefinition AddTodo(this ClassConstructorDefinition definition, string todo)
+    {
+        definition.Lines.Add(new TodoLine(todo));
+        return definition;
     }
 }

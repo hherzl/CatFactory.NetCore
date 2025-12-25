@@ -12,15 +12,15 @@ public class FluentAPITests
         // Arrange and Act
         var definition = CSharpClassDefinition
             .Create(AccessModifier.Public, "EmployeeController", "ShanghaiCat.API.Controllers", baseClass: "ControllerBase")
-            .ImportNs("Microsoft.AspNetCore", "Microsoft.EntityFrameworkCore")
+            .UsingNs("Microsoft.AspNetCore", "Microsoft.EntityFrameworkCore")
             .AddDefaultCtor()
             ;
 
         // Assert
-        Assert.True(definition.Namespaces.Count == 2);
-        Assert.True(definition.Namespace == "ShanghaiCat.API.Controllers");
-        Assert.True(definition.Name == "EmployeeController");
-        Assert.True(definition.BaseClass == "ControllerBase");
+        Assert.Equal(2, definition.Namespaces.Count);
+        Assert.Equal("ShanghaiCat.API.Controllers", definition.Namespace);
+        Assert.Equal("EmployeeController", definition.Name);
+        Assert.Equal("ControllerBase", definition.BaseClass);
     }
 
     [Fact]
@@ -29,12 +29,12 @@ public class FluentAPITests
         // Arrange and Act
         var definition = CSharpClassDefinition
             .Create(AccessModifier.Public, "DbHelper", "Helpers", isStatic: true)
-            .ImportNs("Microsoft.Data.SqlClient")
+            .UsingNs("Microsoft.Data.SqlClient")
             ;
 
         // Assert
-        Assert.True(definition.Namespaces.Count == 1);
-        Assert.True(definition.Namespace == "Helpers");
-        Assert.True(definition.Name == "DbHelper");
+        Assert.Single(definition.Namespaces);
+        Assert.Equal("Helpers", definition.Namespace);
+        Assert.Equal("DbHelper", definition.Name);
     }
 }
