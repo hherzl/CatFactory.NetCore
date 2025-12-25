@@ -18,7 +18,7 @@ public class RecordScaffoldingTests : ScaffoldingTest
         // Arrange
         var definition = CSharpRecordDefinition
             .Create(AccessModifier.Public, "ProductQueryModel", ns: "Infrastructure.Persistence.QueryModels")
-            .ImportNs("System")
+            .UsingNs("System")
             ;
 
         definition.Properties.Add(CSharpRecordDefinition.CreateAutomaticProp("int?", "Id"));
@@ -39,7 +39,7 @@ public class RecordScaffoldingTests : ScaffoldingTest
         // Arrange
         var definition = CSharpRecordDefinition
             .Create(AccessModifier.Public, "CategoryQueryModel", ns: "Infrastructure.Persistence.QueryModels")
-            .ImportNs("System")
+            .UsingNs("System")
             ;
 
         definition.Properties.Add(CSharpRecordDefinition.CreatePositionalProp("int?", "Id"));
@@ -57,8 +57,8 @@ public class RecordScaffoldingTests : ScaffoldingTest
         var definition = CSharpRecordDefinition
             .Create(AccessModifier.Public, "Invoice", ns: "DesignPatterns")
             .Implement("INotifyPropertyChanged")
-            .ImportNs("System")
-            .ImportNs("System.ComponentModel")
+            .UsingNs("System")
+            .UsingNs("System.ComponentModel")
             ;
 
         definition.AddViewModelProp("int?", "Id");
@@ -77,8 +77,8 @@ public class RecordScaffoldingTests : ScaffoldingTest
         var recordDefinition = CSharpRecordDefinition
             .Create(AccessModifier.Public, "TeacherViewModel", ns: "DesignPatterns")
             .Implement("INotifyPropertyChanged")
-            .ImportNs("System")
-            .ImportNs("System.ComponentModel")
+            .UsingNs("System")
+            .UsingNs("System.ComponentModel")
             ;
 
         recordDefinition.AddViewModelProp("Guid?", "Id");

@@ -1,43 +1,42 @@
 ﻿using CatFactory.Collections;
 
-namespace CatFactory.NetCore.ObjectOrientedProgramming
+namespace CatFactory.NetCore.ObjectOrientedProgramming;
+
+public static class CSharpInterfaceDefinitionExtensions
 {
-    public static class CSharpInterfaceDefinitionExtensions
+    public static CSharpInterfaceDefinition Implement(this CSharpInterfaceDefinition definition, string contract)
     {
-        public static CSharpInterfaceDefinition Implement(this CSharpInterfaceDefinition definition, string contract)
+        definition.Implements.AddUnique(contract);
+        return definition;
+    }
+
+    public static CSharpInterfaceDefinition UsingNs(this CSharpInterfaceDefinition definition, string ns)
+    {
+        definition.Namespaces.AddUnique(ns);
+        return definition;
+    }
+
+    public static CSharpInterfaceDefinition UsingNs(this CSharpInterfaceDefinition definition, params string[] ns)
+    {
+        foreach (var item in ns)
         {
-            definition.Implements.AddUnique(contract);
-            return definition;
+            definition.Namespaces.AddUnique(item);
         }
 
-        public static CSharpInterfaceDefinition ImportNs(this CSharpInterfaceDefinition definition, string ns)
-        {
-            definition.Namespaces.AddUnique(ns);
-            return definition;
-        }
+        return definition;
+    }
 
-        public static CSharpInterfaceDefinition ImportNs(this CSharpInterfaceDefinition definition, params string[] ns)
-        {
-            foreach (var item in ns)
-            {
-                definition.Namespaces.AddUnique(item);
-            }
+    public static CSharpInterfaceDefinition SetDocumentation(this CSharpInterfaceDefinition definition, string summary = null, string remarks = null, string returns = null)
+    {
+        if (!string.IsNullOrEmpty(summary))
+            definition.Documentation.Summary = summary;
 
-            return definition;
-        }
+        if (!string.IsNullOrEmpty(remarks))
+            definition.Documentation.Remarks = remarks;
 
-        public static CSharpInterfaceDefinition SetDocumentation(this CSharpInterfaceDefinition definition, string summary = null, string remarks = null, string returns = null)
-        {
-            if (!string.IsNullOrEmpty(summary))
-                definition.Documentation.Summary = summary;
+        if (!string.IsNullOrEmpty(returns))
+            definition.Documentation.Returns = returns;
 
-            if (!string.IsNullOrEmpty(remarks))
-                definition.Documentation.Remarks = remarks;
-
-            if (!string.IsNullOrEmpty(returns))
-                definition.Documentation.Returns = returns;
-
-            return definition;
-        }
+        return definition;
     }
 }

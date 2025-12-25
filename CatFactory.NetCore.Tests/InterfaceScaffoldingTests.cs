@@ -18,7 +18,7 @@ public class InterfaceScaffoldingTests : ScaffoldingTest
         // Arrange
         var definition = CSharpInterfaceDefinition.Create(AccessModifier.Public, "IRepository", ns: "Infrastructure.Persistence")
             .Implement("IDisposable")
-            .ImportNs("System")
+            .UsingNs("System")
             ;
 
         // Act
@@ -30,9 +30,9 @@ public class InterfaceScaffoldingTests : ScaffoldingTest
     {
         // Arrange
         var definition = CSharpInterfaceDefinition.Create(AccessModifier.Public, "INorthwindRepository", ns: "Infrastructure.Persistence")
-            .ImportNs("System")
-            .ImportNs("System.Linq")
-            .ImportNs("Domain.Entities")
+            .UsingNs("System")
+            .UsingNs("System.Linq")
+            .UsingNs("Domain.Entities")
             .Implement("IRepository")
             .SetDocumentation(summary: "Contains all operations related to Northwind database access")
             ;

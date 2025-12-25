@@ -175,16 +175,16 @@ public class NamingConventionTests
 
         // Act
         // Assert
-        Assert.Equal("Foo1", project.GetPropertyName(table, table.Columns.First()));
-        Assert.Equal("V2019", project.GetPropertyName(table, table.Columns[1]));
-        Assert.Equal("Class", project.GetPropertyName(table, table.Columns[2]));
-        Assert.Equal("Interface", project.GetPropertyName(table, table.Columns[3]));
-        Assert.Equal("SystemString", project.GetPropertyName(table, table.Columns[4]));
+        Assert.Equal("Foo1", project.GetPropName(table, table.Columns.First()));
+        Assert.Equal("V2019", project.GetPropName(table, table.Columns[1]));
+        Assert.Equal("Class", project.GetPropName(table, table.Columns[2]));
+        Assert.Equal("Interface", project.GetPropName(table, table.Columns[3]));
+        Assert.Equal("SystemString", project.GetPropName(table, table.Columns[4]));
 
-        Assert.Equal("Bar1", project.GetPropertyName(view, view.Columns.First()));
-        Assert.Equal("V2019", project.GetPropertyName(view, view.Columns[1]));
-        Assert.Equal("Class", project.GetPropertyName(view, view.Columns[2]));
-        Assert.Equal("Interface", project.GetPropertyName(view, view.Columns[3]));
-        Assert.Equal("SystemString", project.GetPropertyName(view, view.Columns[4]));
+        Assert.Equal("Bar1", project.GetPropName(view, view.Columns.First()));
+        Assert.Equal("V2019", project.GetPropName(view, view.Columns[1]));
+        Assert.Equal("Class", project.GetPropName(view, view.Columns[2]));
+        Assert.Equal("Interface", project.GetPropName(view, view.Columns[3]));
+        Assert.Equal("SystemString", project.GetPropName(view, view.Columns[4]));
     }
 }
