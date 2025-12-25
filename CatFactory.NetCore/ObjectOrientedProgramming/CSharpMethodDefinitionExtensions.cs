@@ -33,49 +33,49 @@ public static class CSharpMethodDefinitionExtensions
         return definition;
     }
 
-    public static MethodDefinition Set(this MethodDefinition definition, Action<List<ILine>> action)
+    public static MethodDefinition Set(this MethodDefinition definition, Action<ICollection<ILine>> action)
     {
         action.Invoke(definition.Lines);
         return definition;
     }
 
-    public static List<ILine> Line(this List<ILine> lines, string line)
+    public static ICollection<ILine> Line(this ICollection<ILine> lines, string line)
     {
         lines.Add(new CodeLine(line));
         return lines;
     }
 
-    public static List<ILine> Line(this List<ILine> lines, int tabs, string line)
+    public static ICollection<ILine> Line(this ICollection<ILine> lines, int tabs, string line)
     {
         lines.Add(new CodeLine(tabs, line));
         return lines;
     }
 
-    public static List<ILine> Comment(this List<ILine> lines, string comment)
+    public static ICollection<ILine> Comment(this ICollection<ILine> lines, string comment)
     {
         lines.Add(new CommentLine(comment));
         return lines;
     }
 
-    public static List<ILine> Comment(this List<ILine> lines, int tabs, string comment)
+    public static ICollection<ILine> Comment(this ICollection<ILine> lines, int tabs, string comment)
     {
         lines.Add(new CommentLine(tabs, comment));
         return lines;
     }
 
-    public static List<ILine> Empty(this List<ILine> lines)
+    public static ICollection<ILine> Empty(this ICollection<ILine> lines)
     {
         lines.Add(new EmptyLine());
         return lines;
     }
 
-    public static List<ILine> Return(this List<ILine> lines, string ret)
+    public static ICollection<ILine> Return(this ICollection<ILine> lines, string ret)
     {
         lines.Add(new ReturnLine(ret));
         return lines;
     }
 
-    public static List<ILine> Todo(this List<ILine> lines, string todo)
+    public static ICollection<ILine> Todo(this ICollection<ILine> lines, string todo)
     {
         lines.Add(new TodoLine(todo));
         return lines;

@@ -391,9 +391,9 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .UsingNs("System")
             ;
 
-        definition.Constants.Add(new ConstantDefinition(AccessModifier.Public, "int", "Foo", 1000));
-        definition.Constants.Add(new ConstantDefinition(AccessModifier.Public, "string", "Bar", "ABC"));
-        definition.Constants.Add(new ConstantDefinition(AccessModifier.Public, "bool", "Baz", true));
+        definition.Constants.Add(new(AccessModifier.Public, "int", "Foo", 1000));
+        definition.Constants.Add(new(AccessModifier.Public, "string", "Bar", "ABC"));
+        definition.Constants.Add(new(AccessModifier.Public, "bool", "Baz", true));
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, "DesignPatterns"), string.Empty, true, definition);

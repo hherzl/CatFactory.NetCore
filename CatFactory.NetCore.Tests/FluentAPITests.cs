@@ -74,4 +74,23 @@ public class FluentAPITests
         Assert.Equal("CreateOrderCommand", definition.Name);
         Assert.Equal("Commands", definition.Namespace);
     }
+
+    [Fact]
+    public void CreateWithGeneric_ServiceClass_ReturnsClassDefinition()
+    {
+        // Arrange and Act
+        var definition = CSharpClassDefinition
+            .Create<FooClassDefinition>(AccessModifier.Public, "InvoiceHandler", "Services")
+            .AddDefaultCtor()
+            .Add(new MethodDefinition(AccessModifier.Public, "Task", "HandleAsync")
+                .AddParam("CreateInvoiceRequest", "request")
+                .AddParam("CancellationToken", "ct")
+                .Set(body => body.Line("return Task.CompletedTask;"))
+            );
+
+        // Assert
+        Assert.Equal("InvoiceHandler", definition.Name);
+        Assert.Equal("Services", definition.Namespace);
+        Assert.Single(definition.Methods);
+    }
 }
