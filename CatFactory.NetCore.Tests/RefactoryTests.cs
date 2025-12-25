@@ -12,8 +12,8 @@ public class RefactoryTests
         // Arrange
         var classDefinition = CSharpClassDefinition
             .Create(AccessModifier.Public, "UserViewModel", ns: "DesignPatterns")
-            .ImportNs("System")
-            .ImportNs("System.ComponentModel")
+            .UsingNs("System")
+            .UsingNs("System.ComponentModel")
             ;
 
         classDefinition.AddViewModelProp("Guid?", "Id");
