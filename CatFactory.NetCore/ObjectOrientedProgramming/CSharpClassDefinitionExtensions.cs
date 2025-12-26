@@ -42,6 +42,36 @@ public static class CSharpClassDefinitionExtensions
         return definition;
     }
 
+    public static CSharpClassDefinition AddField(this CSharpClassDefinition definition, AccessModifier accessModifier, string type, string name, bool isReadonly = false, ICodeNamingConvention namingConvention = null)
+    {
+        namingConvention ??= new DotNetNamingConvention();
+
+        definition.Fields.Add(new(accessModifier, type, namingConvention.GetFieldName(name))
+        {
+            IsReadOnly = isReadonly
+        });
+
+        return definition;
+    }
+
+    public static CSharpClassDefinition Add(this CSharpClassDefinition definition, FieldDefinition method)
+    {
+        definition.Fields.Add(method);
+        return definition;
+    }
+
+    public static void AddAutoProp(this CSharpClassDefinition classDefinition, string type, string name, ICodeNamingConvention namingConvention = null)
+    {
+        namingConvention ??= new DotNetNamingConvention();
+
+        var prop = new PropertyDefinition(AccessModifier.Public, type, namingConvention.GetPropertyName(name))
+        {
+            IsAutomatic = true
+        };
+
+        classDefinition.Properties.Add(prop);
+    }
+
     public static void AddPropWithField(this CSharpClassDefinition classDefinition, string type, string name, string fieldName = null, ICodeNamingConvention namingConvention = null)
     {
         namingConvention ??= new DotNetNamingConvention();
@@ -105,6 +135,20 @@ public static class CSharpClassDefinitionExtensions
         classDefinition.Fields.Add(new(AccessModifier.Private, prop.Type, fieldName));
 
         classDefinition.Properties.Add(prop);
+    }
+
+    public static CSharpClassDefinition AddMethod(this CSharpClassDefinition definition, AccessModifier accessModifier, string type, string name, ICodeNamingConvention namingConvention = null)
+    {
+        namingConvention ??= new DotNetNamingConvention();
+
+        definition.Methods.Add(new(accessModifier, type, namingConvention.GetMethodName(name)));
+        return definition;
+    }
+
+    public static CSharpClassDefinition Add(this CSharpClassDefinition definition, MethodDefinition method)
+    {
+        definition.Methods.Add(method);
+        return definition;
     }
 
     public static CSharpClassDefinition SetDocumentation(this CSharpClassDefinition definition, string summary = null, string remarks = null, string returns = null)
