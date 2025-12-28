@@ -60,7 +60,7 @@ public static class CSharpClassDefinitionExtensions
         return definition;
     }
 
-    public static void AddAutoProp(this CSharpClassDefinition classDefinition, string type, string name, ICodeNamingConvention namingConvention = null)
+    public static void AddAutoProp(this CSharpClassDefinition definition, string type, string name, ICodeNamingConvention namingConvention = null)
     {
         namingConvention ??= new DotNetNamingConvention();
 
@@ -69,10 +69,10 @@ public static class CSharpClassDefinitionExtensions
             IsAutomatic = true
         };
 
-        classDefinition.Properties.Add(prop);
+        definition.Properties.Add(prop);
     }
 
-    public static void AddPropWithField(this CSharpClassDefinition classDefinition, string type, string name, string fieldName = null, ICodeNamingConvention namingConvention = null)
+    public static void AddPropWithField(this CSharpClassDefinition definition, string type, string name, string fieldName = null, ICodeNamingConvention namingConvention = null)
     {
         namingConvention ??= new DotNetNamingConvention();
 
@@ -92,12 +92,12 @@ public static class CSharpClassDefinitionExtensions
             }
         };
 
-        classDefinition.Fields.Add(new(AccessModifier.Private, prop.Type, fieldName));
+        definition.Fields.Add(new(AccessModifier.Private, prop.Type, fieldName));
 
-        classDefinition.Properties.Add(prop);
+        definition.Properties.Add(prop);
     }
 
-    public static void AddViewModelProp(this CSharpClassDefinition classDefinition, string type, string name, string fieldName = null, ICodeNamingConvention namingConvention = null, bool useNullConditionalOperator = true)
+    public static void AddViewModelProp(this CSharpClassDefinition definition, string type, string name, string fieldName = null, ICodeNamingConvention namingConvention = null, bool useNullConditionalOperator = true)
     {
         namingConvention ??= new DotNetNamingConvention();
 
@@ -132,9 +132,9 @@ public static class CSharpClassDefinitionExtensions
 
         prop.SetBody.Add(new CodeLine("}"));
 
-        classDefinition.Fields.Add(new(AccessModifier.Private, prop.Type, fieldName));
+        definition.Fields.Add(new(AccessModifier.Private, prop.Type, fieldName));
 
-        classDefinition.Properties.Add(prop);
+        definition.Properties.Add(prop);
     }
 
     public static CSharpClassDefinition AddMethod(this CSharpClassDefinition definition, AccessModifier accessModifier, string type, string name, ICodeNamingConvention namingConvention = null)

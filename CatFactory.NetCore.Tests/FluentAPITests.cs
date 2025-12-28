@@ -83,6 +83,7 @@ public class FluentAPITests
             .Create<FooClassDefinition>(AccessModifier.Public, "InvoiceHandler", "Services")
             .AddDefaultCtor()
             .Add(new MethodDefinition(AccessModifier.Public, "Task", "HandleAsync")
+                .IsAsync()
                 .AddParam("CreateInvoiceRequest", "request")
                 .AddParam("CancellationToken", "ct")
                 .Set(body => body.Line("return Task.CompletedTask;"))

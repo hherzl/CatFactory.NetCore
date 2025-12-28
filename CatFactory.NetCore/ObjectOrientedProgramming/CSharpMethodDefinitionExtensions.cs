@@ -21,6 +21,36 @@ public static class CSharpMethodDefinitionExtensions
         return definition;
     }
 
+    public static MethodDefinition IsAsync(this MethodDefinition definition, bool flag = true)
+    {
+        definition.IsAsync = flag;
+        return definition;
+    }
+
+    public static MethodDefinition IsStatic(this MethodDefinition definition, bool flag)
+    {
+        definition.IsStatic = flag;
+        definition.IsVirtual = !flag;
+        definition.IsOverride = !flag;
+        return definition;
+    }
+
+    public static MethodDefinition IsOverride(this MethodDefinition definition, bool flag)
+    {
+        definition.IsOverride = flag;
+        definition.IsVirtual = !flag;
+        definition.IsStatic = !flag;
+        return definition;
+    }
+
+    public static MethodDefinition IsVirtual(this MethodDefinition definition, bool flag)
+    {
+        definition.IsVirtual = flag;
+        definition.IsOverride = !flag;
+        definition.IsStatic = !flag;
+        return definition;
+    }
+
     public static MethodDefinition AddParam(this MethodDefinition definition, string type, string name)
     {
         definition.Parameters.Add(new(type, name));
