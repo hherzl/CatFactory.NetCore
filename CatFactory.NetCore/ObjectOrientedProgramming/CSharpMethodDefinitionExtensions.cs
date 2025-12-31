@@ -21,6 +21,25 @@ public static class CSharpMethodDefinitionExtensions
         return definition;
     }
 
+    public static MethodDefinition IsExtension(this MethodDefinition definition, bool flag = true)
+    {
+        definition.IsExtension = flag;
+        definition.IsStatic = definition.IsExtension;
+
+        if (definition.IsExtension)
+        {
+            definition.IsVirtual = definition.IsOverride = false;
+        }
+
+        return definition;
+    }
+
+    public static MethodDefinition AddGenericType(this MethodDefinition definition, string name, params string[] constraints)
+    {
+        definition.GenericTypes.Add(new GenericTypeDefinition(name, constraints));
+        return definition;
+    }
+
     public static MethodDefinition AddParam(this MethodDefinition definition, string type, string name)
     {
         definition.Parameters.Add(new(type, name));

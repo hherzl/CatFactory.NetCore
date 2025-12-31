@@ -14,8 +14,7 @@ public class FluentAPITests
         var definition = CSharpClassDefinition
             .Create(AccessModifier.Public, "EmployeeController", "ShanghaiCat.API.Controllers", baseClass: "ControllerBase")
             .UsingNs("Microsoft.AspNetCore", "Microsoft.EntityFrameworkCore")
-            .AddDefaultCtor()
-            ;
+            .AddDefaultCtor();
 
         // Assert
         Assert.Equal(2, definition.Namespaces.Count);
@@ -30,8 +29,7 @@ public class FluentAPITests
         // Arrange and Act
         var definition = CSharpClassDefinition
             .Create(AccessModifier.Public, "DbHelper", "Helpers", isStatic: true)
-            .UsingNs("Microsoft.Data.SqlClient")
-            ;
+            .UsingNs("Microsoft.Data.SqlClient");
 
         // Assert
         Assert.Single(definition.Namespaces);
@@ -44,8 +42,7 @@ public class FluentAPITests
     {
         // Arrange and Act
         var definition = CSharpClassDefinition
-            .Create<FooClassDefinition>(AccessModifier.Public, "PersonQueryModel", "QueryModels")
-            ;
+            .Create<FooClassDefinition>(AccessModifier.Public, "PersonQueryModel", "QueryModels");
 
         definition.AddAutomaticProperty("int?", "Id");
         definition.AddAutomaticProperty("string", "GivenName");
@@ -62,8 +59,7 @@ public class FluentAPITests
     {
         // Arrange and Act
         var definition = CSharpClassDefinition
-            .Create<FooClassDefinition>(AccessModifier.Public, "CreateOrderCommand", "Commands")
-            ;
+            .Create<FooClassDefinition>(AccessModifier.Public, "CreateOrderCommand", "Commands");
 
         definition.AddAutomaticProperty("string", "CustomerId");
         definition.AddAutomaticProperty("string", "OrderNumber");
