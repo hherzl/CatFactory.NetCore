@@ -19,8 +19,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Shipper", ns: "Domain.Entities")
             .UsingNs("System")
             .UsingNs("System.ComponentModel.DataAnnotations")
-            .UsingNs("System.ComponentModel.DataAnnotations.Schema")
-            ;
+            .UsingNs("System.ComponentModel.DataAnnotations.Schema");
 
         definition.AddTableAttrib("Shippers", schema: "dbo");
 
@@ -39,8 +38,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Product", ns: "Domain.Entities", isPartial: true)
             .Implement("INotifyPropertyChanged")
             .UsingNs("System")
-            .UsingNs("System.ComponentModel")
-            ;
+            .UsingNs("System.ComponentModel");
 
         definition.Events = new()
         {
@@ -69,8 +67,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Supplier", ns: "Domain.Entities")
             .UsingNs("System")
             .UsingNs("System.ComponentModel.DataAnnotations")
-            .UsingNs("System.ComponentModel.DataAnnotations.Schema")
-            ;
+            .UsingNs("System.ComponentModel.DataAnnotations.Schema");
 
         definition.AddTableAttrib("Suppliers", schema: "dbo");
 
@@ -90,8 +87,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Category", ns: "Domain.Entities")
             .UsingNs("System")
             .UsingNs("System.ComponentModel.DataAnnotations")
-            .UsingNs("System.ComponentModel.DataAnnotations.Schema")
-            ;
+            .UsingNs("System.ComponentModel.DataAnnotations.Schema");
 
         definition.AddTableAttrib("Categories", schema: "dbo");
 
@@ -112,8 +108,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "Order", ns: "Domain.Entities")
             .UsingNs("System")
             .UsingNs("System.ComponentModel.DataAnnotations")
-            .UsingNs("System.ComponentModel.DataAnnotations.Schema")
-            ;
+            .UsingNs("System.ComponentModel.DataAnnotations.Schema");
 
         definition.AddTableAttrib("Orders", schema: "dbo");
 
@@ -140,8 +135,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .UsingNs("System")
             .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base()"))
             .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base(message)").AddParam("string", "message"))
-            .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base(message, innerException)").AddParam("string", "message").AddParam("Exception", "innerException"))
-            ;
+            .AddCtor(CSharpClassDefinition.CreateCtor(invocation: "base(message, innerException)").AddParam("string", "message").AddParam("Exception", "innerException"));
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _domainDirectory), _exceptionsDirectory, true, definition);
@@ -153,8 +147,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
         // Arrange
         var definition = CSharpClassDefinition.Create(AccessModifier.Public, "EntityExtensions", ns: "Domain.Entities", isStatic: true)
             .UsingNs("System")
-            .UsingNs("Domain.Entities")
-            ;
+            .UsingNs("Domain.Entities");
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "string", "ToJson", isExtension: true, target: definition)
             .AddParam("Order", "entity")
@@ -242,8 +235,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .UsingNs("Microsoft.EntityFrameworkCore")
             .UsingNs("Microsoft.Data.SqlClient")
             .UsingNs("Domain.Entities")
-            .UsingNs("Infrastructure.Persistence.QueryModels")
-            ;
+            .UsingNs("Infrastructure.Persistence.QueryModels");
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "IQueryable<Order>", "GetOrders", isExtension: true, target: definition)
             .AddParam("NorthwindDbContext", "dbContext")
@@ -261,8 +253,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
                     .Line("if (employeeId.HasValue)")
                     .Line(1, "query = query.Where(item => item.EmployeeId == employeeId);")
                     .Empty()
-                    .Return("query;")
-                    ;
+                    .Return("query;");
             });
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "Task<List<CustOrderHist>>", "GetCustOrderHistAsync", isExtension: true, isAsync: true, target: definition)
@@ -307,14 +298,12 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .Create(AccessModifier.Public, "Repository", ns: "Infrastructure.Persistence", isPartial: true)
             .Implement("IRepository")
             .UsingNs("System")
-            .AddCtor(CSharpClassDefinition.CreateCtor().AddParam("NorthwindDbContext", "dbContext").AddLine("_dbContext = dbContext;"))
-            ;
+            .AddCtor(CSharpClassDefinition.CreateCtor().AddParam("NorthwindDbContext", "dbContext").AddLine("_dbContext = dbContext;"));
 
-        definition.Fields.Add(CSharpFieldDefinition.Create("NorthwindDbContext", "_dbContext", AccessModifier.Protected, isReadOnly: true));
+        definition.Fields.Add(CSharpFieldDefinition.Create("NorthwindDbContext", "_dbContext", AccessModifier.Protected, isReadonly: true));
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "", "Dispose", target: definition)
-            .Set(body => body.Todo("Implement dispose for DbContext"))
-            ;
+            .Set(body => body.Todo("Implement dispose for DbContext"));
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, _solutionDirectory, _infrastructureDirectory), _persistenceDirectory, true, definition);
@@ -330,8 +319,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .UsingNs("System")
             .UsingNs("System.Linq")
             .UsingNs("Microsoft.EntityFrameworkCore")
-            .UsingNs("Domain.Entities")
-            ;
+            .UsingNs("Domain.Entities");
 
         definition.Constructors.Add(CSharpClassDefinition.CreateCtor(invocation: "base(dbContext)").AddParam("NorthwindDbContext", "dbContext"));
 
@@ -376,7 +364,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .UsingNs("System")
             ;
 
-        definition.Fields.Add(CSharpFieldDefinition.Create("string", "Bar", AccessModifier.Public, isReadOnly: true, value: "\"ABC\""));
+        definition.Fields.Add(CSharpFieldDefinition.Create("string", "Bar", AccessModifier.Public, isReadonly: true, value: "\"ABC\""));
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, "DesignPatterns"), string.Empty, true, definition);
@@ -394,6 +382,29 @@ public class ClassScaffoldingTests : ScaffoldingTest
         definition.Constants.Add(new(AccessModifier.Public, "int", "Foo", 1000));
         definition.Constants.Add(new(AccessModifier.Public, "string", "Bar", "ABC"));
         definition.Constants.Add(new(AccessModifier.Public, "bool", "Baz", true));
+
+        // Act
+        CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, "DesignPatterns"), string.Empty, true, definition);
+    }
+
+    [Fact]
+    public void ScaffoldingClassWithGenericMethod()
+    {
+        // Arrange
+        var definition = CSharpClassDefinition
+            .Create(AccessModifier.Public, "QueryExtensions", isStatic: true)
+            .UsingNs("System")
+            .Ns("DesignPatterns");
+
+        definition.Methods.Add(new MethodDefinition(AccessModifier.Public, "IEnumerable<TQueryModel>", "Foo")
+            .IsExtension()
+            .AddGenericType("TQueryModel", "class", "new()")
+            .AddParam("IEnumerable<TQueryModel>", "sequence")
+            .Set(body =>
+            {
+                body.Line("return sequence;");
+            })
+        );
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, "DesignPatterns"), string.Empty, true, definition);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using CatFactory.CodeFactory;
@@ -81,7 +82,7 @@ public class CSharpClassBuilder : CSharpCodeBuilder
 
         this.AddAttributes(start);
 
-        var declaration = new List<string>
+        var declaration = new Collection<string>
         {
             ObjectDefinition.AccessModifier.ToString().ToLower()
         };
@@ -109,19 +110,31 @@ public class CSharpClassBuilder : CSharpCodeBuilder
         {
             declaration.Add(":");
 
-            var parents = new List<string>();
+            var parents = new Collection<string>();
 
             if (!string.IsNullOrEmpty(ClassDefinition.BaseClass))
                 parents.Add(ClassDefinition.BaseClass);
 
             if (ClassDefinition.Implements.Count > 0)
-                parents.AddRange(ClassDefinition.Implements);
+            {
+                foreach (var implement in ClassDefinition.Implements)
+                {
+                    parents.Add(implement);
+                }
+            }
 
             declaration.Add(string.Join(", ", parents));
         }
 
-        if (ClassDefinition.GenericTypes.Count > 0)
-            declaration.Add(string.Join(", ", ClassDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
+        if (ClassDefinition.GenericTypes.Count > 0 && ClassDefinition.GenericTypes.Any(item => item.Constraints?.Count > 0))
+        {
+            declaration.Add("where");
+
+            foreach (var genericType in ClassDefinition.GenericTypes)
+            {
+                declaration.Add($"{genericType.Name} : {string.Join(", ", genericType.Constraints)}");
+            }
+        }
 
         Lines.Add(new CodeLine("{0}{1}", Indent(start), string.Join(" ", declaration)));
 
@@ -242,15 +255,15 @@ public class CSharpClassBuilder : CSharpCodeBuilder
         {
             var field = ClassDefinition.Fields[i];
 
-            var fieldSignature = new List<string>
-                {
-                    field.AccessModifier.ToString().ToLower()
-                };
+            var fieldSignature = new Collection<string>
+            {
+                field.AccessModifier.ToString().ToLower()
+            };
 
             if (field.IsStatic)
                 fieldSignature.Add("static");
 
-            if (field.IsReadOnly)
+            if (field.IsReadonly)
                 fieldSignature.Add("readonly");
 
             fieldSignature.Add(field.Type);
@@ -485,7 +498,7 @@ public class CSharpClassBuilder : CSharpCodeBuilder
                 }
                 else
                 {
-                    var propSignature = new List<string>
+                    var propSignature = new Collection<string>
                     {
                         prop.AccessModifier.ToString().ToLower()
                     };
@@ -533,7 +546,7 @@ public class CSharpClassBuilder : CSharpCodeBuilder
             }
             else if (prop.IsAutomatic)
             {
-                var propertySignature = new List<string>
+                var propertySignature = new Collection<string>
                 {
                     prop.AccessModifier.ToString().ToLower()
                 };
@@ -676,7 +689,7 @@ public class CSharpClassBuilder : CSharpCodeBuilder
                         parameterDef = string.Format("{0}{1} {2} = {3}", parametersAttributes, parameter.Type, parameter.Name, parameter.DefaultValue);
                 }
 
-                parameters.Add(method.IsExtension && j == 0 ? string.Format("this {0}", parameterDef) : parameterDef);
+                parameters.Add(method.IsExtension && j == 0 ? $"this {parameterDef}" : parameterDef);
             }
 
             if (method.GenericTypes.Count == 0)
@@ -684,8 +697,15 @@ public class CSharpClassBuilder : CSharpCodeBuilder
             else
                 methodSignature.Add(string.Format("{0}<{1}>({2})", method.Name, string.Join(", ", method.GenericTypes.Select(item => item.Name)), string.Join(", ", parameters)));
 
-            if (method.GenericTypes.Count > 0)
-                methodSignature.Add(string.Join(", ", method.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraint)).Select(item => string.Format("where {0}", item.Constraint))));
+            if (method.GenericTypes.Count > 0 && method.GenericTypes.Any(item => item.Constraints?.Count > 0))
+            {
+                methodSignature.Add("where");
+
+                foreach (var genericType in ClassDefinition.GenericTypes)
+                {
+                    methodSignature.Add($"{genericType.Name} : {string.Join(", ", genericType.Constraints)}");
+                }
+            }
 
             Lines.Add(new CodeLine("{0}{1}", Indent(start + 1), string.Join(" ", methodSignature)));
 

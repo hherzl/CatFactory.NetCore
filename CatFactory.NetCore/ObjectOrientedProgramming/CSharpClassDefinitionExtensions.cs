@@ -24,6 +24,28 @@ public static class CSharpClassDefinitionExtensions
         return definition;
     }
 
+    public static CSharpClassDefinition Ns(this CSharpClassDefinition definition, string ns)
+    {
+        definition.Namespace = ns;
+        return definition;
+    }
+
+    public static CSharpClassDefinition IsStatic(this CSharpClassDefinition definition, bool flag = true)
+    {
+        definition.IsStatic = flag;
+        definition.IsSealed = !flag;
+
+        return definition;
+    }
+
+    public static CSharpClassDefinition IsSealed(this CSharpClassDefinition definition, bool flag = true)
+    {
+        definition.IsSealed = flag;
+        definition.IsStatic = !flag;
+
+        return definition;
+    }
+
     public static CSharpClassDefinition Implement(this CSharpClassDefinition definition, string contract)
     {
         definition.Implements.AddUnique(contract);
@@ -48,7 +70,7 @@ public static class CSharpClassDefinitionExtensions
 
         definition.Fields.Add(new(accessModifier, type, namingConvention.GetFieldName(name))
         {
-            IsReadOnly = isReadonly
+            IsReadonly = isReadonly
         });
 
         return definition;

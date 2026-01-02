@@ -1,4 +1,6 @@
-﻿using CatFactory.CodeFactory;
+﻿using System;
+using System.Collections.Generic;
+using CatFactory.CodeFactory;
 using CatFactory.ObjectOrientedProgramming;
 
 namespace CatFactory.NetCore.ObjectOrientedProgramming;
@@ -15,6 +17,12 @@ public static class ClassConstructorDefinitionExtensions
             }
         });
 
+        return definition;
+    }
+
+    public static ClassConstructorDefinition Set(this ClassConstructorDefinition definition, Action<ICollection<ILine>> action)
+    {
+        action.Invoke(definition.Lines);
         return definition;
     }
 
