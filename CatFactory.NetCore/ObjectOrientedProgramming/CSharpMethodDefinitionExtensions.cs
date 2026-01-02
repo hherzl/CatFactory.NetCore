@@ -21,15 +21,43 @@ public static class CSharpMethodDefinitionExtensions
         return definition;
     }
 
+    public static MethodDefinition IsStatic(this MethodDefinition definition, bool flag = true)
+    {
+        definition.IsStatic = flag;
+
+        if (definition.IsStatic)
+            definition.IsVirtual = definition.IsOverride = false;
+
+        return definition;
+    }
+
     public static MethodDefinition IsExtension(this MethodDefinition definition, bool flag = true)
     {
         definition.IsExtension = flag;
         definition.IsStatic = definition.IsExtension;
 
         if (definition.IsExtension)
-        {
             definition.IsVirtual = definition.IsOverride = false;
-        }
+
+        return definition;
+    }
+
+    public static MethodDefinition IsVirtual(this MethodDefinition definition, bool flag = true)
+    {
+        definition.IsVirtual = flag;
+
+        if (definition.IsVirtual)
+            definition.IsStatic = definition.IsExtension = false;
+
+        return definition;
+    }
+
+    public static MethodDefinition IsOverride(this MethodDefinition definition, bool flag = true)
+    {
+        definition.IsOverride = flag;
+
+        if (definition.IsOverride)
+            definition.IsStatic = definition.IsExtension = false;
 
         return definition;
     }
