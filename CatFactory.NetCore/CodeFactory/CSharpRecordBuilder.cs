@@ -278,7 +278,7 @@ public class CSharpRecordBuilder : CSharpCodeBuilder
             if (field.IsStatic)
                 fieldSignature.Add("static");
 
-            if (field.IsReadOnly)
+            if (field.IsReadonly)
                 fieldSignature.Add("readonly");
 
             fieldSignature.Add(field.Type);

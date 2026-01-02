@@ -31,14 +31,9 @@ public static class CSharpMethodDefinitionExtensions
         return definition;
     }
 
-    public static MethodDefinition IsExtension(this MethodDefinition definition, bool flag = true)
+    public static MethodDefinition IsAsync(this MethodDefinition definition, bool flag = true)
     {
-        definition.IsExtension = flag;
-        definition.IsStatic = definition.IsExtension;
-
-        if (definition.IsExtension)
-            definition.IsVirtual = definition.IsOverride = false;
-
+        definition.IsAsync = flag;
         return definition;
     }
 

@@ -300,7 +300,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .UsingNs("System")
             .AddCtor(CSharpClassDefinition.CreateCtor().AddParam("NorthwindDbContext", "dbContext").AddLine("_dbContext = dbContext;"));
 
-        definition.Fields.Add(CSharpFieldDefinition.Create("NorthwindDbContext", "_dbContext", AccessModifier.Protected, isReadOnly: true));
+        definition.Fields.Add(CSharpFieldDefinition.Create("NorthwindDbContext", "_dbContext", AccessModifier.Protected, isReadonly: true));
 
         CSharpMethodDefinition.Create(AccessModifier.Public, "", "Dispose", target: definition)
             .Set(body => body.Todo("Implement dispose for DbContext"));
@@ -364,7 +364,7 @@ public class ClassScaffoldingTests : ScaffoldingTest
             .UsingNs("System")
             ;
 
-        definition.Fields.Add(CSharpFieldDefinition.Create("string", "Bar", AccessModifier.Public, isReadOnly: true, value: "\"ABC\""));
+        definition.Fields.Add(CSharpFieldDefinition.Create("string", "Bar", AccessModifier.Public, isReadonly: true, value: "\"ABC\""));
 
         // Act
         CSharpCodeBuilder.CreateFiles(Path.Combine(_baseDirectory, "DesignPatterns"), string.Empty, true, definition);

@@ -70,7 +70,7 @@ public static class CSharpClassDefinitionExtensions
 
         definition.Fields.Add(new(accessModifier, type, namingConvention.GetFieldName(name))
         {
-            IsReadOnly = isReadonly
+            IsReadonly = isReadonly
         });
 
         return definition;

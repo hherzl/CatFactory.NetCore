@@ -44,10 +44,10 @@ public class FluentAPITests
         var definition = CSharpClassDefinition
             .Create<FooClassDefinition>(AccessModifier.Public, "PersonQueryModel", "QueryModels");
 
-        definition.AddAutomaticProperty("int?", "Id");
-        definition.AddAutomaticProperty("string", "GivenName");
-        definition.AddAutomaticProperty("string", "MiddleName");
-        definition.AddAutomaticProperty("string", "FamilyName");
+        definition.AddAutomaticProp("int?", "Id");
+        definition.AddAutomaticProp("string", "GivenName");
+        definition.AddAutomaticProp("string", "MiddleName");
+        definition.AddAutomaticProp("string", "FamilyName");
 
         // Assert
         Assert.Equal("PersonQueryModel", definition.Name);
@@ -61,10 +61,10 @@ public class FluentAPITests
         var definition = CSharpClassDefinition
             .Create<FooClassDefinition>(AccessModifier.Public, "CreateOrderCommand", "Commands");
 
-        definition.AddAutomaticProperty("string", "CustomerId");
-        definition.AddAutomaticProperty("string", "OrderNumber");
-        definition.AddAutomaticProperty("DateTime?", "OrderDate");
-        definition.AddAutomaticProperty("decimal?", "OrderTotal");
+        definition.AddAutomaticProp("string", "CustomerId");
+        definition.AddAutomaticProp("string", "OrderNumber");
+        definition.AddAutomaticProp("DateTime?", "OrderDate");
+        definition.AddAutomaticProp("decimal?", "OrderTotal");
 
         // Assert
         Assert.Equal("CreateOrderCommand", definition.Name);
