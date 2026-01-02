@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using CatFactory.CodeFactory;
 using CatFactory.NetCore.ObjectOrientedProgramming;
+using CatFactory.ObjectOrientedProgramming;
 using Microsoft.Extensions.Logging;
 
 namespace CatFactory.NetCore.CodeFactory;
@@ -99,7 +100,7 @@ public class CSharpRecordBuilder : CSharpCodeBuilder
             declaration.Add(string.Join(", ", parents));
         }
 
-        if (RecordDefinition.GenericTypes.Count > 0)
+        if (RecordDefinition.GenericTypes.Count > 0 && RecordDefinition.GenericTypes.Any(item => item.Constraints?.Count > 0))
         {
             declaration.Add("where");
 
@@ -714,7 +715,7 @@ public class CSharpRecordBuilder : CSharpCodeBuilder
             else
                 methodSignature.Add(string.Format("{0}<{1}>({2})", method.Name, string.Join(", ", method.GenericTypes.Select(item => item.Name)), string.Join(", ", parameters)));
 
-            if (method.GenericTypes.Count > 0)
+            if (method.GenericTypes.Count > 0 && method.GenericTypes.Any(item => item.Constraints?.Count > 0))
             {
                 methodSignature.Add("where");
 

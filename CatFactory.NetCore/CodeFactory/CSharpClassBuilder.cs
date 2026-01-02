@@ -126,9 +126,8 @@ public class CSharpClassBuilder : CSharpCodeBuilder
             declaration.Add(string.Join(", ", parents));
         }
 
-        if (ClassDefinition.GenericTypes.Count > 0)
+        if (ClassDefinition.GenericTypes.Count > 0 && ClassDefinition.GenericTypes.Any(item => item.Constraints?.Count > 0))
         {
-            //declaration.Add($"where {", string.Join(", ", ClassDefinition.GenericTypes.Where(item => !string.IsNullOrEmpty(item.Constraints)).Select(item => string.Format("where {0}", item.Constraint))));
             declaration.Add("where");
 
             foreach (var genericType in ClassDefinition.GenericTypes)
@@ -698,7 +697,7 @@ public class CSharpClassBuilder : CSharpCodeBuilder
             else
                 methodSignature.Add(string.Format("{0}<{1}>({2})", method.Name, string.Join(", ", method.GenericTypes.Select(item => item.Name)), string.Join(", ", parameters)));
 
-            if (method.GenericTypes.Count > 0)
+            if (method.GenericTypes.Count > 0 && method.GenericTypes.Any(item => item.Constraints?.Count > 0))
             {
                 methodSignature.Add("where");
 
