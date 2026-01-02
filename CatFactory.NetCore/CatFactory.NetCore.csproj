@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <Version>1.0.0-beta-aurora-build08</Version>
+    <Version>1.0.0-beta-aurora-build09</Version>
     <Description>CatFactory Package for .NET Core (C#)</Description>
     <RepositoryUrl>https://github.com/hherzl/CatFactory.NetCore</RepositoryUrl>
     <PackageTags>C# NET Core OOP ORM Scaffolding</PackageTags>
     <PackageReleaseNotes>
-      1.0.0-beta-aurora-build08 Version:
+      1.0.0-beta-aurora-build09 Version:
 
       Core package update
 
